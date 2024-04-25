@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+    dualtarget-backend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+
+        environment:
+            POSTGRES_HOST: localhost
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: dualtarget-database
+            BLOCKFROST_NETWORK_NAME_PREPROD: Preprod
+            BLOCKFROST_NETWORK_NAME_PREVIEW: Preview
+            BLOCKFROST_NETWORK_NAME_MAINNET: Mainnet
+            BLOCKFROST_RPC_URL_MAINNET: https://cardano-mainnet.blockfrost.io/api/v0
+            BLOCKFROST_RPC_URL_PREPROD: https://cardano-preprod.blockfrost.io/api/v0
+            BLOCKFROST_RPC_URL_PREVIEW: https://cardano-preview.blockfrost.io/api/v0
+            BLOCKFROST_PROJECT_API_KEY_MAINNET: mainnettClW67e7zjxBTdjgynNwmGsvyz5DCMmC
+            BLOCKFROST_PROJECT_API_KEY_PREPROD: preprody7qLCi4kIiAUEFRlJvmZ2PTi6jreF7gI
+            BLOCKFROST_PROJECT_API_KEY_PREVIEW: preprody7qLCi4kIiAUEFRlJvmZ2PTi6jreF7gI
+            KOIOS_RPC_URL_PREPROD: https://preprod.koios.rest/api/v1
+            KOIOS_RPC_URL_PREVIEW: https://preview.koios.rest/api/v1
+            KOIOS_RPC_URL_MAINNET: https://api.koios.rest/api/v1
+            KOIOS_RPC_URL_PREPROD_V0: https://preprod.koios.rest/api/v0
+            KOIOS_RPC_URL_PREVIEW_V0: https://preview.koios.rest/api/v0
+            KOIOS_RPC_URL_MAINNET_V0: https://api.koios.rest/api/v0
+            DUALTARGET_CONTRACT_ADDRESS_PREPROD: addr_test1wrkv2awy8l5nk9vwq2shdjg4ntlxs8xsj7gswj8au5xn8fcxyhpjk
+            EXCHANGE_ADDRESS_FREE_PREPROP: ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7
+#      postgres:
+#         image: postgres:12
+#         environment:
+#             POSTGRES_USER: postgres
+#             POSTGRES_PASSWORD: postgres
+#             POSTGRES_DB: decentralized-metaverse-mall
+#         ports:
+#             - 5432:5432
+#         volumes:
+#             - pgdata:/var/lib/postgresql/data
+# volumes:
+#     pgdata: {}

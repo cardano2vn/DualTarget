@@ -1,0 +1,10 @@
+{
+    "header": {
+        "home": "Home",
+        "deposit": "Deposit",
+        "withdraw": "Withdraw",
+        "rewards": "Delegation Rewards",
+        "faq": "FAQ"
+    },
+    "home": ""
+}

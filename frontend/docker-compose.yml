@@ -1,0 +1,26 @@
+version: "3"
+services:
+    dualtarget:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "3500:3500"
+        environment:
+            BLOCKFROST_NETWORK_NAME_PREPROD: "Preprod"
+            BLOCKFROST_NETWORK_NAME_PREVIEW: "Preview"
+            BLOCKFROST_NETWORK_NAME_MAINNET: "Mainnet"
+            BLOCKFROST_RPC_URL_MAINNET: "https://cardano-mainnet.blockfrost.io/api/v0"
+            BLOCKFROST_RPC_URL_PREPROD: "https://cardano-preprod.blockfrost.io/api/v0"
+            BLOCKFROST_RPC_URL_PREVIEW: "https://cardano-preview.blockfrost.io/api/v0"
+            BLOCKFROST_PROJECT_API_KEY_MAINNET: "mainnettClW67e7zjxBTdjgynNwmGsvyz5DCMmC"
+            BLOCKFROST_PROJECT_API_KEY_PREPROD: "preprody7qLCi4kIiAUEFRlJvmZ2PTi6jreF7gI"
+            BLOCKFROST_PROJECT_API_KEY_PREVIEW: "preprodQfe5parraxgP3k0IqDnrptIvZVBejjsS"
+            KOIOS_RPC_URL_PREPROD: "https://preprod.koios.rest/api/v1"
+            KOIOS_RPC_URL_PREVIEW: "https://preview.koios.rest/api/v1"
+            KOIOS_RPC_URL_MAINNET: "https://api.koios.rest/api/v1"
+            NEXT_APP_BASE_URL: "http://localhost:5000/api/v1"
+            VILAI_POOL_ID: "pool1u7zrgexnxsysctnnwljjjymr70he829fr5n3vefnv80guxr42dv"
+            POLICYID_C2E_TOKEN: "c88c4d8b1e448d579f58992debe9f905b47607ea878f3c2480248834"
+            ASSETNAME_C2E_TOKEN: "C2E"
+            EXPIRED_TIME: "1728000000"

@@ -1,0 +1,20 @@
+.wrapper {
+    padding: 38px 40px 40px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    background-image: linear-gradient(180deg, #373c62 0, #424a7b);
+    border-radius: 50px;
+    box-shadow: 0 4px 84px 0 rgba(0, 0, 0, 0.13);
+}
+
+@media (max-width: 1024px) {
+    .wrapper {
+        padding: 48px 24px 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        border-radius: 2.2rem;
+    }
+}

@@ -1,0 +1,97 @@
+.widget {
+    position: fixed;
+    right: 1.6rem;
+    bottom: 1.6rem;
+    max-width: 327px;
+    width: 100%;
+    border-radius: 1.2rem;
+    z-index: 500;
+    height: 70vh;
+    overflow: hidden;
+    background-color: #fff;
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+
+    &.open {
+        opacity: 0;
+        animation: reveal 0.5s ease-in-out 0.5s forwards;
+        display: flex;
+    }
+}
+@keyframes reveal {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.header {
+    background-color: rgb(29, 35, 69) !important;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.widget-title {
+    flex: 1;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.close-widget-button {
+    background-color: transparent;
+    color: hsl(0, 0%, 100%);
+    cursor: pointer;
+}
+
+.form-wrapper {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    padding: 15px 15px 30px 25px;
+    margin: 0 10px 0 0;
+    &::-webkit-scrollbar-thumb {
+        border-radius: 4px !important;
+    }
+}
+
+.input {
+    margin-top: 1.6rem;
+}
+
+.submit-action {
+    padding: 15px 20px;
+    width: 100%;
+    background: #fff;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px -0.4rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+    max-height: 68px;
+    height: 100%;
+}
+
+.submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.25s ease-in-out 0s, box-shadow 0.1s ease-in-out 0s, background-color 0.25s ease-in-out 0s, color 0.25s ease-in-out 0s,
+        outline-color 0.1s ease-in-out 0s, z-index 0.25s ease-in-out 0s;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 6px 15px;
+    font-size: 14px;
+    background-color: #1d2345;
+    color: rgb(255, 255, 255);
+    line-height: 2.2rem;
+}

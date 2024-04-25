@@ -1,0 +1,77 @@
+.sidebar-menu {
+    z-index: 100;
+}
+
+.wrapper {
+    position: relative;
+    flex-shrink: 0;
+    align-items: normal;
+    background: transparent;
+    border: 0;
+    direction: rtl;
+    display: none;
+    flex-direction: column;
+    margin-left: 2.6rem;
+    order: 1;
+    padding: 0;
+    width: fit-content;
+    z-index: 101;
+    .bar {
+        background: #fff;
+        border-radius: 10px;
+        height: 3px;
+        margin: 4px 0;
+        transition: all 0.3s ease;
+        display: block;
+
+        &:first-child {
+            width: 3rem;
+        }
+        &:nth-child(2) {
+            width: 1.8rem;
+        }
+        &:last-child {
+            width: 2.6rem;
+        }
+    }
+
+    &.open {
+        .bar {
+            width: 3rem;
+        }
+
+        .bar:first-child {
+            -webkit-transform: translateY(6px) rotate(-45deg);
+            transform: translateY(6px) rotate(-45deg);
+            -webkit-transform-origin: bottom;
+            transform-origin: bottom;
+        }
+
+        .bar:nth-child(2) {
+            display: none;
+        }
+
+        .bar:last-child {
+            -webkit-transform: translate(-2px, -5px) rotate(45deg);
+            transform: translate(-2px, -5px) rotate(45deg);
+            -webkit-transform-origin: bottom;
+            transform-origin: bottom;
+        }
+    }
+
+    &.isShowingWallet {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1365px) {
+    .wrapper {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 670px) {
+    /* connect wallet begin */
+
+    /* connect wallet end */
+}

@@ -1,0 +1,35 @@
+.wrapper {
+    background-color: #444c7c66;
+    border-radius: 8px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    line-height: 26px;
+    margin: 172px auto 56px;
+    max-width: 640px;
+    overflow: auto;
+    padding: 40px 20px;
+    width: 100%;
+    text-align: justify;
+}
+.terms {
+    font-size: 1.6rem;
+}
+.list-wrapper {
+    list-style-type: none;
+}
+.title-h2 {
+    font-size: 1.6rem;
+    text-decoration: underline;
+}
+
+.paragragh {
+    font-weight: 500;
+}
+@media (max-width: 768px) {
+    .wrapper {
+        background-color: initial;
+        margin: 125px auto 0;
+    }
+}

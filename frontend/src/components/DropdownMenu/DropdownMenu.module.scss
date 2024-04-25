@@ -1,0 +1,95 @@
+.wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.dropdown-menu {
+    width: 100%;
+    color: var(--white-color);
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 1.2rem 2.4rem;
+    position: relative;
+    font-weight: 500;
+
+    &::before {
+        content: "";
+        background: linear-gradient(101deg, #7054d1 18%, #ab56c9 61%, #b275dc 102%);
+        border-radius: 12px;
+        inset: 0;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        padding: 1px;
+        pointer-events: none;
+        position: absolute;
+    }
+
+    &.active::before {
+        border-radius: unset;
+        border-top-right-radius: 12px;
+        border-top-left-radius: 12px;
+    }
+
+    &.active .arrow-icon {
+        rotate: 180deg;
+    }
+}
+
+.arrow-icon {
+    margin-left: 1rem;
+    transform: translateY(-2px);
+    transition: all 0.2s;
+}
+
+.cover_list-wrapper {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    overflow: hidden;
+    display: none;
+    background-color: var(--background-header);
+
+    &::before {
+        content: "";
+        background: linear-gradient(101deg, #7054d1 18%, #ab56c9 61%, #b275dc 102%);
+        inset: 0;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        padding: 1px;
+        pointer-events: none;
+        position: absolute;
+        border-bottom-right-radius: 12px;
+        border-bottom-left-radius: 12px;
+    }
+
+    &.show {
+        display: block;
+    }
+}
+
+.item {
+    color: var(--white-color);
+    font-size: 16px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 1.2rem 2.4rem;
+    &::before {
+        display: none;
+    }
+    &:hover,
+    &.selected {
+        background: linear-gradient(101deg, #7054d1 18%, #ab56c9 61%, #b275dc 102%);
+    }
+}

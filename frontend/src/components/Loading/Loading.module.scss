@@ -1,0 +1,19 @@
+.spinner-stat {
+    animation: rotation 1s linear infinite;
+    border: 1px solid #efc644;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    box-sizing: border-box;
+    display: block;
+    height: 10px;
+    width: 10px;
+}
+
+@keyframes rotation {
+    0% {
+        rotate: 0;
+    }
+    100% {
+        rotate: 360deg;
+    }
+}

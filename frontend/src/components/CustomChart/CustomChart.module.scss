@@ -1,0 +1,210 @@
+.wrapper {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart {
+    width: 100%;
+    height: 450px;
+}
+
+.isLoading {
+    display: none;
+}
+
+.button-toggle-chart-visibility {
+    max-width: 452px;
+    width: 100%;
+    margin: 0 auto !important;
+    padding: 12px 17px;
+    border-radius: 12px;
+    color: var(--white-color);
+    background: var(--background-button-linear);
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.button-toggle-chart-text {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-left: 8px;
+}
+.test {
+    color: red;
+}
+
+.chart-block {
+    display: none;
+    background-image: linear-gradient(180deg, #373c62 0, #424a7b);
+    width: 100%;
+    padding: 3.8rem 4rem 4rem;
+    border-radius: 5rem;
+    overflow: hidden;
+    // flex: 1;
+    &.show {
+        display: block;
+    }
+}
+
+.exchange-rate-images {
+    position: relative;
+    height: 40px;
+    width: 50px;
+}
+
+.cardano-coin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 30px;
+    width: 30px;
+}
+
+.djed-coin {
+    position: absolute;
+    top: 0;
+    left: 45%;
+    height: 30px;
+    width: 30px;
+}
+
+.chart-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    padding-bottom: 8px;
+    row-gap: 8px;
+}
+.header-left {
+    display: flex;
+    align-items: center;
+    column-gap: 1.6rem;
+}
+.exchange-rate-name {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+.exchange-icon-wrapper {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1.6rem;
+    background: #424a7b;
+    border: 1px solid rgb(176, 177, 204);
+    color: var(--white-color);
+    &:hover {
+        background: #424a7b80;
+    }
+}
+.exchange-check-icon {
+    margin-left: 4px;
+}
+
+.loading-overlay {
+    width: 100%;
+    min-height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loading-icon {
+    width: 50px;
+    height: 50px;
+}
+
+.current-hovered-value {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 12px 0 40px 20px;
+}
+.hovered-wrapper {
+    display: flex;
+    font-size: 2.4rem;
+    font-weight: 600;
+}
+
+.datetime {
+    font-size: 1.6rem;
+    color: #ffffff80;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.token-name {
+    margin-left: 16px;
+}
+
+.refresh-button {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    transition: all 0.2s;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgb(176, 177, 204);
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
+.refresh-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--white-color);
+}
+@media screen and (max-width: 1024px) {
+    .button-toggle-chart-visibility {
+        display: flex;
+    }
+    .chart-block {
+        padding: 4.8rem 2.4rem 2.4rem;
+        margin-top: 3rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .exchange-rate-images {
+        height: 4rem;
+        width: 6rem;
+    }
+
+    .cardano-coin,
+    .djed-coin {
+        width: 40px;
+        height: 40px;
+    }
+
+    .chart-header-wrapper {
+        flex-direction: column;
+    }
+
+    .header-inner {
+        justify-content: space-between;
+    }
+
+    .chart-block {
+        margin-top: 3rem;
+    }
+}

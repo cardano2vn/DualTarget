@@ -1,0 +1,71 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--background-header);
+    z-index: 10;
+}
+
+.wrapper-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.6rem 2.6rem;
+    width: 100%;
+}
+
+.nav-list {
+    display: flex;
+    padding: 0 3vw;
+}
+
+.nav-left-wrapper,
+.nav-right-wrapper {
+    width: 25%;
+}
+
+.nav-left-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2.6rem;
+}
+
+.nav-right-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+// Responsive
+
+@media screen and (max-width: 1365px) {
+    .navbar {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .network-wrapper {
+        user-select: none;
+        pointer-events: none;
+    }
+
+    .network-selector::before {
+        display: none;
+    }
+
+    .network-arrow-icon {
+        transition: none;
+        display: none;
+    }
+}
+
+/* connect wallet error end */
+
+@media screen and (max-width: 768px) {
+    .connect-wallet-button {
+        display: none;
+    }
+}

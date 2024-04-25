@@ -1,0 +1,60 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 24px 0 0;
+    color: #fff;
+}
+
+.button {
+    background-color: #dda85c;
+    border: 0;
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 400;
+    height: 24px;
+    letter-spacing: normal;
+    margin: 0 8px;
+    padding: 0 11px 1px;
+    width: fit-content;
+    white-space: nowrap;
+}
+
+.button-text {
+    margin: 0 3px;
+}
+
+.page-of-total {
+    font-size: 12px;
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 300;
+    letter-spacing: normal;
+    line-height: 2;
+    min-width: 110px;
+    text-align: center;
+}
+
+@media (max-width: 1365px) {
+    .wrapper {
+        margin: 24px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        flex-wrap: wrap;
+    }
+
+    .page-of-total {
+        order: -1;
+        width: 100%;
+    }
+}

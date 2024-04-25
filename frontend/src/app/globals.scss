@@ -1,0 +1,136 @@
+@import "normalize.css";
+
+:root {
+    --max-width: 1024px;
+    --border-radius-12: 12px;
+    --border-radius-50: 50px;
+    --hover-link-color: #efc644;
+    --white-color: rgb(255, 255, 255);
+    --black-color: rgba(0, 0, 0);
+    --background-header: #2e3154;
+    --text-primary-color: #e086f7;
+    --text-secondary-color: #e086f7;
+    --background-primary: linear-gradient(180deg, #1d2345 0, #3a426f);
+    --background-button-linear: linear-gradient(91.14deg, #7054d1 0.64%, #ab56c9 51.6%, #b275dc 99.47%);
+    --shadow-button: 0 8px 12px 0 rgba(177, 109, 215, 0.28);
+    --text-linear: linear-gradient(107deg, #7054d1 16%, #ab56c9 60%, #b275dc 102%);
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    font-size: 62.5%;
+    font-family: "Poppins", Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    background-repeat: no-repeat;
+}
+
+body {
+    color: var(--white-color);
+    background: var(--background-primary) center / 100% no-repeat;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+input,
+button,
+textarea {
+    border: none;
+    outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        color-scheme: dark;
+    }
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("../assets/fonts/Poppins-Bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("../assets/fonts/Poppins-Medium.ttf") format("truetype");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("../assets/fonts/Poppins-Regular.ttf") format("truetype");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("../assets/fonts/Poppins-ExtraLight.ttf") format("truetype");
+    font-weight: 400;
+}
+
+// Scrollbar CSS
+html *::-webkit-scrollbar {
+    border-radius: 0.5rem;
+    width: 6px;
+}
+
+html *::-webkit-scrollbar-thumb {
+    border-radius: var(--border-radius-primary);
+    background: #c2c2c2;
+}
+
+html *::-webkit-scrollbar-track {
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+// Custom chart
+.apexcharts-tooltip {
+    opacity: 1 !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
+    display: flex !important;
+    flex-direction: column-reverse !important;
+}
+
+.apexcharts-tooltip-marker {
+    display: none !important;
+}
+
+.apexcharts-tooltip-title {
+    background-color: transparent !important;
+    border: none !important;
+    font-size: 1.6rem !important;
+    color: #ffffff80 !important;
+}
+
+.apexcharts-tooltip-series-group {
+    padding: 0 !important;
+}
+
+.apexcharts-tooltip-text {
+    font-size: 2.4rem !important;
+    font-weight: 600 !important;
+}
+
+.apexcharts-tooltip-y-group {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    gap: 1rem !important;
+}
