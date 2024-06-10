@@ -1,0 +1,48 @@
+.wrapper {
+    margin-top: 80px;
+}
+
+.founder-container {
+    border-radius: 8px;
+    padding: 56px min(56px, 5.6vw);
+    margin: 0 auto;
+    margin: 50px 20px;
+    align-content: start;
+    align-items: stretch;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: stretch;
+    justify-items: stretch;
+}
+
+@media (max-width: 1366px) {
+    .content {
+        padding: 14.8rem 6.4rem 12.8rem;
+    }
+
+    .background-cardano-side-wrapper {
+        height: 50%;
+    }
+    .background-floating-coins-wrapper {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .founder-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .founder-container {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .founder-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

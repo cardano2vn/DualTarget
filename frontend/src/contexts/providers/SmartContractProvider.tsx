@@ -1,6 +1,16 @@
 "use client";
 
-import { Data, Lucid, TxHash, TxSigned, UTxO, Credential, Lovelace, Address, Constr } from "lucid-cardano";
+import {
+    Data,
+    Lucid,
+    TxHash,
+    TxSigned,
+    UTxO,
+    Credential,
+    Lovelace,
+    Address,
+    Constr,
+} from "lucid-cardano";
 import React, { ReactNode, useContext, useState } from "react";
 import SmartContractContext from "~/contexts/components/SmartContractContext";
 import { ClaimableUTxO, CalculateSellingStrategy } from "~/types/GenericsType";
@@ -21,24 +31,46 @@ const SmartContractProvider = function ({ children }: Props) {
     const [waitingWithdraw, setWaitingWithdraw] = useState<boolean>(false);
     const [waitingCalculateEUTxO, setWaitingCalculateEUTxO] = useState<boolean>(false);
 
-    const deposit = async function ({ lucid, sellingStrategies }: { lucid: Lucid; sellingStrategies: CalculateSellingStrategy[] }) {
+    const deposit = async function ({
+        lucid,
+        sellingStrategies,
+        currentPrice,
+    }: {
+        lucid: Lucid;
+        sellingStrategies: CalculateSellingStrategy[];
+        currentPrice: number;
+    }) {
         try {
             setWaitingDeposit(true);
+            console.log(currentPrice);
 
-            const contractAddress: string = process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
+            const contractAddress: string = process.env
+                .DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
             const datumParams = await readDatum({ contractAddress: contractAddress, lucid: lucid });
 
-            const vkeyOwnerHash: string = lucid.utils.getAddressDetails(await lucid.wallet.address()).paymentCredential?.hash as string;
-            const vkeyBeneficiaryHash: string = lucid.utils.getAddressDetails(contractAddress).paymentCredential?.hash as string;
-
-            const datums: any[] = sellingStrategies.map(function (sellingStrategy: CalculateSellingStrategy, index: number) {
+            console.log(datumParams);
+            const vkeyOwnerHash: string = lucid.utils.getAddressDetails(
+                await lucid.wallet.address(),
+            ).paymentCredential?.hash as string;
+            const vkeyBeneficiaryHash: string = lucid.utils.getAddressDetails(contractAddress)
+                .paymentCredential?.hash as string;
+            const datums: any[] = sellingStrategies.map(function (
+                sellingStrategy: CalculateSellingStrategy,
+                index: number,
+            ) {
                 return Data.to<DualtargetDatum>(
                     {
                         odOwner: vkeyOwnerHash,
                         odBeneficiary: vkeyBeneficiaryHash,
-                        assetADA: { policyId: datumParams.assetAda.policyId, assetName: datumParams.assetAda.assetName },
+                        assetADA: {
+                            policyId: datumParams.assetAda.policyId,
+                            assetName: datumParams.assetAda.assetName,
+                        },
                         amountADA: BigInt(sellingStrategy.amountSend!),
-                        assetOut: { policyId: datumParams.assetOut.policyId, assetName: datumParams.assetOut.assetName },
+                        assetOut: {
+                            policyId: datumParams.assetOut.policyId,
+                            assetName: datumParams.assetOut.assetName,
+                        },
                         minimumAmountOut: BigInt(sellingStrategy.minimumAmountOut!),
                         minimumAmountOutProfit: BigInt(sellingStrategy.minimumAmountOutProfit!),
                         buyPrice: BigInt(sellingStrategy.buyPrice!),
@@ -49,7 +81,7 @@ const SmartContractProvider = function ({ children }: Props) {
                         feeAddress: datumParams.feeAddress,
                         validatorAddress: datumParams.validatorAddress,
                         deadline: BigInt(new Date().getTime() + 10 * 1000),
-                        isLimitOrder: BigInt(0),
+                        isLimitOrder: BigInt(2),
                     },
                     DualtargetDatum,
                 );
@@ -57,11 +89,32 @@ const SmartContractProvider = function ({ children }: Props) {
 
             let tx: any = lucid.newTx();
 
-            sellingStrategies.forEach(async function (sellingStrategy: CalculateSellingStrategy, index: number) {
-                tx = await tx.payToContract(contractAddress, { inline: datums[index] }, { lovelace: BigInt(sellingStrategy.amountSend!) });
+            sellingStrategies.forEach(async function (
+                sellingStrategy: CalculateSellingStrategy,
+                index: number,
+            ) {
+                console.log(sellingStrategy.buyPrice);
+                if (Number(sellingStrategy.buyPrice) <= Number(currentPrice * 1000000)) {
+                    tx = await tx.payToContract(
+                        contractAddress,
+                        { inline: datums[index] },
+                        {
+                            [process.env.MIN_TOKEN_ASSET_PREPROD!]: BigInt(
+                                Math.round(sellingStrategy.amountSend! / 1000000),
+                            ),
+                        },
+                    );
+                } else {
+                    tx = await tx.payToContract(
+                        contractAddress,
+                        { inline: datums[index] },
+                        { lovelace: BigInt(sellingStrategy.amountSend!) },
+                    );
+                }
             });
 
             tx = await tx.complete();
+            console.log(tx);
 
             const signedTx: TxSigned = await tx.sign().complete();
             const txHash: TxHash = await signedTx.submit();
@@ -78,11 +131,18 @@ const SmartContractProvider = function ({ children }: Props) {
         }
     };
 
-    const withdraw = async function ({ lucid, claimableUtxos }: { lucid: Lucid; claimableUtxos: Array<ClaimableUTxO> }) {
+    const withdraw = async function ({
+        lucid,
+        claimableUtxos,
+    }: {
+        lucid: Lucid;
+        claimableUtxos: Array<ClaimableUTxO>;
+    }) {
         try {
             setWaitingWithdraw(true);
             const refundRedeemer = Data.to(new Constr(1, []));
-            const contractAddress: string = process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
+            const contractAddress: string = process.env
+                .DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
             const scriptUtxos: UTxO[] = await lucid.utxosAt(contractAddress);
             let smartcontractUtxo: UTxO | undefined = scriptUtxos.find(function (scriptUtxo: UTxO) {
                 return scriptUtxo.scriptRef?.script;
@@ -117,13 +177,27 @@ const SmartContractProvider = function ({ children }: Props) {
         }
     };
 
-    const calculateClaimEUTxO = async function ({ lucid, mode, min, max }: { lucid: Lucid; mode: number; min: number; max: number }) {
+    const calculateClaimEUTxO = async function ({
+        lucid,
+        mode,
+        min,
+        max,
+    }: {
+        lucid: Lucid;
+        mode: number;
+        min: number;
+        max: number;
+    }) {
         setWaitingCalculateEUTxO(true);
         try {
-            const paymentAddress: string = lucid.utils.getAddressDetails(await lucid.wallet.address()).paymentCredential?.hash as string;
-            const contractAddress: string = process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
+            const paymentAddress: string = lucid.utils.getAddressDetails(
+                await lucid.wallet.address(),
+            ).paymentCredential?.hash as string;
+            const contractAddress: string = process.env
+                .DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
             const scriptUtxos: UTxO[] = await lucid.utxosAt(contractAddress);
             const datumParams = await readDatum({ contractAddress: contractAddress, lucid: lucid });
+
             const claimableUtxos: ClaimableUTxO[] = [];
             for (const scriptUtxo of scriptUtxos) {
                 if (scriptUtxo.datum) {
@@ -132,9 +206,15 @@ const SmartContractProvider = function ({ children }: Props) {
                     const params = {
                         odOwner: outputDatum.fields[0],
                         odBeneficiary: outputDatum.fields[1],
-                        assetADA: { policyId: datumParams.assetAda.policyId, assetName: datumParams.assetAda.assetName },
+                        assetADA: {
+                            policyId: datumParams.assetAda.policyId,
+                            assetName: datumParams.assetAda.assetName,
+                        },
                         amountA: outputDatum.fields[3],
-                        assetOut: { policyId: datumParams.assetOut.policyId, assetName: datumParams.assetOut.assetName },
+                        assetOut: {
+                            policyId: datumParams.assetOut.policyId,
+                            assetName: datumParams.assetOut.assetName,
+                        },
                         minimumAmountOut: outputDatum.fields[5],
                         minimumAmountOutProfit: outputDatum.fields[6],
                         buyPrice: outputDatum.fields[7],
@@ -151,7 +231,10 @@ const SmartContractProvider = function ({ children }: Props) {
                     switch (mode) {
                         case 0:
                             if (String(params.odOwner) === String(paymentAddress)) {
-                                let winter_addr: Credential = { type: "Key", hash: params.feeAddress };
+                                let winter_addr: Credential = {
+                                    type: "Key",
+                                    hash: params.feeAddress,
+                                };
                                 const freeAddress1 = lucid.utils.credentialToAddress(winter_addr);
 
                                 claimableUtxos.push({
@@ -164,8 +247,14 @@ const SmartContractProvider = function ({ children }: Props) {
                                 break;
                             }
                         case 1:
-                            if (String(params.odOwner) === String(paymentAddress) && Number(params.isLimitOrder) !== 0) {
-                                let winter_addr: Credential = { type: "Key", hash: params.feeAddress };
+                            if (
+                                String(params.odOwner) === String(paymentAddress) &&
+                                Number(params.isLimitOrder) !== 0
+                            ) {
+                                let winter_addr: Credential = {
+                                    type: "Key",
+                                    hash: params.feeAddress,
+                                };
                                 const freeAddress1 = lucid.utils.credentialToAddress(winter_addr);
 
                                 claimableUtxos.push({
@@ -184,7 +273,10 @@ const SmartContractProvider = function ({ children }: Props) {
                                 params.buyPrice >= min * 1000000 &&
                                 params.buyPrice <= max * 1000000
                             ) {
-                                let winter_addr: Credential = { type: "Key", hash: params.feeAddress };
+                                let winter_addr: Credential = {
+                                    type: "Key",
+                                    hash: params.feeAddress,
+                                };
                                 const freeAddress1 = lucid.utils.credentialToAddress(winter_addr);
 
                                 claimableUtxos.push({
@@ -209,8 +301,13 @@ const SmartContractProvider = function ({ children }: Props) {
         return [];
     };
 
-    const previewWithdraw = async function ({ lucid }: { lucid: Lucid }): Promise<CalculateSellingStrategy[]> {
-        const paymentAddress: string = lucid.utils.getAddressDetails(await lucid.wallet.address()).paymentCredential?.hash as string;
+    const previewWithdraw = async function ({
+        lucid,
+    }: {
+        lucid: Lucid;
+    }): Promise<CalculateSellingStrategy[]> {
+        const paymentAddress: string = lucid.utils.getAddressDetails(await lucid.wallet.address())
+            .paymentCredential?.hash as string;
         const contractAddress: string = process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
         const scriptUtxos: UTxO[] = await lucid.utxosAt(contractAddress);
 

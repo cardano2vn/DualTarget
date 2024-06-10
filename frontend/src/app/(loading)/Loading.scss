@@ -1,0 +1,42 @@
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-header);
+    z-index: 9999;
+}
+
+.preloader__wrapper {
+    --size: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    width: var(--size);
+    height: var(--size);
+    list-style-type: none;
+    position: relative;
+    margin: 0 auto;
+    top: 50%;
+}
+
+.preloader_box {
+    width: calc(var(--size) / 3);
+    height: calc(var(--size) / 3);
+    background: var(--white-color);
+    float: left;
+    animation: animate 1.3s ease-in-out var(--i) infinite;
+}
+
+@keyframes animate {
+    0%,
+    70%,
+    100% {
+        -webkit-transform: scale3D(1, 1, 1);
+        transform: scale3D(1, 1, 1);
+    }
+    35% {
+        -webkit-transform: scale3D(0, 0, 1);
+        transform: scale3D(0, 0, 1);
+    }
+}

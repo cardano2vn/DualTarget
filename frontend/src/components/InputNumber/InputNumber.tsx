@@ -4,6 +4,7 @@ import Tippy from "~/components/Tippy";
 import styles from "./InputNumber.module.scss";
 import Image from "next/image";
 import icons from "~/assets/icons";
+import { Placement } from "tippy.js";
 
 const cx = classNames.bind(styles);
 
@@ -15,9 +16,11 @@ interface Props {
     onChange?: (...event: any[]) => void;
     value: string;
     description?: string;
+    tooltipPlacement?: Placement;
 }
+
 const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumberInner(
-    { errorMessage, title, placeholder, className, onChange, value = "", description }: Props,
+    { errorMessage, title, placeholder, className, onChange, value = "", description, tooltipPlacement }: Props,
     ref,
 ) {
     const [localValue, setLocalValue] = useState<string>(value);
@@ -34,7 +37,7 @@ const InputNumber = forwardRef<HTMLInputElement, Props>(function InputNumberInne
             <div className={cx("title")}>
                 {title}
                 {description && (
-                    <Tippy render={<div>{description}</div>}>
+                    <Tippy placement={tooltipPlacement} render={<div>{description}</div>}>
                         <Image className={cx("icon-help-circle")} src={icons.helpCircle} width={12} height={12} alt="" />
                     </Tippy>
                 )}

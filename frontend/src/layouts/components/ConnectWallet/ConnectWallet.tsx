@@ -27,6 +27,7 @@ import ModalContext from "~/contexts/components/ModalContext";
 import Toast from "~/components/Toast";
 import { ToastContextType } from "~/types/contexts/ToastContextType";
 import ToastContext from "~/contexts/components/ToastContext";
+import TranslateContext from "~/contexts/components/TranslateContext";
 
 const cx = classNames.bind(styles);
 type Props = {
@@ -34,6 +35,8 @@ type Props = {
 };
 
 const ConnectWallet = function ({ className }: Props) {
+    const { t } = useContext(TranslateContext);
+
     const { isShowingErrorNetwork, toogleErrorNetwork, isShowingWallet, toggleShowingWallet, isShowingTestNetwork, toggleTestNetwork } =
         useContext<ModalContextType>(ModalContext);
     const { toasts } = useContext<ToastContextType>(ToastContext);
@@ -112,18 +115,7 @@ const ConnectWallet = function ({ className }: Props) {
                                         <div className={cx("data-number")}>{wallet?.balance}</div>
                                     </section>
                                 </div>
-                                <div className={cx("item-wallet")}>
-                                    <section className={cx("item-icon")}>
-                                        <Image className={cx("item-icon-image")} src={images.shen} alt="" />
-                                    </section>
-                                    <section className={cx("item-data")}>
-                                        <div className={cx("item-data-name")}>
-                                            <p className={cx("item-data-name-symbol")}>ADA</p>
-                                            <p className={cx("item-data-name-description")}>Cardano</p>
-                                        </div>
-                                        <p className={cx("data-number")}>{wallet?.balance}</p>
-                                    </section>
-                                </div>
+
                                 <div onClick={disconnect} className={cx("disconnect")}>
                                     Disconnect
                                 </div>
@@ -143,7 +135,7 @@ const ConnectWallet = function ({ className }: Props) {
                         <div>
                             <section className={cx("connected-wallet-container")}>
                                 <div className={cx("connected-wallet-total-ada")}>
-                                    {wallet?.balance && wallet.balance.toFixed(6)} {" ₳"}
+                                    {wallet?.balance && wallet.balance.toFixed(5)} {" ₳"}
                                 </div>
 
                                 <div className={cx("connected-wallet-image-container")}>
@@ -158,7 +150,7 @@ const ConnectWallet = function ({ className }: Props) {
                             </section>
                         </div>
                     ) : (
-                        <span>{isShowingErrorNetwork ? "Wrong Network" : "Connect Wallet"}</span>
+                        <span>{isShowingErrorNetwork ? t("layout.wallet.button wrong network") : t("layout.wallet.button connect")}</span>
                     )}
                 </Button>
             </Tippy>
@@ -174,16 +166,16 @@ const ConnectWallet = function ({ className }: Props) {
                             <Image className={cx("connect-wallet-close-icon")} src={icons.close} alt="" />
                         </section>
                         <section className={cx("connect-wallet-title")}>
-                            <h1>Connect Wallet</h1>
+                            <h1> {t("layout.wallet.button connect")}</h1>
                         </section>
                         <section className={cx("connect-wallet-accept")}>
                             <div className={cx("connect-wallet-input")}>
                                 <input onChange={handleAccept} type="checkbox" placeholder="" className={cx("connect-wallet-checkbox")} />
                             </div>
                             <label className={cx("connect-wallet-input")} htmlFor="">
-                                By checking this box and connecting my wallet, I confirm that I have read, understood, and agreed to the
+                                {t("layout.wallet.terms and conditions")}
                                 <Link className={cx("connect-wallet-input-link")} target="_blank" href={configs.routes.term}>
-                                    Terms and Conditions
+                                    {t("layout.wallet.terms and conditions link")}
                                 </Link>
                                 .
                             </label>
@@ -199,8 +191,8 @@ const ConnectWallet = function ({ className }: Props) {
 
             <Modal toggle={toogleErrorNetwork} isShowing={isShowingErrorNetwork}>
                 <div className={cx("connect-wallet-error-wrapper")}>
-                    <h2 className={cx("connect-wallet-error-title")}>Wallet Network Error</h2>
-                    <p className={cx("connect-wallet-error-description")}>Please change the network to preprod or disconnect</p>
+                    <h2 className={cx("connect-wallet-error-title")}>{t("layout.wallet.network error")}</h2>
+                    <p className={cx("connect-wallet-error-description")}>{t("layout.wallet.change network")}</p>
                     <div className={cx("connect-wallet-error-button-wrapper")}>
                         <Button onClick={disconnect} className={cx("connect-wallet-error-button")}>
                             Disconnect

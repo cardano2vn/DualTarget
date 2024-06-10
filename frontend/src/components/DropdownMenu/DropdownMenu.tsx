@@ -30,6 +30,8 @@ const DropdownMenu = function ({ items, selectItem, currentItem, classNameItem, 
         selectItem(item);
     };
 
+    
+
     return (
         <div className={cx("wrapper")}>
             <div

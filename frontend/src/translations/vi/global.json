@@ -1,10 +1,196 @@
 {
-    "header": {
-        "home": "Trang chủ",
-        "deposit": "Tiền gửi",
-        "withdraw": "Rút",
-        "rewards": "Phần thưởng ủy quyền",
-        "faq": "Các câu hỏi thường gặp"
+    "layout": {
+        "form": {
+            "errors": {
+                "messages": {
+                    "required": "Trường này là bắt buộc",
+                    "min": "Giá tối thiểu phải lớn hơn giá tối đa.",
+                    "max": "Giá tối đa phải lớn hơn giá tối thiểu."
+                }
+            }
+        },
+        "header": {
+            "home": "Trang chủ",
+            "deposit": "Tiền gửi",
+            "withdraw": "Rút",
+            "rewards": "Phần thưởng ủy quyền",
+            "about": "Giới thiệu",
+            "faq": "Các câu hỏi thường gặp"
+        },
+        "wallet": {
+            "button connect": "Kết nối ví",
+            "button wrong network": "Sai mạng",
+            "terms and conditions": "Bằng cách chọn hộp này và kết nối ví của mình, tôi xác nhận rằng tôi đã đọc, hiểu và đồng ý với",
+            "terms and conditions link": "Điều khoản và Điều kiện",
+            "not installed": "Chưa cài đặt",
+            "network error": "Lỗi mạng ví",
+            "change network": "Vui lòng thay đổi mạng thành preprod hoặc ngắt kết nối"
+        },
+        "notification": {
+            "no wallet": "Kết nối để xem các yêu cầu đúc và ghi của bạn",
+            "error to fetch data": "Đã xảy ra lỗi khi tìm nạp dữ liệu",
+            "no data": "Không có dữ liệu"
+        },
+        "footer": {
+            "term of use": "Điều khoản sử dụng",
+            "powered by": "Được cung cấp bởi"
+        }
     },
-    "home": ""
+    "home": {
+        "title": "Mục tiêu kép dành cho Người nắm giữ ADA (Stake và tăng tài sản) với bot giao dịch tự động phi tập trung",
+        "card pool": {
+            "title": "Quỹ",
+            "total wallet": "Tổng số ví",
+            "total UTxO": "Tổng UTxO",
+            "total volume lock": "Tổng số lượng giao dịch khóa",
+            "total DJED": "Tổng DJED",
+            "button": "Gửi tiền"
+        },
+        "card statistics": {
+            "title": "Thống kê",
+            "total transactions": "Tổng số giao dịch",
+            "total volume lock": "Tổng số lượng giao dịch khóa",
+            "total volume unlock": "Tổng số lượng giao dịch mở khóa",
+            "total DJED": "Tổng DJED",
+            "button": "Rút tiền"
+        },
+        "card profit": {
+            "title": "Tỷ suất lợi nhuận",
+            "base reserve": "Pool Dualtarget",
+            "update": "Cập nhật mới nhất: "
+        },
+        "card sub": "*Gửi tiền\\Rút tiền bao gồm phí cơ bản và phí điều hành",
+        "about dualtarget": {
+            "title": "Về dualtarget",
+            "sub title": "Đặt cọc và tăng tài sản bằng phương thức phi tập trung",
+            "content": {
+                "paragraph 1": "Chúng tôi sẽ phát triển một nền tảng cho phép người dùng chọn mục tiêu kép và phương thức giao dịch trực tiếp trong ví của họ. Đồng thời, chúng tôi sẽ tạo các bot giao dịch tự động trên các sàn giao dịch phi tập trung",
+                "paragraph 2": "Chúng tôi sẽ phát triển một nền tảng cho phép người dùng chọn mục tiêu kép và phương thức giao dịch trực tiếp trong ví của họ. Đồng thời, chúng tôi sẽ tạo các bot giao dịch tự động trên các sàn giao dịch phi tập trung"
+            },
+            "button": "Chúng tôi"
+        }
+    },
+    "deposit": {
+        "title": "Quỹ tiền gửi",
+        "card": {
+            "title": "Tiền gửi",
+            "balance": "Số dư",
+            "fields": {
+                "min price": {
+                    "title": "Giá thấp nhất",
+                    "placeholder": "Nhập giá thấp nhất",
+                    "instruction": "Bạn có thể giữ giá thấp nhất cho chiến lược"
+                },
+                "max price": {
+                    "title": "Giá cao nhất",
+                    "placeholder": "Nhập giá cao nhất",
+                    "instruction": "Bạn có thể giữ giá cao nhất cho chiến lược"
+                },
+                "desired income": {
+                    "title": "Thu nhập mong muốn",
+                    "placeholder": "Nhập thu nhập mong muốn",
+                    "instruction": "Số tiền nhận được hàng tháng"
+                },
+                "stake percentage": {
+                    "title": "Tỷ lệ cổ phần",
+                    "placeholder": "Nhập tỷ lệ cổ phần",
+                    "instruction": "Phần thưởng cổ phần hàng năm"
+                },
+                "step": {
+                    "title": "Bước nhảy",
+                    "placeholder": "Nhập bước nhảy giá",
+                    "instruction": "Bước nhảy cho ₳/DJED"
+                },
+                "total ADA": {
+                    "title": "Tổng số ADA",
+                    "placeholder": "Nhập tổng số ADA",
+                    "instruction": "Tổng số ADA đang giữ"
+                }
+            },
+            "button deposit": "Gửi tiền",
+            "button calculate": "Tính",
+            "fees": "Phí",
+            "you will pay": "Bạn sẽ trả"
+        },
+        "history": {
+            "title": "Lịch sử"
+        }
+    },
+    "withdraw": {
+        "title": "Rút tài sản",
+        "balance": "Số dư",
+        "card": {
+            "fields": {
+                "ranges": {
+                    "min": { "title": "Tối thiểu", "instruction": "Tính toán dựa trên các tham số số lượng tối thiểu của hợp đồng." },
+                    "max": { "title": "Tối đa", "instruction": "Tính toán dựa trên số lượng có thể đúc được và số dư ví của bạn." }
+                },
+                "amount": {
+                    "placeholder": "Nhập tổng số ADA"
+                }
+            },
+            "modes": {
+                "all": "TẤT CẢ",
+                "only profit": "CHỈ LỢI NHUẬN",
+                "select parts": "CHỌN PHẦN"
+            },
+            "button": "Rút tiền",
+            "fees": "Phí",
+            "you will receive": "Bạn sẽ nhận"
+        },
+        "orders": {
+            "title": "Đơn hàng"
+        }
+    },
+    "delegation rewards": {
+        "card": {
+            "title": "Phần thưởng ủy quyền cho người giữ ADA",
+            "sub title": "Kiểm tra phần thưởng ADA của bạn",
+            "fields": {
+                "address": {
+                    "title": "Địa chỉ",
+                    "placeholder": "Nhập địa chỉ để tải dữ liệu",
+                    "instruction": "Vui lòng nhập địa chỉ Cardano của bạn đủ điều kiện nhận phần thưởng ủy quyền."
+                }
+            },
+            "current epoch": "Epoch hiện tại",
+            "total distributed rewards": "Tổng phần thưởng đã phân phối",
+            "total pending rewards": "Tổng phần thưởng đang chờ xử lý"
+        }
+    },
+    "faq": {
+        "title": "Câu hỏi thường gặp",
+        "sub title": "Câu trả lời cho các câu hỏi thường gặp",
+        "questions": {
+            "1": "Cơ chế ổn định của DJED là gì?",
+            "2": "Cơ chế ổn định của DJED là gì?",
+            "3": "Điều gì xảy ra với giá của SHEN nếu tỷ lệ rơi xuống dưới 400%?"
+        },
+        "answers": {
+            "1": "<p className={cx(\"faq-paragraph\")}>DJED là một stablecoin được thế chấp quá mức sử dụng tài sản thế chấp ngoại sinh (ADA) để đảm bảo sự ổn định. Giao thức này được hỗ trợ bởi tỷ lệ thế chấp quá mức từ 400-800% và được đảm bảo bởi đồng tiền dự trữ của nó, SHEN. Sự ổn định của DJED dựa trên thế chấp quá mức, điều này loại bỏ nhu cầu tin tưởng vào một token quản trị như được thấy trong các stablecoin thuật toán. Nền tảng này cũng hoàn toàn phi tập trung và do cộng đồng điều hành, cho phép phát triển mã nguồn mở và sự tham gia của cộng đồng trong việc đúc và đốt DJED và SHEN. </p> <p className={cx(\"faq-paragraph\")}><Image className={cx(\"faq-image\")} style={{ objectFit: \"contain\" }} src={images.eternl} alt=\"\"/></p>",
+            "2": "<p className={cx(\"faq-paragraph\")}><b className={cx(\"faq-bold\")}>Tài sản thế chấp</b> - Djed sử dụng tài sản thế chấp ngoại sinh (ADA). Một stablecoin thuật toán thông thường sử dụng tài sản thế chấp nội sinh, như: FRAX, Synthetix và UST. </p>",
+            "3": "<p className={cx(\"faq-paragraph\")}>Giá mua của SHEN được xác định bởi phương trình PbRc. Điều này có nghĩa là nếu Ptrc (giá mục tiêu của đồng tiền dự trữ) không được xác định, giao thức sẽ lấy giá tối thiểu. Ngược lại, nó sẽ lấy giá tối đa giữa vốn chia cho số lượng RC và giá tối thiểu. </p> <p className={cx(\"faq-paragraph\")}>Giá mua của SHEN được xác định bởi phương trình PbRc. Điều này có nghĩa là nếu Ptrc (giá mục tiêu của đồng tiền dự trữ) không được xác định, giao thức sẽ lấy giá tối thiểu. Ngược lại, nó sẽ lấy giá tối đa giữa vốn chia cho số lượng RC và giá tối thiểu. </p>"
+        }
+    },
+    "about": {
+        "title": "Về Quỹ của Chúng Tôi",
+        "sub title": "Chúng tôi là một tổ chức trung lập và độc lập, mỗi ngày chúng tôi tạo ra các chương trình độc đáo, đẳng cấp thế giới và phát triển",
+        "founders": {
+            "1": {
+                "name": "Tiến Nguyễn Anh",
+                "major": "Chuyên gia Khoa học Máy tính",
+                "description": "Người sáng lập hồ bơi stake VILAI, cựu chuyên gia tại HPE; Kỹ sư Hỗ trợ Blockchain"
+            },
+            "2": {
+                "name": "Hiếu Nguyễn Văn",
+                "major": "Thạc sĩ Điện tử và Viễn thông",
+                "description": "Người sáng lập hồ bơi stake HADA, thành viên của Chương trình Plutus Pioneer, Nhà nghiên cứu tại VAST."
+            },
+            "3": {
+                "name": "Khánh Phạm Văn",
+                "major": "Tiến sĩ Toán học",
+                "description": "Nhà nghiên cứu tại Viện Công nghệ Thông tin - VAST; Giảng viên tại Đại học Quốc gia Hà Nội về Trí tuệ Nhân tạo, Học sâu, Học tăng cường"
+            }
+        }
+    }
 }

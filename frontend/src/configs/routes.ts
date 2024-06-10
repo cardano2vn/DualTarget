@@ -4,6 +4,7 @@ const routes = {
     withdraw: "/withdraw",
     rewards: "/delegation-rewards",
     faq: "/faq",
+    about: "/about",
     term: "/term",
 } as const;
 

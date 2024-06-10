@@ -395,7 +395,8 @@
         max-width: 100%;
         padding: 36px 20px;
         width: 100%;
-        z-index: 1000;
+        z-index: 1001 !important;
     }
+
     /* connect wallet end */
 }

@@ -12,6 +12,7 @@ import { TransactionHistoryType, TransactionResponseType } from "~/types/Generic
 import WalletContext from "~/contexts/components/WalletContext";
 import Loading from "../Loading";
 import { historyTransactions } from "~/constants/header-table";
+import TranslateContext from "~/contexts/components/TranslateContext";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,7 @@ type Props = {
 
 const Orders = ({ className, isLoading, data, isError, page, setPage }: Props) => {
     const { wallet } = useContext(WalletContext);
+    const { t } = useContext(TranslateContext);
 
     return (
         <div className={cx("wrapper", className)}>
@@ -34,7 +36,7 @@ const Orders = ({ className, isLoading, data, isError, page, setPage }: Props) =
                     <div className={cx("icon-wrapper")}>
                         <Image src={icons.glass} className={cx("icon")} alt="search-icon" />
                     </div>
-                    <p className={cx("notification")}>Connect to view your mint and burn requests</p>
+                    <p className={cx("notification")}>{t("layout.notification.no wallet")}</p>
                 </div>
             ) : (
                 <div>
@@ -50,7 +52,7 @@ const Orders = ({ className, isLoading, data, isError, page, setPage }: Props) =
                             <div className={cx("icon-wrapper")}>
                                 <Image src={icons.glass} className={cx("icon")} alt="search-icon" />
                             </div>
-                            <p className={cx("notification")}>There was an error fetching data</p>
+                            <p className={cx("notification")}>{t("layout.notification.error to fetch data")}</p>
                         </div>
                     )}
                     {data && data.histories.length === 0 && (
@@ -58,7 +60,7 @@ const Orders = ({ className, isLoading, data, isError, page, setPage }: Props) =
                             <div className={cx("icon-wrapper")}>
                                 <Image src={icons.glass} className={cx("icon")} alt="search-icon" />
                             </div>
-                            <p className={cx("notification")}>No data available</p>
+                            <p className={cx("notification")}>{t("layout.notification.no data")}</p>
                         </div>
                     )}
                     {data && data.histories.length > 0 && (

@@ -1,65 +1,76 @@
-import React from "react";
+import React, { useContext } from "react";
 import classNames from "classnames/bind";
 import Image from "next/image";
+import parse from "html-react-parser";
 import styles from "~/components/FaqItem/FaqItem.module.scss";
 import images from "~/assets/images";
+import TranslateContext from "~/contexts/components/TranslateContext";
+import { TFunction } from "i18next";
 
 const cx = classNames.bind(styles);
-type Props = {};
 
-const faqs = [
-    {
-        title: "What is DJED's stability mechanism?",
-        Children: function (): JSX.Element {
-            return (
-                <span className={cx("faq-description")}>
-                    <p className={cx("faq-paragraph")}>
-                        DJED is an overcollateralized stablecoin that uses exogenous collateral (ADA) to ensure stability. The protocol is backed by
-                        400-800% overcollateralization and is guaranteed by its reserve coin, SHEN. The stability of DJED is based on
-                        overcollateralization, which eliminates the need for trust in a governance token as seen in algorithmic stablecoins. The
-                        platform is also fully decentralized and community-driven, allowing for open-source development and community involvement in
-                        minting and burning DJED and SHEN.
-                    </p>
-                    <p className={cx("faq-paragraph")}>
-                        <Image className={cx("faq-image")} src={images.eternl} alt="" />
-                    </p>
-                </span>
-            );
-        },
-    },
-    {
-        title: "What is DJED's stability mechanism?",
-        Children: function (): JSX.Element {
-            return (
-                <span>
-                    <p className={cx("faq-paragraph")}>
-                        <b className={cx("faq-bold")}>Collateral</b> - Djed uses exogenous collateral (ADA). A typical algorithmic stablecoin uses
-                        endogenous collateral, such as: FRAX, Synthetix and UST.
-                    </p>
-                </span>
-            );
-        },
-    },
+function useFAQs(): {
+    t: TFunction<"translation", undefined>;
+    faqs: {
+        title: string;
+        Children: () => JSX.Element;
+    }[];
+} {
+    const { t } = useContext(TranslateContext);
+    return {
+        t,
+        faqs: [
+            {
+                title: t("faq.questions.1"),
+                Children: function (): JSX.Element {
+                    return (
+                        <span
+                            style={{
+                                fontSize: 14,
+                            }}
+                            className={cx("faq-description")}
+                        >
+                            {parse(t("faq.answers.1"))}
+                        </span>
+                    );
+                },
+            },
+            {
+                title: t("faq.questions.2"),
+                Children: function (): JSX.Element {
+                    return (
+                        <span
+                            style={{
+                                fontSize: 14,
+                            }}
+                            className={cx("faq-description")}
+                        >
+                            {parse(t("faq.answers.2"))}
+                        </span>
+                    );
+                },
+            },
 
-    {
-        title: "What happens to SHEN's price if the ratio falls below 400%?",
-        Children: function (): JSX.Element {
-            return (
-                <span>
-                    <p className={cx("faq-paragraph")}>
-                        The buying price of SHEN, is determined by the equation PbRc. This means that if Ptrc (price target reserve coin) is not
-                        defined, the protocol takes the minimum price. Otherwise, it takes the maximum between the equity divided by the number of RC
-                        and the minimum price.
-                    </p>
-                    <p className={cx("faq-paragraph")}>
-                        The buying price of SHEN, is determined by the equation PbRc. This means that if Ptrc (price target reserve coin) is not
-                        defined, the protocol takes the minimum price. Otherwise, it takes the maximum between the equity divided by the number of RC
-                        and the minimum price.
-                    </p>
-                </span>
-            );
-        },
-    },
-];
+            {
+                title: t("faq.questions.3"),
+                Children: function (): JSX.Element {
+                    return (
+                        <span
+                            style={{
+                                fontSize: 14,
+                            }}
+                            className={cx("faq-description")}
+                        >
+                            {parse(t("faq.answers.3"))}
+                        </span>
+                    );
+                },
+            },
+        ] as {
+            title: string;
+            Children: () => JSX.Element;
+        }[],
+    };
+}
 
-export default faqs;
+export default useFAQs;

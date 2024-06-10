@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import classNames from "classnames/bind";
 import styles from "./Header.module.scss";
 import HeaderOption from "./HeaderOption";
@@ -13,6 +13,8 @@ import Hamburger from "~/components/Hamburger";
 import ConnectWallet from "~/layouts/components/ConnectWallet";
 import LanguageSelector from "~/components/LanguageSelector";
 import TranslateContext from "~/contexts/components/TranslateContext";
+import Link from "next/link";
+import routes from "~/configs/routes";
 
 const cx = classNames.bind(styles);
 
@@ -29,9 +31,9 @@ const Header = function ({ selectedRouter, setSelectedRouter }: Props) {
             <div className={cx("wrapper")}>
                 <div className={cx("wrapper-inner")}>
                     <div className={cx("nav-left-wrapper")}>
-                        <div className={cx("logo-wrapper")}>
+                        <Link href={routes.home} className={cx("logo-wrapper")}>
                             <Image width={42} height={42} src={images.logo} alt="dual-target" className={cx("logo")} />
-                        </div>
+                        </Link>
                         <NetworkSelector
                             networks={networks}
                             classNames={{
@@ -48,7 +50,7 @@ const Header = function ({ selectedRouter, setSelectedRouter }: Props) {
                                     <HeaderOption
                                         setOpen={null!}
                                         key={index}
-                                        name={t(`header.${name}`)}
+                                        name={t(`layout.header.${name}`)}
                                         redirect={redirect}
                                         isActive={Boolean(selectedRouter === redirect)}
                                         setSelectedRouter={setSelectedRouter}
@@ -60,7 +62,7 @@ const Header = function ({ selectedRouter, setSelectedRouter }: Props) {
                     <div className={cx("nav-right-wrapper")}>
                         <LanguageSelector />
                         <ConnectWallet className={cx("connect-wallet-button")} />
-                        <Hamburger  />
+                        <Hamburger />
                     </div>
                 </div>
             </div>

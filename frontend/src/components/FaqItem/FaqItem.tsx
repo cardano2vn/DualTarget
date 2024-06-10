@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./FaqItem.module.scss";
 
@@ -18,12 +18,14 @@ const FaqItem = function ({ title, Children }: Props) {
         setIsOpen(!isOpen);
     };
     return (
-        <div className={cx("wrapper", { isOpen: isOpen })} onClick={handleOpen}>
+        <div className={cx("wrapper", { isOpen: isOpen })}>
             <header className={cx("inner")}>
-                <section className={cx("icon", { isOpen: isOpen })} />
-                <section className={cx("title-wrapper")}>
-                    <h3 className={cx("title")}>{title}</h3>
-                </section>
+                <div onClick={handleOpen}>
+                    <section className={cx("icon", { isOpen: isOpen })} />
+                    <section className={cx("title-wrapper")}>
+                        <h3 className={cx("title")}>{title}</h3>
+                    </section>
+                </div>
                 {isOpen && (
                     <section className={cx("container")}>
                         <Children />

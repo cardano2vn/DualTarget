@@ -1,6 +1,6 @@
 import quantityDualTarget from "./quantity-dual-target";
 import { CalculateSellingStrategy } from "~/types/GenericsType";
-
+import { DECIMAL_PLACES, OUTPUT_ADA, BATCHER_FEE } from "~/constants";
 type Props = {
     priceLow: number;
     priceHight: number;
@@ -10,10 +10,14 @@ type Props = {
     stake: number;
 };
 
-function calculateSellingStrategy({ priceHight, priceLow, step, income, stake, totalADA }: Props): Array<CalculateSellingStrategy> {
-    const DECIMAL_PLACES: number = 1000000;
-    const OUTPUT_ADA: number = 3000000;
-    const BATCHER_FEE: number = 1500000;
+function calculateSellingStrategy({
+    priceHight,
+    priceLow,
+    step,
+    income,
+    stake,
+    totalADA,
+}: Props): Array<CalculateSellingStrategy> {
     let price: number = priceLow;
 
     let sumADA: number = 0; // Số lượng ada cần nhập vào => UI
@@ -32,7 +36,9 @@ function calculateSellingStrategy({ priceHight, priceLow, step, income, stake, t
         const sellPrice: number = Math.floor(buyPrice * (1 + step / 100));
         const amountIn: number = Math.floor(quantitySell * DECIMAL_PLACES);
         const minimumAmountOut: number = Math.floor((amountIn * buyPrice) / DECIMAL_PLACES);
-        const minimumAmountOutProfit: number = Math.floor(((step / 100) * sellPrice * amountIn) / DECIMAL_PLACES);
+        const minimumAmountOutProfit: number = Math.floor(
+            ((step / 100) * sellPrice * amountIn) / DECIMAL_PLACES,
+        );
         const amountSend: number = amountIn + BATCHER_FEE + OUTPUT_ADA;
         sumADA += amountSend;
 

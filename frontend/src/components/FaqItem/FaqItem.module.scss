@@ -2,7 +2,6 @@
     width: 100%;
     border-radius: 20px;
     margin-bottom: 20px;
-    // background: linear-gradient(91.03deg, #1e2446 39.41%, #333a61 91.44%, #2c3774 108.38%);
 
     &.isOpen {
         background: linear-gradient(91.03deg, #1e2446 39.41%, #333a61 91.44%, #2c3774 108.38%);
@@ -15,17 +14,12 @@
     -webkit-backdrop-filter: blur(30px);
     background-image: linear-gradient(91.03deg, #1e2446 39.41%, #333a61 91.44%, #2c3774 108.38%);
     border-radius: 2.60417vw;
-    // box-shadow: 0 4px 84px 0 rgba(0, 0, 0, 0.12);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    margin-bottom: 56px;
-    // max-width: 71.77083vw;
-    // padding: 3.54167vw 5.41667vw;
     position: relative;
     border-radius: 20px;
-    margin-bottom: 20px;
-    padding: 20px;
+    padding: 20px 36px 20px 20px;
     width: 100%;
 }
 
@@ -78,9 +72,7 @@
 
 .faq-paragraph {
     color: #fff;
-    font-size: 0.9375vw;
     font-weight: 300;
-    line-height: 1.66667vw;
     margin: 0;
     text-align: left;
     white-space-collapse: break-spaces;
@@ -95,33 +87,10 @@
 
 .faq-bold {
     font-weight: 600;
-
-}
-@media (max-width: 767px) {
-    .faq-paragraph {
-        font-size: 1.5rem;
-        line-height: 7.22222vw;
-    }
 }
 
 @media (max-width: 1024px) {
     .title {
-        font-size: 1.5rem;
-        margin: 0 0 2.86832vw;
-    }
-    .faq-paragraph {
-        font-size: 1.4rem;
-        line-height: 3.38983vw;
-    }
-}
-
-@media (max-width: 1365px) {
-    .title {
-        font-size: 2.34432vw;
-        margin: 0 0 1.61172vw;
-    }
-    .faq-paragraph {
-        font-size: 1.31868vw;
-        line-height: 2.34432vw;
+        font-size: 1.6rem;
     }
 }

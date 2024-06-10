@@ -6,12 +6,15 @@ import { StatisticsType } from "~/types/GenericsType";
 import { LucidContextType } from "~/types/contexts/LucidContextType";
 import LucidContext from "~/contexts/components/LucidContext";
 import { Data, UTxO } from "lucid-cardano";
+import { NetworkContextType } from "~/types/contexts/NetworkContextType";
+import NetworkContext from "../components/NetworkContext";
 
 type Props = {
     children: ReactNode;
 };
 
 const StatisticsProvider = function ({ children }: Props) {
+    const { network } = useContext<NetworkContextType>(NetworkContext);
     const { lucidPlatform } = useContext<LucidContextType>(LucidContext);
 
     const [pool, setPool] = useState<StatisticsType>({
@@ -26,9 +29,11 @@ const StatisticsProvider = function ({ children }: Props) {
     useEffect(() => {
         if (lucidPlatform) {
             (async function () {
-                const contractAddress: string = process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
+                const contractAddress: string =
+                    network === "Preprod"
+                        ? (process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string)
+                        : (process.env.DUALTARGET_CONTRACT_ADDRESS_MAINNET! as string);
                 const scriptUTxOs: UTxO[] = await lucidPlatform.utxosAt(contractAddress);
-
                 const totalADA: number = scriptUTxOs.reduce(function (balance: number, utxo: UTxO) {
                     return balance + Number(utxo.assets.lovelace) / 1000000;
                 }, 0);
@@ -56,7 +61,9 @@ const StatisticsProvider = function ({ children }: Props) {
         }
     }, [lucidPlatform]);
 
-    return <StatisticsContext.Provider value={{ pool, profit }}>{children}</StatisticsContext.Provider>;
+    return (
+        <StatisticsContext.Provider value={{ pool, profit }}>{children}</StatisticsContext.Provider>
+    );
 };
 
 export default StatisticsProvider;

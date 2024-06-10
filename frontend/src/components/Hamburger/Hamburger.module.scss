@@ -35,6 +35,9 @@
         }
     }
 
+    &.hideX {
+        display: none;
+    }
     &.open {
         .bar {
             width: 3rem;

@@ -22,8 +22,14 @@ type Props = {
 
 const WalletProvider = function ({ children }: Props) {
     const { lucid, setLucid } = useContext<LucidContextType>(LucidContext);
-    const { toogleErrorNetwork, isShowingErrorNetwork, isShowingWallet, toggleShowingWallet, isShowingTestNetwork, toggleTestNetwork } =
-        useContext<ModalContextType>(ModalContext);
+    const {
+        toogleErrorNetwork,
+        isShowingErrorNetwork,
+        isShowingWallet,
+        toggleShowingWallet,
+        isShowingTestNetwork,
+        toggleTestNetwork,
+    } = useContext<ModalContextType>(ModalContext);
     const { toast } = useContext<ToastContextType>(ToastContext);
     const [wallet, setWallet] = useState<WalletType>(null!);
     const [loading, setLoading] = useState<boolean>(false);
@@ -75,7 +81,10 @@ const WalletProvider = function ({ children }: Props) {
 
             lucid.selectWallet(await api());
             const address: string = (await lucid.wallet.address()) as string;
-            const networkConnection: Network = checkNetwork({ address: address as string, pattern: "test" });
+            const networkConnection: Network = checkNetwork({
+                address: address as string,
+                pattern: "test",
+            });
             if (networkConnection !== network && !isShowingErrorNetwork) {
                 toggleShowingWallet();
                 toogleErrorNetwork();
@@ -153,7 +162,11 @@ const WalletProvider = function ({ children }: Props) {
             setLoading(false);
         }
     };
-    return <WalletContext.Provider value={{ connect, wallet, disconnect, refresh, loading }}>{children}</WalletContext.Provider>;
+    return (
+        <WalletContext.Provider value={{ connect, wallet, disconnect, refresh, loading }}>
+            {children}
+        </WalletContext.Provider>
+    );
 };
 
 export default WalletProvider;

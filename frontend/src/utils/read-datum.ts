@@ -25,7 +25,7 @@ const readDatum = async function ({ contractAddress, lucid }: Props) {
         },
         assetOut: {
             policyId: datum.fields[4].fields[0],
-            assetName: datum.fields[4].fields[0],
+            assetName: datum.fields[4].fields[1],
         },
         odStrategy: datum.fields[9],
         batcherFee: datum.fields[10],

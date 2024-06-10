@@ -24,7 +24,11 @@ const AccountProvider = function ({ children }: Props) {
         enabled: !Boolean(wallet?.address),
     });
 
-    return <AccountContext.Provider value={{ account, setAccount }}>{children}</AccountContext.Provider>;
+    return (
+        <AccountContext.Provider value={{ account, setAccount }}>
+            {children}
+        </AccountContext.Provider>
+    );
 };
 
 export default AccountProvider;

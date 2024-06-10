@@ -1,10 +1,196 @@
 {
-    "header": {
-        "home": "Home",
-        "deposit": "Deposit",
-        "withdraw": "Withdraw",
-        "rewards": "Delegation Rewards",
-        "faq": "FAQ"
+    "layout": {
+        "form": {
+            "errors": {
+                "messages": {
+                    "required": "This field is required",
+                    "min": "Min price must be greater than Max price.",
+                    "max": "Max price must be greater than Min price."
+                }
+            }
+        },
+        "header": {
+            "home": "Home",
+            "deposit": "Deposit",
+            "withdraw": "Withdraw",
+            "rewards": "Delegation Rewards",
+            "about": "About",
+            "faq": "FAQ"
+        },
+        "wallet": {
+            "button connect": "Connect wallet",
+            "button wrong network": "Wrong Network",
+            "terms and conditions": "By checking this box and connecting my wallet, I confirm that I have read, understood, and agreed to the",
+            "terms and conditions link": "Terms and Conditions",
+            "not installed": "Not installed",
+            "network error": "Wallet Network Error",
+            "change network": "Please change the network to preprod or disconnect"
+        },
+        "notification": {
+            "no wallet": "Connect to view your mint and burn requests",
+            "error to fetch data": "There was an error fetching data",
+            "no data": "No data for this wallet address"
+        },
+        "footer": {
+            "term of use": "Term of Use",
+            "powered by": "Powered by"
+        }
     },
-    "home": ""
+    "home": {
+        "title": "Dualtarget for ADA-Holders (Staking and increasing assets) with a decentralized automated trading bot",
+        "card pool": {
+            "title": "Pool",
+            "total wallet": "Total wallet",
+            "total UTxO": "Total UTxO",
+            "total volume lock": "Total Volume Lock",
+            "total DJED": "Total DJED",
+            "button": "Deposit"
+        },
+        "card statistics": {
+            "title": "Statistics",
+            "total transactions": "Total transactions",
+            "total volume lock": "Total Volume Lock",
+            "total volume unlock": "Total Volume Unlock",
+            "total DJED": "Total DJED",
+            "button": "Withdraw"
+        },
+        "card profit": {
+            "title": "Profit margin",
+            "base reserve": "Pool Dualtarget",
+            "update": "Last updated: "
+        },
+        "card sub": "*Deposit\\Withdraw includes base fee and operator fee",
+        "about dualtarget": {
+            "title": "About dualtarget",
+            "sub title": "Staking and increasing assets with a decentralized",
+            "content": {
+                "paragraph 1": "We will develop a platform that enables users to choose dual targets and trading methods directly within their wallets. Simultaneously, we'll create automated trading bots on decentralized exchanges",
+                "paragraph 2": "We will develop a platform that enables users to choose dual targets and trading methods directly within their wallets. Simultaneously, we'll create automated trading bots on decentralized exchanges"
+            },
+            "button": "About us"
+        }
+    },
+    "deposit": {
+        "title": "Deposit pool",
+        "card": {
+            "title": "Deposite",
+            "balance": "Balance",
+            "fields": {
+                "min price": {
+                    "title": "Min price",
+                    "placeholder": "Enter the lowest price",
+                    "instruction": "You can hold min price for strategy"
+                },
+                "max price": {
+                    "title": "Max price",
+                    "placeholder": "Enter the highest price",
+                    "instruction": "You can hold max price for strategy"
+                },
+                "desired income": {
+                    "title": "Desired income",
+                    "placeholder": "Enter your desired income",
+                    "instruction": "Money recive for month"
+                },
+                "stake percentage": {
+                    "title": "Stake",
+                    "placeholder": "Enter the stake percentage",
+                    "instruction": "Stake reward for year"
+                },
+                "step": {
+                    "title": "Step",
+                    "placeholder": "Enter the price jump",
+                    "instruction": "Step for ₳/DJED"
+                },
+                "total ADA": {
+                    "title": "Total ADA",
+                    "placeholder": "Enter the total number of ADA",
+                    "instruction": "Total ADA hold"
+                }
+            },
+            "button deposit": "Deposit",
+            "button calculate": "Calculate",
+            "fees": "Fees",
+            "you will pay": "You will pay"
+        },
+        "history": {
+            "title": "History"
+        }
+    },
+    "withdraw": {
+        "title": "Withdraw asset",
+        "balance": "Balance",
+        "card": {
+            "fields": {
+                "ranges": {
+                    "min": { "title": "MIN", "instruction": "Calculated based on the contract minimum amount parameters." },
+                    "max": { "title": "MAX", "instruction": "Calculate based on the available mintable amount and your wallet balance." }
+                },
+                "amount": {
+                    "placeholder": "Enter the total number of ADA"
+                }
+            },
+            "modes": {
+                "all": "ALL",
+                "only profit": "ONLY PROFIT",
+                "select parts": "SELECT PARTS"
+            },
+            "button": "Withdraw",
+            "fees": "Fees",
+            "you will receive": "You will receive"
+        },
+        "orders": {
+            "title": "Orders"
+        }
+    },
+    "delegation rewards": {
+        "card": {
+            "title": "Delegation Rewards for ADA holders",
+            "sub title": "Check your ADA rewards",
+            "fields": {
+                "address": {
+                    "title": "Address",
+                    "placeholder": "Enter address to load the data",
+                    "instruction": "Please enter your Cardano address eligible for deligation rewards."
+                }
+            },
+            "current epoch": "Current Epoch",
+            "total distributed rewards": "Total Distributed Rewards",
+            "total pending rewards": "Total Pending Rewards"
+        }
+    },
+    "faq": {
+        "title": "FAQ",
+        "sub title": "Answers to frequently asked questions",
+        "questions": {
+            "1": "What is DJED's stability mechanism?",
+            "2": "What is DJED's stability mechanism?",
+            "3": "What happens to SHEN's price if the ratio falls below 400%?"
+        },
+        "answers": {
+            "1": "<p className={cx(\"faq-paragraph\")}>DJED is an overcollateralized stablecoin that uses exogenous collateral (ADA) to ensure stability. The protocol is backed by 400-800% overcollateralization and is guaranteed by its reserve coin, SHEN. The stability of DJED is based on overcollateralization, which eliminates the need for trust in a governance token as seen in algorithmic stablecoins. The platform is also fully decentralized and community-driven, allowing for open-source development and community involvement in minting and burning DJED and SHEN. </p> <p className={cx(\"faq-paragraph\")}><Image className={cx(\"faq-image\")} style={{ objectFit: \"contain\" }} src={images.eternl} alt=\"\"/></p>",
+            "2": "<p className={cx(\"faq-paragraph\")}><b className={cx(\"faq-bold\")}>Collateral</b> - Djed uses exogenous collateral (ADA). A typical algorithmic stablecoin uses endogenous collateral, such as: FRAX, Synthetix and UST. </p>",
+            "3": "<p className={cx(\"faq-paragraph\")}>The buying price of SHEN, is determined by the equation PbRc. This means that if Ptrc (price target reserve coin) is not defined, the protocol takes the minimum price. Otherwise, it takes the maximum between the equity divided by the number of RC and the minimum price. </p> <p className={cx(\"faq-paragraph\")}> The buying price of SHEN, is determined by the equation PbRc. This means that if Ptrc (price target reserve coin) is not defined, the protocol takes the minimum price. Otherwise, it takes the maximum between the equity divided by the number of RC and the minimum price. </p>"
+        }
+    },
+    "about": {
+        "title": "Our Foundation",
+        "sub title": "We are impartial and independent, and every day we create distinctive, world-class programmes and develop",
+        "founders": {
+            "1": {
+                "name": "Tien Nguyen Anh",
+                "major": "Computer Science Experts",
+                "description": "Founder of the VILAI stake pool, former Experts at HPE; Blockchain Support Engineer"
+            },
+            "2": {
+                "name": "Hieu Nguyen Van",
+                "major": "MSc. Electronics and Telecommunication",
+                "description": "Founder of HADA stake pool, member of Plutus Pioneer Program, Researcher at VAST."
+            },
+            "3": {
+                "name": "Khanh Pham Van",
+                "major": "Doctor of Mathematics",
+                "description": "Researcher at the Institute of Information Technology - VAST; Lecturer at Hanoi National University on Artificial Intelligence, Deep Learning, Reinforcement Learning"
+            }
+        }
+    }
 }

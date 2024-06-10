@@ -30,9 +30,14 @@ type DataType = {
 const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
     const [show, setShow] = useState<boolean>(true);
     const [currentHoveredValue, setCurrentHoveredValue] = useState<DataType>({ date: 0, value: 0 });
+    const [currentMarketPrice, setCurrentMarketPrice] = useState<DataType>({ date: 0, value: 0 });
     const chartId = useId();
     const dataObject = useMemo(() => {
         if (data && data.length > 0) {
+            setCurrentMarketPrice({
+                date: data[data.length - 1][0],
+                value: data[data.length - 1][1],
+            });
             return data.map((e) => ({
                 date: e[0],
                 value: e[1],
@@ -148,14 +153,24 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                 yAxis: yAxis,
                 valueYField: "value",
                 valueXField: "date",
-                tooltip: am5.Tooltip.new(root, {
-                    labelText: undefined,
-                    forceHidden: true,
-                    animationDuration: 0,
-                }),
                 stroke: am5.color(0xab56c9),
             }),
         );
+        const tooltip = am5.Tooltip.new(root, {
+            labelText: `${convertTimestampToDateObject(currentHoveredValue.date)}\n{value}`,
+            getFillFromSprite: false,
+            animationDuration: 100,
+            autoTextColor: true,
+        });
+
+        tooltip.get("background")?.setAll({
+            fill: am5.color(0xffffff),
+            fillOpacity: 0.8,
+            stroke: am5.color(0xab56c9),
+            strokeWidth: 1,
+        });
+
+        series.set("tooltip", tooltip);
 
         series.fills.template.set(
             "fillGradient",
@@ -176,28 +191,28 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
             }),
         );
 
-        series.bullets.push(function () {
-            var circle = am5.Circle.new(root, {
-                radius: 6,
-                stroke: am5.color(0xffffff),
-                strokeWidth: 2,
-                interactive: true,
-                fill: am5.color(0xb275dc),
-                opacity: 0,
-            });
+        // series.bullets.push(function () {
+        //     var circle = am5.Circle.new(root, {
+        //         radius: 6,
+        //         stroke: am5.color(0xffffff),
+        //         strokeWidth: 2,
+        //         interactive: true,
+        //         fill: am5.color(0xb275dc),
+        //         opacity: 0,
+        //     });
 
-            circle.states.create("default", {
-                opacity: 0,
-            });
+        //     circle.states.create("default", {
+        //         opacity: 0,
+        //     });
 
-            circle.states.create("hover", {
-                opacity: 1,
-            });
+        //     circle.states.create("hover", {
+        //         opacity: 1,
+        //     });
 
-            return am5.Bullet.new(root, {
-                sprite: circle,
-            });
-        });
+        //     return am5.Bullet.new(root, {
+        //         sprite: circle,
+        //     });
+        // });
 
         series.fills.template.setAll({
             fillOpacity: 1,
@@ -279,23 +294,23 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
         series.appear(1000);
         chart.appear(1000, 100);
 
-        let previousBulletSprites: any = [];
+        // let previousBulletSprites: any = [];
         cursor.events.on("cursormoved", cursorMoved);
 
         function cursorMoved() {
-            for (var i = 0; i < previousBulletSprites.length; i++) {
-                previousBulletSprites[i].unhover();
-            }
+            // for (var i = 0; i < previousBulletSprites.length; i++) {
+            //     previousBulletSprites[i].unhover();
+            // }
 
-            previousBulletSprites = [];
+            // previousBulletSprites = [];
             chart.series.each(function (series) {
                 var dataItem = series.get("tooltip")?.dataItem;
                 if (dataItem) {
-                    const bulletSprite = dataItem.bullets?.[0].get("sprite");
-                    if (bulletSprite) {
-                        bulletSprite.hover();
-                        previousBulletSprites.push(bulletSprite);
-                    }
+                    // const bulletSprite = dataItem.bullets?.[0].get("sprite");
+                    // if (bulletSprite) {
+                    //     bulletSprite.hover();
+                    //     previousBulletSprites.push(bulletSprite);
+                    // }
 
                     const { date, value } = dataItem.dataContext as DataType;
                     setCurrentHoveredValue({
@@ -428,10 +443,10 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                     >
                         <div className={cx("current-hovered-value")}>
                             <div className={cx("hovered-wrapper")}>
-                                <span className={cx("price")}>{currentHoveredValue.value.toFixed(4)}</span>
+                                <span className={cx("price")}>{currentMarketPrice.value.toFixed(4)}</span>
                                 <span className={cx("token-name")}>DJED</span>
                             </div>
-                            <div className={cx("datetime")}>{convertTimestampToDateObject(currentHoveredValue.date)}</div>
+                            <div className={cx("datetime")}>{convertTimestampToDateObject(currentMarketPrice.date)}</div>
                         </div>
                         <div className={cx("chart-offset")}>
                             <div id={`price-chart-${chartId}`} className={cx("chart")} />

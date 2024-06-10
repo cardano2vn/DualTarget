@@ -1,0 +1,132 @@
+.wrapper {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 2.29167vw;
+    position: relative;
+}
+
+.background {
+    background: url("../../assets/images/background-faq.png") no-repeat;
+    background-position: top;
+    background-size: contain;
+    height: 100%;
+    max-width: 41.66667vw;
+    object-fit: contain;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+}
+
+.title-container {
+    align-items: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 11.97917vw;
+    z-index: 1;
+}
+
+.title {
+    color: #fff;
+    font-size: 5.20833vw;
+    font-weight: 700;
+    letter-spacing: -2px;
+    margin: 0;
+    text-align: left;
+}
+
+.sub-title {
+    color: #fff;
+    font-size: 2.1875vw;
+    font-weight: 200;
+    letter-spacing: -0.86px;
+    margin: 0;
+    text-align: center;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1024px;
+    padding: 172px 0 0;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: left;
+}
+
+@media (max-width: 1365px) {
+    .wrapper {
+        padding-bottom: 3.22344vw;
+    }
+    .title-container {
+        margin-top: 16.84982vw;
+    }
+
+    .title {
+        font-size: 7.32601vw;
+    }
+
+    .sub-title {
+        font-size: 3.07692vw;
+    }
+
+    .container {
+        padding: 172px 64px 0;
+    }
+}
+
+@media (max-width: 1024px) {
+    .wrapper {
+        padding-bottom: 5.73664vw;
+    }
+
+    .title-container {
+        margin-top: 29.98696vw;
+    }
+
+    .title {
+        font-size: 8.3442vw;
+    }
+
+    .sub-title {
+        font-size: 4.1721vw;
+    }
+}
+
+@media (max-width: 767px) {
+    .wrapper {
+        padding-bottom: 12.22222vw;
+    }
+
+    .titles-container {
+        margin-top: 41.11111vw;
+    }
+
+    .title {
+        font-size: 17.77778vw;
+    }
+
+    .sub-title {
+        font-size: 5.55556vw;
+        font-weight: 200;
+        margin-top: 2.22222vw;
+        padding: 0 16.66667vw;
+    }
+
+    .container {
+        margin: 0 auto 72px;
+        padding: 172px 18px 0;
+    }
+}
+
+.faq-description {
+    font-size: 14px;
+}

@@ -24,18 +24,26 @@ class Koios extends Axios {
                 },
             );
             const parse = JSON.parse(data);
-            console.log(parse);
             return parse[0].rewards[0].amount;
         } catch (error) {
             return 0;
         }
     }
 
-    async poolDelegatorsHistory({ poolId, epochNo, stakeAddress }: { poolId: string; epochNo: number; stakeAddress: string }) {
+    async poolDelegatorsHistory({
+        poolId,
+        epochNo,
+        stakeAddress,
+    }: {
+        poolId: string;
+        epochNo: number;
+        stakeAddress: string;
+    }) {
         try {
-            const response = await this.get(`/pool_delegators_history?_pool_bech32=${poolId}&_epoch_no=${epochNo}`);
+            const response = await this.get(
+                `/pool_delegators_history?_pool_bech32=${poolId}&_epoch_no=${epochNo}`,
+            );
             const parse = JSON.parse(response.data);
-            console.log(parse);
             const { amount } = parse.find(function (parsePoolDelegatorsHistory: any) {
                 return parsePoolDelegatorsHistory.stake_address === stakeAddress;
             });
@@ -46,9 +54,10 @@ class Koios extends Axios {
     }
 
     async epochInfomation({ epochNo }: { epochNo: number }) {
-        const { data } = await this.get(`/epoch_info?_epoch_no=${epochNo}&_include_next_epoch=true`);
+        const { data } = await this.get(
+            `/epoch_info?_epoch_no=${epochNo}&_include_next_epoch=true`,
+        );
         const parse = JSON.parse(data)[0];
-        console.log(parse);
         return parse;
     }
 }

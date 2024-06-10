@@ -12,9 +12,10 @@ type Props = {
     denominations?: string;
     className?: string;
     loading?: boolean;
+    decimals?: number;
 };
 
-const Coin = function ({ className, title, amount, denominations, loading }: Props) {
+const Coin = function ({ className, title, amount, denominations, loading, decimals = 4 }: Props) {
     return (
         <div className={cx("body", className)}>
             <div className={cx("buy-price")}>
@@ -24,7 +25,7 @@ const Coin = function ({ className, title, amount, denominations, loading }: Pro
                 ) : (
                     <div className={cx("amount")}>
                         <span>
-                            <CountUp start={0} end={Number(amount!)} />
+                            <CountUp start={0} end={Number(amount!)} decimals={decimals} />
                         </span>
                         <span className={cx("suffix")}>{denominations}</span>
                     </div>

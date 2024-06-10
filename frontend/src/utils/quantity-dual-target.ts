@@ -5,7 +5,12 @@ type Props = {
     entry: number;
 };
 
-const quantityDualTarget = function ({ stake, entry, income, step }: Props): [number, number, number] {
+const quantityDualTarget = function ({
+    stake,
+    entry,
+    income,
+    step,
+}: Props): [number, number, number] {
     try {
         const USDTPool: number = (income * 12) / (stake / 100);
         const quantityEntrySell: number = USDTPool / (entry * (1 + step / 100));
@@ -21,4 +26,3 @@ const quantityDualTarget = function ({ stake, entry, income, step }: Props): [nu
 };
 
 export default quantityDualTarget;
-

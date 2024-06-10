@@ -5,6 +5,7 @@ const publicRoutes = [
     { name: "deposit", redirect: configs.routes.deposit },
     { name: "withdraw", redirect: configs.routes.withdraw },
     { name: "rewards", redirect: configs.routes.rewards },
+    { name: "about", redirect: configs.routes.about },
     { name: "faq", redirect: configs.routes.faq },
 ];
 

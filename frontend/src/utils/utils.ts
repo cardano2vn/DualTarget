@@ -11,7 +11,9 @@ export const convertTimestampToDateObject = (timestamp: number) => {
     }).format(date);
 };
 
-export const isTransactionHistoryType = (data: TransactionHistoryType[] | DelegationRewardType[]): data is TransactionHistoryType[] => {
+export const isTransactionHistoryType = (
+    data: TransactionHistoryType[] | DelegationRewardType[],
+): data is TransactionHistoryType[] => {
     const item = data[0];
     return Array.isArray(data) && "blockTime" in item && "txHash" in item && "fee" in item;
 };

@@ -9,6 +9,7 @@ import icons from "~/assets/icons";
 import { WalletContextType } from "~/types/contexts/WalletContextType";
 import WalletContext from "~/contexts/components/WalletContext";
 import styles from "./WalletItem.module.scss";
+import TranslateContext from "~/contexts/components/TranslateContext";
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,7 @@ type Props = {
 const WalletItem = function ({ wallet, accept }: Props) {
     const [isDownload, setIsDownload] = useState<boolean>(true);
     const { connect, loading } = useContext<WalletContextType>(WalletContext);
+    const { t } = useContext(TranslateContext);
 
     const handleConnectWallet = async function () {
         await connect({ api: wallet.api, name: wallet.name, image: wallet.image, checkApi: wallet.checkApi });
@@ -48,7 +50,7 @@ const WalletItem = function ({ wallet, accept }: Props) {
                 {!isDownload && (
                     <div className={cx("action")}>
                         <Link className={cx("action-link")} href={wallet.downloadApi as string} target="_blank">
-                            Not installed
+                            {t("layout.wallet.not installed")}
                             <Image className={cx("action-image")} src={icons.install} alt="install icons" />
                         </Link>
                     </div>

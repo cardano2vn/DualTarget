@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import Image from "next/image";
@@ -6,6 +6,7 @@ import Tippy from "../Tippy";
 import classNames from "classnames/bind";
 import styles from "./InputRange.module.scss";
 import icons from "~/assets/icons";
+import TranslateContext from "~/contexts/components/TranslateContext";
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,8 @@ type Props = {
 };
 
 const InputRange = function ({ disabled, min, max, currentValue, onChange }: Props) {
+    const { t } = useContext(TranslateContext);
+
     const [value, setValue] = React.useState<number[]>([min, max]);
 
     const handleChange = (event: Event, newValue: number | number[]) => {
@@ -36,14 +39,14 @@ const InputRange = function ({ disabled, min, max, currentValue, onChange }: Pro
         <div className={cx("amount-slider-container")}>
             <div className={cx("percentage")}>
                 <div className={cx("percentage_min_max")}>
-                    <p className={cx({ disabled })}>MIN</p>
-                    <Tippy render={<div>Calculated based on the contract minimum amount parameters.</div>}>
+                    <p className={cx({ disabled })}>{t("withdraw.card.fields.ranges.min.title")}</p>
+                    <Tippy render={<div>{t("withdraw.card.fields.ranges.min.instruction")}</div>}>
                         <Image className={cx("icon-help-circle")} src={icons.helpCircle} width={12} height={12} alt="" />
                     </Tippy>
                 </div>
                 <div className={cx("percentage_min_max")}>
-                    <p className={cx({ disabled })}>MAX</p>
-                    <Tippy placement="top-end" render={<div>Calculate based on the available mintable amount and your wallet balance.</div>}>
+                    <p className={cx({ disabled })}>{t("withdraw.card.fields.ranges.max.title")}</p>
+                    <Tippy placement="top-end" render={<div>{t("withdraw.card.fields.ranges.max.instruction")}</div>}>
                         <Image className={cx("icon-help-circle")} src={icons.helpCircle} width={12} height={12} alt="" />
                     </Tippy>
                 </div>

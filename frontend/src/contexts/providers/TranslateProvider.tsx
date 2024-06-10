@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import TranslateContext from "~/contexts/components/TranslateContext";
 import { I18nextProvider, initReactI18next } from "react-i18next";
@@ -35,7 +35,6 @@ type Props = {
 
 const TranslateProvider = function ({ children }: Props) {
     const { t, i18n } = useTranslation("global");
-    
 
     const changeLanguage = function (language: string) {
         i18n.changeLanguage(language);

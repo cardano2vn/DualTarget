@@ -40,7 +40,7 @@ const SidebarMenu = function ({ open, setOpen, className }: Props) {
                         return (
                             <HeaderOption
                                 key={index}
-                                name={t(`header.${name}`)}
+                                name={t(`layout.header.${name}`)}
                                 redirect={redirect}
                                 isActive={Boolean(selected === redirect)}
                                 setSelectedRouter={setSelected}

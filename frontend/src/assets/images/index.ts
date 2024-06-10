@@ -23,6 +23,11 @@ const images = {
     shen: require("./tokens/shen.png"),
     ada: require("./tokens/cardano.png"),
     /* token-image-end */
+    /* founder-image-start */
+    nguyenvanhieu: require("./founders/hieu.jpg"),
+    nguyenanhtien: require("./founders/tien.jpg"),
+    phanvankhanh: require("./founders/khanh.jpg"),
+    /* founder-image-end */
 };
 
 export default images;
