@@ -2,7 +2,11 @@ import React from "react";
 import classNames from "classnames/bind";
 import styles from "./Table.module.scss";
 import Link from "next/link";
-import { DelegationRewardType, HeaderTableType, TransactionHistoryType } from "~/types/GenericsType";
+import {
+    DelegationRewardType,
+    HeaderTableType,
+    TransactionHistoryType,
+} from "~/types/GenericsType";
 import { isTransactionHistoryType } from "~/utils/utils";
 
 const cx = classNames.bind(styles);
@@ -27,7 +31,8 @@ const Table = function ({ className, data, titles, center = false }: Props) {
                         </Link>
                     </td>
                     <td className={cx("row-item", "action")}>{item.type}</td>
-                    <td className={cx("row-item", "amount")}>{item.amount}</td>
+                    <td className={cx("row-item", "amount")}>{item.amountADA}</td>
+                    <td className={cx("row-item", "amount")}>{item.amountDJED}</td>
                     <td className={cx("row-item", "fee")}>{item.fee}</td>
                     <td className={cx("row-item", "status")}>{item.status}</td>
                 </tr>

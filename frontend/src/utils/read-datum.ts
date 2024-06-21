@@ -17,21 +17,21 @@ const readDatum = async function ({ contractAddress, lucid }: Props) {
 
     if (!smartcontractUtxo) throw new Error("Cound not find smart contract utxo");
 
-    const datum: any = Data.from(smartcontractUtxo.datum!);
+    const datum = Data.from<DualtargetDatum>(smartcontractUtxo.datum!, DualtargetDatum);
     return {
         assetAda: {
-            policyId: datum.fields[2].fields[0],
-            assetName: datum.fields[2].fields[1],
+            policyId: datum.assetADA.policyId,
+            assetName: datum.assetADA.assetName,
         },
         assetOut: {
-            policyId: datum.fields[4].fields[0],
-            assetName: datum.fields[4].fields[1],
+            policyId: datum.assetOut.policyId,
+            assetName: datum.assetOut.assetName,
         },
-        odStrategy: datum.fields[9],
-        batcherFee: datum.fields[10],
-        outputADA: datum.fields[11],
-        feeAddress: datum.fields[12],
-        validatorAddress: datum.fields[13],
+        odStrategy: datum.odStrategy,
+        batcherFee: datum.batcherFee,
+        outputADA: datum.outputADA,
+        feeAddress: datum.feeAddress,
+        validatorAddress: datum.validatorAddress,
     };
 };
 

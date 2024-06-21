@@ -5,7 +5,7 @@ import styles from "./Title.module.scss";
 const cx = classNames.bind(styles);
 
 type Props = {
-    title: string;
+    title?: string;
     description?: string;
     className?: string;
 };

@@ -122,8 +122,14 @@
         "card": {
             "fields": {
                 "ranges": {
-                    "min": { "title": "Tối thiểu", "instruction": "Tính toán dựa trên các tham số số lượng tối thiểu của hợp đồng." },
-                    "max": { "title": "Tối đa", "instruction": "Tính toán dựa trên số lượng có thể đúc được và số dư ví của bạn." }
+                    "min": {
+                        "title": "Tối thiểu",
+                        "instruction": "Tính toán dựa trên các tham số số lượng tối thiểu của hợp đồng."
+                    },
+                    "max": {
+                        "title": "Tối đa",
+                        "instruction": "Tính toán dựa trên số lượng có thể đúc được và số dư ví của bạn."
+                    }
                 },
                 "amount": {
                     "placeholder": "Nhập tổng số ADA"
@@ -176,6 +182,40 @@
         "title": "Về Quỹ của Chúng Tôi",
         "sub title": "Chúng tôi là một tổ chức trung lập và độc lập, mỗi ngày chúng tôi tạo ra các chương trình độc đáo, đẳng cấp thế giới và phát triển",
         "founders": {
+            "1": {
+                "name": "Tiến Nguyễn Anh",
+                "major": "Chuyên gia Khoa học Máy tính",
+                "description": "Người sáng lập hồ bơi stake VILAI, cựu chuyên gia tại HPE; Kỹ sư Hỗ trợ Blockchain"
+            },
+            "2": {
+                "name": "Hiếu Nguyễn Văn",
+                "major": "Thạc sĩ Điện tử và Viễn thông",
+                "description": "Người sáng lập hồ bơi stake HADA, thành viên của Chương trình Plutus Pioneer, Nhà nghiên cứu tại VAST."
+            },
+            "3": {
+                "name": "Khánh Phạm Văn",
+                "major": "Tiến sĩ Toán học",
+                "description": "Nhà nghiên cứu tại Viện Công nghệ Thông tin - VAST; Giảng viên tại Đại học Quốc gia Hà Nội về Trí tuệ Nhân tạo, Học sâu, Học tăng cường"
+            }
+        },
+        "developers": {
+            "1": {
+                "name": "Tiến Nguyễn Anh",
+                "major": "Chuyên gia Khoa học Máy tính",
+                "description": "Người sáng lập hồ bơi stake VILAI, cựu chuyên gia tại HPE; Kỹ sư Hỗ trợ Blockchain"
+            },
+            "2": {
+                "name": "Hiếu Nguyễn Văn",
+                "major": "Thạc sĩ Điện tử và Viễn thông",
+                "description": "Người sáng lập hồ bơi stake HADA, thành viên của Chương trình Plutus Pioneer, Nhà nghiên cứu tại VAST."
+            },
+            "3": {
+                "name": "Khánh Phạm Văn",
+                "major": "Tiến sĩ Toán học",
+                "description": "Nhà nghiên cứu tại Viện Công nghệ Thông tin - VAST; Giảng viên tại Đại học Quốc gia Hà Nội về Trí tuệ Nhân tạo, Học sâu, Học tăng cường"
+            }
+        },
+        "advisors": {
             "1": {
                 "name": "Tiến Nguyễn Anh",
                 "major": "Chuyên gia Khoa học Máy tính",

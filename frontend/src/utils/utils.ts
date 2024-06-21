@@ -17,3 +17,12 @@ export const isTransactionHistoryType = (
     const item = data[0];
     return Array.isArray(data) && "blockTime" in item && "txHash" in item && "fee" in item;
 };
+
+export function isValidCardanoWalletAddress(walletAddress: string) {
+    const patterns = /^(addr1|addr_test1)[a-z0-9]+/;
+
+    if (!patterns.test(walletAddress) || walletAddress.length < 100 || walletAddress.length > 150)
+        return false;
+
+    return true;
+}

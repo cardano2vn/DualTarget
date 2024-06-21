@@ -39,6 +39,9 @@
             transform: rotate(180deg);
         }
     }
+
+
+    
 }
 
 .connected-wallet-icon {
@@ -130,7 +133,9 @@
 }
 
 .icon-wallet-image {
-    width: 34px;
+    width: 3.4rem;
+    height: 3.4rem;
+    object-fit: cover;
 }
 
 .data-wallet {

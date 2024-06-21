@@ -23,7 +23,16 @@ type Props = {
     description: string;
 };
 
-const Founder = function ({ id, avatar, firstName, lastName, role, twitter, linkedin, description }: Props) {
+const Founder = function ({
+    id,
+    avatar,
+    firstName,
+    lastName,
+    role,
+    twitter,
+    linkedin,
+    description,
+}: Props) {
     const { t } = useContext(TranslateContext);
 
     return (
@@ -44,9 +53,9 @@ const Founder = function ({ id, avatar, firstName, lastName, role, twitter, link
                 </div>
             </div>
             <div className={cx("container")}>
-                <div className={cx("name")}>{t(`about.founders.${id}.name`)} </div>
-                <div className={cx("role")}>{t(`about.founders.${id}.major`)}</div>
-                <div className={cx("description")}>{t(`about.founders.${id}.description`)}</div>
+                <div className={cx("name")}>{t(`about.${role}.${id}.name`)} </div>
+                <div className={cx("role")}>{t(`about.${role}.${id}.major`)}</div>
+                <div className={cx("description")}>{t(`about.${role}.${id}.description`)}</div>
             </div>
         </div>
     );

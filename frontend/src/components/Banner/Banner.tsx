@@ -100,8 +100,10 @@ const Banner = function ({ title, description }: Props) {
 
     return (
         <section className={cx("wrapper")}>
-            {init ? <Particles id={cx(styles.tsparticles)} particlesLoaded={null!} options={options} /> : null}
-            <Title title={t("about.title")} description={t("about.sub title")} />
+            {init ? (
+                <Particles id={cx(styles.tsparticles)} particlesLoaded={null!} options={options} />
+            ) : null}
+            <Title title={title} description={description} />
         </section>
     );
 };

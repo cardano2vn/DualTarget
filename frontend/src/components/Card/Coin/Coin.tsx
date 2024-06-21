@@ -25,7 +25,7 @@ const Coin = function ({ className, title, amount, denominations, loading, decim
                 ) : (
                     <div className={cx("amount")}>
                         <span>
-                            <CountUp start={0} end={Number(amount!)} decimals={decimals} />
+                            <CountUp start={0} end={Number(amount!)} decimals={decimals}  />
                         </span>
                         <span className={cx("suffix")}>{denominations}</span>
                     </div>

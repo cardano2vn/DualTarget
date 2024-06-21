@@ -23,7 +23,7 @@ const Expand = function ({ className, data }: Props) {
             <div>
                 <header className={cx("header", className)}>
                     <span className={cx("action-type")}>{data.type}</span>
-                    {data.amount} ₳
+                    {data.amountADA} ₳
                     <div
                         className={cx("icon", {
                             active: toggle,
@@ -58,6 +58,7 @@ const Expand = function ({ className, data }: Props) {
                             </div>
                         </div>
                     </div>
+
                     <div className={cx("right-content")}>
                         <div className={cx("received-or-payed")}>
                             <div className={cx("title-wrapper")}>
@@ -70,6 +71,14 @@ const Expand = function ({ className, data }: Props) {
                                 <span>Status</span>
                             </div>
                             <div className={cx("value")}>{data.status}</div>
+                        </div>
+                    </div>
+                    <div className={cx("right-content")}>
+                        <div className={cx("status")}>
+                            <div className={"title-wrapper"}>
+                                <span>Amount DJED</span>
+                            </div>
+                            <div className={cx("value")}>{data.amountDJED}</div>
                         </div>
                     </div>
                 </div>

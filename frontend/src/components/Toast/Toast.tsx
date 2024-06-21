@@ -9,30 +9,19 @@ import { ToastType } from "~/types/GenericsType";
 
 const cx = classNames.bind(styles);
 
-type Props = ToastType;
+type Props = Omit<ToastType, "id"> & {
+    onClose: () => void;
+};
 
-const Toast = function ({ icon, message }: Props) {
-    const [isShow, setIsShow] = useState<boolean>(false);
-
-    useEffect(() => {
-        console.log(message);
-        if (message) {
-            setIsShow(!isShow);
-
-            const handler = setTimeout(() => setIsShow(!isShow), 10000);
-
-            return () => clearInterval(handler);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [message]);
+const Toast = function ({ icon, message, onClose }: Props) {
     return (
-        <main className={cx("wrapper", { isShow: isShow })}>
+        <main className={cx("wrapper")}>
             <div className={cx("container")}>
                 <div className={cx("icon-container")}>
                     <Image src={icon} alt="" className={cx("icon")} />
                 </div>
                 <span className={cx("message")}>{message}</span>
-                <div className={cx("icon-delete")} onClick={() => setIsShow(!isShow)}>
+                <div className={cx("icon-delete")} onClick={onClose}>
                     <Image src={icons.delete} className={cx("icon-delete-image")} alt="" />
                 </div>
             </div>

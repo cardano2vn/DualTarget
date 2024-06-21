@@ -4,7 +4,8 @@ const historyTransactions: HeaderTableType[] = [
     { title: "Block Time" },
     { title: "Transaction Hash" },
     { title: "Action" },
-    { title: "Amount" },
+    { title: "Amount ADA" },
+    { title: "Amount DJED" },
     { title: "Fees" },
     { title: "Status" },
 ];
@@ -17,7 +18,8 @@ const historyRewards: HeaderTableType[] = [
     },
     {
         title: "Amount (ADA)",
-        description: "Rewards are calculated with 2-3 epoch delay according to Cardano network rules",
+        description:
+            "Rewards are calculated with 2-3 epoch delay according to Cardano network rules",
     },
     {
         title: "Status",

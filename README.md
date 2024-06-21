@@ -6,6 +6,30 @@
     <img src="./frontend/src/assets/images/logo.png" />
 </div>
 
+## Project folder structure
+
+1. apps: Manage routes using a directory structure. Instead of complicated configuration, you just need to create directories and files to define routes.
+2. assets: Contains project resources including video icon images and fonts.
+3. components: Used to organize and manage application components.
+4. configs: Configure paths for wallet settings and project routes.
+
+-   wallets.ts:
+-   routes.ts: Definition of absolute project routes
+
+5. constants
+6. contexts
+7. Data
+8. Helpers
+9. Hooks
+10. Layouts
+11. Libs
+12. routers: Define names and routes of routers in the project (for public routers)
+13. Services
+14. Styles
+15. Transactions
+16. Types
+17. Utils
+
 ## Instructions for use
 
 [![Everything Is AWESOME](./frontend/src/assets/images/youtube.png)](https://www.youtube.com/watch?v=DCWY93O_QAU&t=1s "Everything Is AWESOME")
@@ -47,47 +71,52 @@ In this tutorial we will show you 2 ways to run our project on the frontend Thro
 
 ```ts
 const nextConfig = {
-    ...
     env: {
-        BLOCKFROST_NETWORK_NAME_PREPROD: "Preprod",
-        BLOCKFROST_NETWORK_NAME_PREVIEW: "Preview",
+        // MAINNET NETWORK
         BLOCKFROST_NETWORK_NAME_MAINNET: "Mainnet",
         BLOCKFROST_RPC_URL_MAINNET:
             "https://cardano-mainnet.blockfrost.io/api/v0",
-        BLOCKFROST_RPC_URL_PREPROD:
-            "https://cardano-preprod.blockfrost.io/api/v0",
-        BLOCKFROST_RPC_URL_PREVIEW:
-            "https://cardano-preview.blockfrost.io/api/v0",
         BLOCKFROST_PROJECT_API_KEY_MAINNET:
             "mainnettClW67e7zjxBTdjgynNwmGsvyz5DCMmC",
-        BLOCKFROST_PROJECT_API_KEY_PREPROD:
-            "preprody7qLCi4kIiAUEFRlJvmZ2PTi6jreF7gI",
-        BLOCKFROST_PROJECT_API_KEY_PREVIEW:
-            "preprody7qLCi4kIiAUEFRlJvmZ2PTi6jreF7gI",
-        KOIOS_RPC_URL_PREPROD: "https://preprod.koios.rest/api/v1",
-        KOIOS_RPC_URL_PREVIEW: "https://preview.koios.rest/api/v1",
         KOIOS_RPC_URL_MAINNET: "https://api.koios.rest/api/v1",
-        NEXT_APP_BASE_URL: "https://api.dualtarget.vn/api/v1",
-        BINANCE_API_KEY:
-            "V0popsaVcPSajStISK7DRkZsYOgMEqnlFoDwejiy28gsDMZ4Uj6Ohrr3vIxdAlby",
-        BINANCE_API_SECRET:
-            "nItpNsxBjIgePDYGAgZ9iiMUlK1LwLLwOs4776B9vbf5HLmDm61TsT5hC9w1nrpg",
+        NEXT_APP_BASE_URL_MAINNET: "https://api.dualtarget.vn/api/v1",
+        DUALTARGET_CONTRACT_ADDRESS_MAINNET:
+            "addr_test1zze6xz2yuzcwkt4f7kpyr4yt82xkq2kkmfj0vv54fz4kwy3a39atxwxg8ks578mqpxpsgsetvu8hx5f9nhvercv4da7s5s9p98",
+        DUALTARGET_PAYMENT_ADDRESS_MAINNET: "",
+        DUALTARGET_STAKE_ADDRESS_MAINNET: "",
+        EXCHANGE_ADDRESS_FREE_MAINNET:
+            "ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7",
+        POOL_ID_MAINNET:
+            "pool1rqgf6qd0p3wyf9dxf2w7qcddvgg4vu56l35ez2xqemhqun2gn7y",
+        MIN_TOKEN_ASSET_MAINNET: "",
+        DJED_TOKEN_ASSET_MAINNET: "",
+        // PREPROD NETWORK
+        BLOCKFROST_NETWORK_NAME_PREPROD: "Preprod",
+        BLOCKFROST_RPC_URL_PREPROD:
+            "https://cardano-preprod.blockfrost.io/api/v0",
+        BLOCKFROST_PROJECT_API_KEY_PREPROD:
+            "preprodUsPqIO1ocp09iUg3TwM2aZcKaEa9ygtn",
+        KOIOS_RPC_URL_PREPROD: "https://preprod.koios.rest/api/v1",
+        NEXT_APP_BASE_URL_PREPROD: "https://preprod.dualtarget.vn/api/v1",
         DUALTARGET_CONTRACT_ADDRESS_PREPROD:
-            "addr_test1wrkv2awy8l5nk9vwq2shdjg4ntlxs8xsj7gswj8au5xn8fcxyhpjk",
+            "addr_test1zze6xz2yuzcwkt4f7kpyr4yt82xkq2kkmfj0vv54fz4kwy3a39atxwxg8ks578mqpxpsgsetvu8hx5f9nhvercv4da7s5s9p98",
+        DUALTARGET_PAYMENT_ADDRESS_PREPROD: "",
+        DUALTARGET_STAKE_ADDRESS_PREPROD:
+            "stake_test1uq7cj74n8ryrmg20rasqnqcygv4kwrmn2yjemkv3ux2k7lgqu950l",
         EXCHANGE_ADDRESS_FREE_PREPROP:
             "ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7",
-        HADA_POOL_ID:
-            "pool1rqgf6qd0p3wyf9dxf2w7qcddvgg4vu56l35ez2xqemhqun2gn7y",
-        EPOCH_POOL_ID: "478",
-        DUALTARGET_PAYMENT_ADDRESS_PREPROP:
-            "addr_test1wrkv2awy8l5nk9vwq2shdjg4ntlxs8xsj7gswj8au5xn8fcxyhpjk",
-        DUALTARGET_STAKE_ADDRESS_PREPROP:
-            "stake1ux0ptr0qx8ey4pw8n7f2n0mkg94dkdqg28nw5jh3l9pdcfc0scpge",
-    },
+        POOL_ID_PREPROD:
+            "pool1ke9h4mggr8ttf45ale5dv4ntkvuw2wkvm6la4mv02688xuy99qp",
+        MIN_TOKEN_ASSET_PREPROD:
+            "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed724d494e",
+        DJED_TOKEN_ASSET_MAINNET: "",
 
-    ...
+        // BINANCE_API_KEY: "V0popsaVcPSajStISK7DRkZsYOgMEqnlFoDwejiy28gsDMZ4Uj6Ohrr3vIxdAlby",
+        // BINANCE_API_SECRET: "nItpNsxBjIgePDYGAgZ9iiMUlK1LwLLwOs4776B9vbf5HLmDm61TsT5hC9w1nrpg",
+    },
 };
 
+export default nextConfig;
 ```
 
 To get these resources you need to `https://blockfrost.io` and `https://www.koios.rest` to do a few operations to get all the dependencies for the project.

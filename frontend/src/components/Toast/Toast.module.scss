@@ -4,7 +4,7 @@
     margin-top: 16px;
     flex-direction: column;
     justify-content: center;
-    position: absolute;
+    // position: absolute;
     animation: slideTopToDown 0.4s;
 
     &.isShow {
@@ -23,7 +23,7 @@
     justify-content: flex-start;
     line-height: 24px;
     max-width: 321px;
-    min-width: 341px;
+    width: 100%;
     padding: 16px 24px;
     position: relative;
     text-align: left;
@@ -53,6 +53,7 @@
 .icon-delete-image {
     overflow-clip-margin: content-box;
     overflow: clip;
+    margin-left: 1.6rem;
 }
 
 @keyframes slideTopToDown {

@@ -45,7 +45,6 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
         }
         return [];
     }, [data]);
-
     const previewStepsChartData = useMemo(() => {
         if (!preview) return [];
         if (preview.length > 0) {
@@ -157,10 +156,9 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
             }),
         );
         const tooltip = am5.Tooltip.new(root, {
-            labelText: `${convertTimestampToDateObject(currentHoveredValue.date)}\n{value}`,
+            labelText: `{valueX.formatDate('d MMMM yyyy')}\n{valueY}`,
             getFillFromSprite: false,
             animationDuration: 100,
-            autoTextColor: true,
         });
 
         tooltip.get("background")?.setAll({
@@ -233,7 +231,15 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
         }
 
         // Create axis ranges
-        function createRange({ value, endValue, color }: { value?: number; endValue?: number; color: am5.Color }) {
+        function createRange({
+            value,
+            endValue,
+            color,
+        }: {
+            value?: number;
+            endValue?: number;
+            color: am5.Color;
+        }) {
             const rangeDataItem = yAxis.makeDataItem({
                 value: value,
                 endValue: endValue,
@@ -255,9 +261,7 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                     background: am5.RoundedRectangle.new(root, {
                         fill: color,
                     }),
-                    tooltip: am5.Tooltip.new(root, {
-                        labelText: "Test",
-                    }),
+                    tooltip: am5.Tooltip.new(root, {}),
                 });
             } else {
                 range.get("label")?.setAll({
@@ -333,7 +337,13 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
     return (
         <div className={cx("wrapper")}>
             <button className={cx("button-toggle-chart-visibility")} onClick={handleToggleChart}>
-                <svg fill="none" height={12} viewBox="0 0 13 12" width={13} xmlns="http://www.w3.org/2000/svg">
+                <svg
+                    fill="none"
+                    height={12}
+                    viewBox="0 0 13 12"
+                    width={13}
+                    xmlns="http://www.w3.org/2000/svg"
+                >
                     <path
                         d="M0.0996094 6.80002C0.0996094 6.3582 0.457782 6.00002 0.899609 6.00002H2.49961C2.94144 6.00002 3.29961 6.3582 3.29961 6.80002V10.8C3.29961 11.2419 2.94144 11.6 2.49961 11.6H0.899609C0.457782 11.6 0.0996094 11.2419 0.0996094 10.8V6.80002Z"
                         fill="currentColor"
@@ -347,7 +357,9 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                         fill="currentColor"
                     />
                 </svg>
-                <span className={cx("button-toggle-chart-text")}>{show ? "Hide" : "Show"} chart</span>
+                <span className={cx("button-toggle-chart-text")}>
+                    {show ? "Hide" : "Show"} chart
+                </span>
             </button>
             <div
                 className={cx("chart-block", {
@@ -393,7 +405,13 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                                     <Tippy render={<div>This pair is verified</div>}>
                                         <div className={cx("exchange-check-icon")}>
                                             <div>
-                                                <svg fill="none" height={16} viewBox="0 0 16 16" width={16} xmlns="http://www.w3.org/2000/svg">
+                                                <svg
+                                                    fill="none"
+                                                    height={16}
+                                                    viewBox="0 0 16 16"
+                                                    width={16}
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                >
                                                     <path
                                                         clipRule="evenodd"
                                                         d="M5.01517 2.76412C5.52963 2.72307 6.01802 2.52077 6.41082 2.18603C7.32747 1.40487 8.67566 1.40487 9.5923 2.18603C9.9851 2.52077 10.4735 2.72307 10.988 2.76412C12.1885 2.85993 13.1418 3.81324 13.2376 5.01377C13.2787 5.52822 13.4809 6.01662 13.8157 6.40942C14.5969 7.32606 14.5969 8.67425 13.8157 9.5909C13.4809 9.9837 13.2787 10.4721 13.2376 10.9865C13.1418 12.1871 12.1885 13.1404 10.988 13.2362C10.4735 13.2772 9.9851 13.4795 9.5923 13.8143C8.67566 14.5954 7.32747 14.5954 6.41082 13.8143C6.01802 13.4795 5.52963 13.2772 5.01517 13.2362C3.81465 13.1404 2.86133 12.1871 2.76553 10.9865C2.72447 10.4721 2.52218 9.9837 2.18743 9.5909C1.40627 8.67425 1.40627 7.32606 2.18743 6.40942C2.52218 6.01662 2.72447 5.52822 2.76553 5.01377C2.86133 3.81324 3.81465 2.85993 5.01517 2.76412ZM10.9672 6.96584C11.2797 6.65342 11.2797 6.14689 10.9672 5.83447C10.6548 5.52205 10.1483 5.52205 9.83588 5.83447L7.20156 8.46879L6.16725 7.43447C5.85483 7.12205 5.3483 7.12205 5.03588 7.43447C4.72346 7.74689 4.72346 8.25342 5.03588 8.56584L6.63588 10.1658C6.9483 10.4783 7.45483 10.4783 7.76725 10.1658L10.9672 6.96584Z"
@@ -408,8 +426,16 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                             </div>
                         </div>
                         <div className={cx("header-right")}>
-                            <Tippy placement="bottom-end" hideOnClick={false} render={<div>Refresh chart</div>}>
-                                <button className={cx("refresh-button")} type="button" onClick={handleRefresh}>
+                            <Tippy
+                                placement="bottom-end"
+                                hideOnClick={false}
+                                render={<div>Refresh chart</div>}
+                            >
+                                <button
+                                    className={cx("refresh-button")}
+                                    type="button"
+                                    onClick={handleRefresh}
+                                >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -443,10 +469,14 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                     >
                         <div className={cx("current-hovered-value")}>
                             <div className={cx("hovered-wrapper")}>
-                                <span className={cx("price")}>{currentMarketPrice.value.toFixed(4)}</span>
+                                <span className={cx("price")}>
+                                    {currentMarketPrice.value.toFixed(4)}
+                                </span>
                                 <span className={cx("token-name")}>DJED</span>
                             </div>
-                            <div className={cx("datetime")}>{convertTimestampToDateObject(currentMarketPrice.date)}</div>
+                            <div className={cx("datetime")}>
+                                {convertTimestampToDateObject(currentMarketPrice.date)}
+                            </div>
                         </div>
                         <div className={cx("chart-offset")}>
                             <div id={`price-chart-${chartId}`} className={cx("chart")} />

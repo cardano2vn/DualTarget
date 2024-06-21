@@ -18,6 +18,7 @@ import { DualtargetDatum } from "~/constants/datum";
 import readDatum from "~/utils/read-datum";
 import { WalletContextType } from "~/types/contexts/WalletContextType";
 import WalletContext from "~/contexts/components/WalletContext";
+import { DECIMAL_PLACES } from "~/constants";
 
 type Props = {
     children: ReactNode;
@@ -42,13 +43,9 @@ const SmartContractProvider = function ({ children }: Props) {
     }) {
         try {
             setWaitingDeposit(true);
-            console.log(currentPrice);
-
             const contractAddress: string = process.env
                 .DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
             const datumParams = await readDatum({ contractAddress: contractAddress, lucid: lucid });
-
-            console.log(datumParams);
             const vkeyOwnerHash: string = lucid.utils.getAddressDetails(
                 await lucid.wallet.address(),
             ).paymentCredential?.hash as string;
@@ -87,20 +84,27 @@ const SmartContractProvider = function ({ children }: Props) {
                 );
             });
 
-            let tx: any = lucid.newTx();
+            let winter_addr: Credential = {
+                type: "Key",
+                hash: datumParams.feeAddress,
+            };
+            const freeAddress1 = lucid.utils.credentialToAddress(winter_addr);
+
+            let tx: any = lucid.newTx().payToAddress(freeAddress1, {
+                lovelace: BigInt(datumParams.batcherFee) as Lovelace,
+            });
 
             sellingStrategies.forEach(async function (
                 sellingStrategy: CalculateSellingStrategy,
                 index: number,
             ) {
-                console.log(sellingStrategy.buyPrice);
-                if (Number(sellingStrategy.buyPrice) <= Number(currentPrice * 1000000)) {
+                if (Number(sellingStrategy.buyPrice) <= Number(currentPrice * DECIMAL_PLACES)) {
                     tx = await tx.payToContract(
                         contractAddress,
                         { inline: datums[index] },
                         {
                             [process.env.MIN_TOKEN_ASSET_PREPROD!]: BigInt(
-                                Math.round(sellingStrategy.amountSend! / 1000000),
+                                Math.round(sellingStrategy.amountSend! / DECIMAL_PLACES),
                             ),
                         },
                     );
@@ -114,7 +118,6 @@ const SmartContractProvider = function ({ children }: Props) {
             });
 
             tx = await tx.complete();
-            console.log(tx);
 
             const signedTx: TxSigned = await tx.sign().complete();
             const txHash: TxHash = await signedTx.submit();
@@ -197,7 +200,6 @@ const SmartContractProvider = function ({ children }: Props) {
                 .DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string;
             const scriptUtxos: UTxO[] = await lucid.utxosAt(contractAddress);
             const datumParams = await readDatum({ contractAddress: contractAddress, lucid: lucid });
-
             const claimableUtxos: ClaimableUTxO[] = [];
             for (const scriptUtxo of scriptUtxos) {
                 if (scriptUtxo.datum) {
@@ -240,7 +242,7 @@ const SmartContractProvider = function ({ children }: Props) {
                                 claimableUtxos.push({
                                     utxo: scriptUtxo,
                                     BatcherFee_addr: String(freeAddress1),
-                                    fee: params.batcherFee,
+                                    fee: Number(params.batcherFee),
                                     minimumAmountOut: params.minimumAmountOut, // Số lượng profit
                                     minimumAmountOutProfit: params.minimumAmountOutProfit,
                                 });
@@ -249,7 +251,7 @@ const SmartContractProvider = function ({ children }: Props) {
                         case 1:
                             if (
                                 String(params.odOwner) === String(paymentAddress) &&
-                                Number(params.isLimitOrder) !== 0
+                                Number(params.isLimitOrder) === 0
                             ) {
                                 let winter_addr: Credential = {
                                     type: "Key",
@@ -260,7 +262,7 @@ const SmartContractProvider = function ({ children }: Props) {
                                 claimableUtxos.push({
                                     utxo: scriptUtxo,
                                     BatcherFee_addr: String(freeAddress1),
-                                    fee: params.batcherFee,
+                                    fee: Number(params.batcherFee),
                                     minimumAmountOut: params.minimumAmountOut, // Số lượng profit
                                     minimumAmountOutProfit: params.minimumAmountOutProfit,
                                 });
@@ -282,7 +284,7 @@ const SmartContractProvider = function ({ children }: Props) {
                                 claimableUtxos.push({
                                     utxo: scriptUtxo,
                                     BatcherFee_addr: String(freeAddress1),
-                                    fee: params.batcherFee,
+                                    fee: Number(params.batcherFee),
                                     minimumAmountOut: params.minimumAmountOut, // Số lượng profit
                                     minimumAmountOutProfit: params.minimumAmountOutProfit,
                                 });
@@ -303,8 +305,10 @@ const SmartContractProvider = function ({ children }: Props) {
 
     const previewWithdraw = async function ({
         lucid,
+        range: [min, max],
     }: {
         lucid: Lucid;
+        range: [number, number];
     }): Promise<CalculateSellingStrategy[]> {
         const paymentAddress: string = lucid.utils.getAddressDetails(await lucid.wallet.address())
             .paymentCredential?.hash as string;
@@ -324,21 +328,57 @@ const SmartContractProvider = function ({ children }: Props) {
                 };
 
                 if (String(params.odOwner) === String(paymentAddress)) {
-                    sellingStrategies.push({
-                        minimumAmountOut: Number(params.minimumAmountOut),
-                        minimumAmountOutProfit: Number(params.minimumAmountOutProfit),
-                        buyPrice: Number(params.buyPrice),
-                        sellPrice: Number(params.sellPrice),
-                    });
+                    const price = Number(params.buyPrice) / DECIMAL_PLACES;
+                    if ((max !== 0 && price > max) || (price < min && min > 0)) {
+                        sellingStrategies.push({
+                            minimumAmountOut: Number(params.minimumAmountOut),
+                            minimumAmountOutProfit: Number(params.minimumAmountOutProfit),
+                            buyPrice: Number(params.buyPrice),
+                            sellPrice: Number(params.sellPrice),
+                        });
+                    }
+
+                    if (min === 0 && max === 0) {
+                        sellingStrategies.push({
+                            minimumAmountOut: Number(params.minimumAmountOut),
+                            minimumAmountOutProfit: Number(params.minimumAmountOutProfit),
+                            buyPrice: Number(params.buyPrice),
+                            sellPrice: Number(params.sellPrice),
+                        });
+                    }
                 }
             }
         }
         return sellingStrategies;
     };
 
+    const previewDeposit = function ({
+        sellingStrategies,
+        currentPrice,
+    }: {
+        sellingStrategies: Array<CalculateSellingStrategy>;
+        currentPrice: number;
+    }) {
+        let amountADA = 0;
+        let amountDJED = 0;
+
+        sellingStrategies.forEach(function (sellingStrategy: CalculateSellingStrategy) {
+            if (Number(sellingStrategy.buyPrice) / DECIMAL_PLACES > currentPrice) {
+                amountADA += Number(sellingStrategy.amountSend) / DECIMAL_PLACES;
+            } else {
+                amountDJED += Number(sellingStrategy.amountSend) / DECIMAL_PLACES;
+            }
+        });
+        return {
+            amountADA,
+            amountDJED,
+        };
+    };
+
     return (
         <SmartContractContext.Provider
             value={{
+                previewDeposit,
                 deposit,
                 calculateClaimEUTxO,
                 withdraw,
