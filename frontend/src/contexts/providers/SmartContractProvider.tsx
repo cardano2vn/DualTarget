@@ -239,6 +239,8 @@ const SmartContractProvider = function ({ children }: Props) {
                                 };
                                 const freeAddress1 = lucid.utils.credentialToAddress(winter_addr);
 
+
+                                // TODO: 
                                 claimableUtxos.push({
                                     utxo: scriptUtxo,
                                     BatcherFee_addr: String(freeAddress1),

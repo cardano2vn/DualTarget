@@ -8,27 +8,41 @@
 
 ## Project folder structure
 
-1. apps: Manage routes using a directory structure. Instead of complicated configuration, you just need to create directories and files to define routes.
-2. assets: Contains project resources including video icon images and fonts.
-3. components: Used to organize and manage application components.
-4. configs: Configure paths for wallet settings and project routes.
+1. `app`: Manage routes using a directory structure. Instead of complicated configuration, you just need to create directories and files to define routes.
 
--   wallets.ts:
+2. `assets`: Contains project resources including video icon images and fonts.
+
+3. `components`: Used to organize and manage application components.
+
+4. `configs`: Configure paths for wallet settings and project routes.
+
+-   wallets.ts: Contains a list of paths to install the chrome wallet extension
+
 -   routes.ts: Definition of absolute project routes
 
-5. constants
-6. contexts
-7. Data
-8. Helpers
-9. Hooks
-10. Layouts
-11. Libs
-12. routers: Define names and routes of routers in the project (for public routers)
-13. Services
-14. Styles
-15. Transactions
-16. Types
-17. Utils
+5. `constants`: Store files containing constants which do not change throughout the run of the application
+
+6. `contexts`: Contains files to manage global state
+
+7. `data`: store static resources
+
+8. `helpers/utils`: Stores files containing utility functions
+
+9. `hooks`: contains custom hooks, that helps us to separate logic from components, make code easier to read and maintain
+
+10. `layouts`: Stores interface components (UI components) responsible for managing the layout of the website or application. These components define the overall structure within which other components will be displayed
+
+11. `libs`
+
+12. `routers`: Define names and routes of routers in the project (for public routers)
+
+13. `services`: Define services sử dụng api blockfrost koios minswap-sdk
+
+14. `styles`: contains files CSS/SCSS used for the entire application
+
+15. `translations`: The JSON files in this folder will store translations for the different languages ​​your application supports
+
+16. `types`: Define Typescript types used for the entire application
 
 ## Instructions for use
 

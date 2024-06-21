@@ -36,6 +36,7 @@ import images from "~/assets/images";
 import TranslateContext from "~/contexts/components/TranslateContext";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import NetworkContext from "~/contexts/components/NetworkContext";
+import { COUNTER_UTXO, DECIMAL_PLACES } from "~/constants";
 const cx = classNames.bind(styles);
 
 type DepositeType = {
@@ -67,7 +68,7 @@ const Deposit = function () {
                 `${window.location.origin}/api/history/transaction?wallet_address=${
                     wallet?.address
                 }&page=${page}&page_size=5&network=${network.toLowerCase()}`,
-                { timeout: 7000 },
+                { timeout: 7_000 },
             ),
         enabled: Boolean(wallet?.address) || (Boolean(wallet?.address) && Boolean(txHashDeposit)),
     });
@@ -107,6 +108,7 @@ const Deposit = function () {
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
     });
+
     useEffect(() => {
         if (Object.keys(errors).length !== 0 || isDirty) {
             Object.keys(errors).forEach((key) => {
@@ -119,7 +121,7 @@ const Deposit = function () {
         if (isGetChartRecordsSuccess && chartDataRecords.data) {
             const prices = chartDataRecords.data.map((history) => [
                 +history.closeTime,
-                +history.high,
+                +history.close,
             ]);
             return prices as ChartDataType;
         }
@@ -136,20 +138,8 @@ const Deposit = function () {
     const onDeposite = handleSubmit((data) => {
         const amountDJED = wallet?.djed;
         const amountADA = wallet?.balance;
-        if (sellingStrategies.length > 20) {
-            toast.error({
-                message: "You need to divide the steps into smaller than 20 steps to deposit.",
-            });
-            return;
-        }
-        if (
-            (lucid &&
-                amountDJED &&
-                amountADA &&
-                fees.amountADA == 0 &&
-                amountDJED >= fees.amountDJED) ||
-            (fees.amountDJED == 0 && (amountADA as number) >= fees.amountADA)
-        ) {
+
+        if (lucid) {
             deposit({
                 lucid,
                 sellingStrategies,
@@ -167,7 +157,7 @@ const Deposit = function () {
                     console.log(error);
                 });
         } else {
-            toast.warn({ message: "Insufficient assets in your wallet" });
+            toast.warn({ message: "You can connect wallets." });
         }
     });
 
@@ -184,16 +174,34 @@ const Deposit = function () {
             Object.keys(errors).length === 0
         ) {
             const result: CalculateSellingStrategy[] = calculateSellingStrategy({
-                income: Number(income), // Bao nhiêu $ một tháng ==> Nhận bao nhiêu dola 1 tháng = 5
-                priceHight: Number(priceHight) * 1000000, //  Giá thấp nhất =  2000000
-                priceLow: Number(priceLow) * 1000000, // Giá cao nhất = 1000000
-                stake: Number(stake), //  ROI % stake theo năm = 5
-                step: Number(step), // Bước nhảy theo giá (%) = 10
-                totalADA: Number(totalADA) * 1000000, // Tổng ada = 24000000
+                income: Number(income),
+                priceHight: Number(priceHight) * DECIMAL_PLACES,
+                priceLow: Number(priceLow) * DECIMAL_PLACES,
+                stake: Number(stake),
+                step: Number(step),
+                totalADA: Number(totalADA) * DECIMAL_PLACES,
             });
-            setSellingStrategies(result);
             const _fees = previewDeposit({ sellingStrategies: result, currentPrice });
             setFees(_fees);
+
+            if (
+                _fees.amountADA > Number(wallet?.balance) ||
+                _fees.amountDJED > Number(wallet?.djed)
+            ) {
+                toast.error({
+                    message: "Insufficient assets in your wallet",
+                });
+                return;
+            }
+
+            if (result.length > COUNTER_UTXO) {
+                toast.error({
+                    message: `You need to divide the steps into smaller than ${COUNTER_UTXO} steps to deposit.`,
+                });
+                return;
+            }
+
+            setSellingStrategies(result);
         } else {
             trigger();
         }
