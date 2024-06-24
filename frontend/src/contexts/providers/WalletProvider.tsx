@@ -111,7 +111,7 @@ const WalletProvider = function ({ children }: Props) {
                 )
                     ? 0
                     : Number(Number(utxo?.assets[process.env.MIN_TOKEN_ASSET_PREPROD!]));
-                return balance + amount;
+                return balance + amount / DECIMAL_PLACES;
             }, 0);
             setWallet(function (previous: WalletType) {
                 return {
@@ -125,17 +125,22 @@ const WalletProvider = function ({ children }: Props) {
                     poolId: poolId,
                 };
             });
+
             await axios.post(
                 "/api/auth/set-wallet-address",
                 { walletAddress: address },
                 {
-                    baseURL: process.env.NEXT_PUBLIC_LOCALHOST,
+                    baseURL: window.location.origin,
                 },
             );
             setLucid(lucid);
-            toast.success({ message: "Wallet connected!" });
+            toast.success({
+                message: "Wallet connected!",
+            });
         } catch (error) {
-            console.log(error);
+            toast.success({
+                message: "Wallet connected error!",
+            });
         } finally {
             setLoading(false);
         }
@@ -148,7 +153,6 @@ const WalletProvider = function ({ children }: Props) {
             if (isShowingErrorNetwork) {
                 toogleErrorNetwork();
             }
-
             localStorage.removeItem("wallet");
             await axios.post("/api/auth/clear-wallet-address", {});
             toast.success({ message: "Wallet disconnected!" });

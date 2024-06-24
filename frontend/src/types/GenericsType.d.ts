@@ -135,6 +135,7 @@ export interface ClaimableUTxO {
     fee: number;
     minimumAmountOut: number;
     minimumAmountOutProfit: number;
+    isLimitOrder?: number;
 }
 
 export type ChartHistoryRecord = {

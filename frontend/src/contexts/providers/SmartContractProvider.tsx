@@ -104,7 +104,7 @@ const SmartContractProvider = function ({ children }: Props) {
                         { inline: datums[index] },
                         {
                             [process.env.MIN_TOKEN_ASSET_PREPROD!]: BigInt(
-                                Math.round(sellingStrategy.amountSend! / DECIMAL_PLACES),
+                                Math.round(sellingStrategy.amountSend!),
                             ),
                         },
                     );
@@ -238,15 +238,13 @@ const SmartContractProvider = function ({ children }: Props) {
                                     hash: params.feeAddress,
                                 };
                                 const freeAddress1 = lucid.utils.credentialToAddress(winter_addr);
-
-
-                                // TODO: 
                                 claimableUtxos.push({
                                     utxo: scriptUtxo,
                                     BatcherFee_addr: String(freeAddress1),
                                     fee: Number(params.batcherFee),
                                     minimumAmountOut: params.minimumAmountOut, // Số lượng profit
                                     minimumAmountOutProfit: params.minimumAmountOutProfit,
+                                    isLimitOrder: params.isLimitOrder,
                                 });
                                 break;
                             }
@@ -267,6 +265,7 @@ const SmartContractProvider = function ({ children }: Props) {
                                     fee: Number(params.batcherFee),
                                     minimumAmountOut: params.minimumAmountOut, // Số lượng profit
                                     minimumAmountOutProfit: params.minimumAmountOutProfit,
+                                    isLimitOrder: params.isLimitOrder,
                                 });
                             }
                             break;
@@ -289,6 +288,7 @@ const SmartContractProvider = function ({ children }: Props) {
                                     fee: Number(params.batcherFee),
                                     minimumAmountOut: params.minimumAmountOut, // Số lượng profit
                                     minimumAmountOutProfit: params.minimumAmountOutProfit,
+                                    isLimitOrder: params.isLimitOrder,
                                 });
                             }
                             break;

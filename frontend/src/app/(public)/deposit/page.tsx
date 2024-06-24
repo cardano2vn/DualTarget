@@ -236,8 +236,8 @@ const Deposit = function () {
                                                     <CountUp
                                                         end={wallet?.balance || 0}
                                                         start={0}
-                                                        decimals={5}
-                                                        decimalPlaces={5}
+                                                        decimals={3}
+                                                        decimalPlaces={3}
                                                     />
                                                     <span className={cx("currency")}>&nbsp;₳</span>
                                                 </span>
@@ -245,8 +245,8 @@ const Deposit = function () {
                                                     <CountUp
                                                         end={wallet?.djed || 0}
                                                         start={0}
-                                                        decimals={5}
-                                                        decimalPlaces={5}
+                                                        decimals={3}
+                                                        decimalPlaces={3}
                                                     />
                                                     <span className={cx("currency")}>
                                                         &nbsp;DJED
@@ -533,7 +533,7 @@ const Deposit = function () {
                                                             <Loading />
                                                         ) : sellingStrategies.length > 0 ? (
                                                             <span className={cx("fee-currency")}>
-                                                                {fees.amountADA.toFixed(5)}&nbsp;₳
+                                                                {fees.amountADA.toFixed(6)}&nbsp;₳
                                                             </span>
                                                         ) : (
                                                             "-"
@@ -545,7 +545,7 @@ const Deposit = function () {
                                                             <Loading />
                                                         ) : sellingStrategies.length > 0 ? (
                                                             <span className={cx("fee-currency")}>
-                                                                &nbsp;{fees.amountDJED}
+                                                                &nbsp;{fees.amountDJED.toFixed(6)}
                                                                 &nbsp;DJED
                                                             </span>
                                                         ) : (

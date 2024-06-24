@@ -123,8 +123,8 @@ export async function GET(request: NextRequest) {
                         blockTime: transaction.block_time,
                         txHash: transaction.utxos.hash,
                         type: "Deposit",
-                        amountADA: +(amountADA / DECIMAL_PLACES).toFixed(5),
-                        amountDJED: +amountDJED,
+                        amountADA: +(amountADA / DECIMAL_PLACES).toFixed(6),
+                        amountDJED: +(amountDJED / DECIMAL_PLACES).toFixed(6),
                         status: "Completed",
                         fee: 1.5,
                     };
