@@ -1,5 +1,26 @@
 {
     "layout": {
+        "toast": {
+            "success": {
+                "deposit": "Nạp tiền thành công.",
+                "connect_wallet": "Ví đã được kết nối!",
+                "disconnect_wallet": "Lỗi kết nối ví!"
+            },
+            "warn": {
+                "connect_wallet": "Bạn không thể kết nối ví của mình.",
+                "divide_transactions": {
+                    "1": "Bạn cần chia nó thành",
+                    "2": "giao dịch hoặc bạn có thể chọn rút từng phần để rút tài sản của mình"
+                }
+            },
+            "error": {
+                "counter_utxo": {
+                    "1": "Bạn cần chia các bước thành nhỏ hơn",
+                    "2": "bước để nạp tiền."
+                },
+                "insufficient_assets": "Tài sản trong ví của bạn không đủ"
+            }
+        },
         "form": {
             "errors": {
                 "messages": {

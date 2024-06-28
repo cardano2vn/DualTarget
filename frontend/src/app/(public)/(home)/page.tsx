@@ -46,8 +46,6 @@ export default function Home() {
         enabled: true,
     });
 
-    console.log(data);
-
     const words = [t("home.title")];
     const [text, count] = useTypewriter({
         words,

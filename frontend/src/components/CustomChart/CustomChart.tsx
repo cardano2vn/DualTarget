@@ -6,12 +6,13 @@ import * as am5xy from "@amcharts/amcharts5/xy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import styles from "./CustomChart.module.scss";
 import { CalculateSellingStrategy, ChartDataType } from "~/types/GenericsType";
-import CountUp from "react-countup";
 import Image from "next/image";
 import icons from "~/assets/icons";
 import Tippy from "../Tippy";
 import Loading from "../Loading";
 import { convertTimestampToDateObject } from "~/utils/utils";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentPrice } from "~/utils/current-price";
 
 const cx = classNames.bind(styles);
 
@@ -31,6 +32,12 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
     const [show, setShow] = useState<boolean>(true);
     const [currentHoveredValue, setCurrentHoveredValue] = useState<DataType>({ date: 0, value: 0 });
     const [currentMarketPrice, setCurrentMarketPrice] = useState<DataType>({ date: 0, value: 0 });
+    const { data: currentPrice } = useQuery({
+        queryKey: ["market_price"],
+        queryFn: () => getCurrentPrice(),
+        refetchInterval: 1000,
+    });
+
     const chartId = useId();
     const dataObject = useMemo(() => {
         if (data && data.length > 0) {
@@ -467,17 +474,19 @@ const CustomChart = function ({ data, preview, isLoading, onRefresh }: Props) {
                             isLoading,
                         })}
                     >
-                        <div className={cx("current-hovered-value")}>
-                            <div className={cx("hovered-wrapper")}>
-                                <span className={cx("price")}>
-                                    {currentMarketPrice.value.toFixed(4)}
-                                </span>
-                                <span className={cx("token-name")}>DJED</span>
+                        {currentPrice && (
+                            <div className={cx("current-hovered-value")}>
+                                <div className={cx("hovered-wrapper")}>
+                                    <span className={cx("price")}>
+                                        {Number(currentPrice?.price).toFixed(4)}
+                                    </span>
+                                    <span className={cx("token-name")}>DJED</span>
+                                </div>
+                                <div className={cx("datetime")}>
+                                    {convertTimestampToDateObject(new Date().getTime())}
+                                </div>
                             </div>
-                            <div className={cx("datetime")}>
-                                {convertTimestampToDateObject(currentMarketPrice.date)}
-                            </div>
-                        </div>
+                        )}
                         <div className={cx("chart-offset")}>
                             <div id={`price-chart-${chartId}`} className={cx("chart")} />
                         </div>

@@ -143,7 +143,7 @@ const ConnectWallet = function ({ className }: Props) {
                                                 start={0}
                                                 decimals={3}
                                                 decimalPlaces={3}
-                                            />{" "}
+                                            />
                                             ₳
                                         </div>
                                     </section>
@@ -167,7 +167,7 @@ const ConnectWallet = function ({ className }: Props) {
                                                 start={0}
                                                 decimals={3}
                                                 decimalPlaces={3}
-                                            />{" "}
+                                            />
                                             DJED
                                         </div>
                                     </section>

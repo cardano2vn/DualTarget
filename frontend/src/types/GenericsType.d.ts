@@ -7,6 +7,20 @@ export type DelegationRewardType = {
     status: string;
 };
 
+export type EnviromentType = {
+    NAME: string;
+    BLOCKFROST_RPC_URL: string;
+    BLOCKFROST_PROJECT_API_KEY: string;
+    KOIOS_RPC_URL: string;
+    DUALTARGET_CONTRACT_ADDRESS: string;
+    DUALTARGET_PAYMENT_ADDRESS: string;
+    DUALTARGET_STAKE_ADDRESS: string;
+    EXCHANGE_ADDRESS_FREE: string;
+    HADA_POOL_ID: string;
+    DUALTARGET_TXHASH_REFERENCE_SCRIPT: string;
+    DJED_TOKEN_ASSET: string;
+};
+
 export type DelegationRewardResponseType = {
     totalPage: number;
     histories: DelegationRewardType[];

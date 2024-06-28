@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import Blockfrost from "~/services/blockfrost";
 import Koios from "~/services/koios";
 import caculateDepositWithdraw from "~/utils/calculate-deposit-withdraw";
+import readEnviroment from "~/utils/read-enviroment";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -12,29 +13,19 @@ export async function GET(request: NextRequest) {
     const walletAddress: string = searchParams.get("wallet_address") as string;
     const network: CardanoNetwork = searchParams.get("network") as CardanoNetwork;
 
-    const poolId: string =
-        network === "preprod"
-            ? (process.env.POOL_ID_PREPROD as string)
-            : (process.env.POOL_ID_MAINNET! as string);
-    const stakeAddress: string =
-        network === "preprod"
-            ? (process.env.DUALTARGET_STAKE_ADDRESS_PREPROD as string)
-            : (process.env.DUALTARGET_STAKE_ADDRESS_MAINNET as string);
-    const smartcontractAddress: string =
-        network === "preprod"
-            ? (process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD as string)
-            : (process.env.DUALTARGET_CONTRACT_ADDRESS_MAINNET as string);
+    const enviroment = readEnviroment({
+        network: network,
+        index: 0,
+    });
 
-    const koios = new Koios(
-        network === "preprod"
-            ? (process.env.KOIOS_RPC_URL_PREPROD! as string)
-            : (process.env.KOIOS_RPC_URL_MAINNET! as string),
-    );
+    const poolId: string = enviroment.HADA_POOL_ID;
+    const stakeAddress: string = enviroment.DUALTARGET_STAKE_ADDRESS;
+    const smartcontractAddress: string = enviroment.DUALTARGET_CONTRACT_ADDRESS;
+
+    const koios = new Koios(enviroment.KOIOS_RPC_URL);
 
     const blockfrost = new Blockfrost(
-        network === "preprod"
-            ? process.env.BLOCKFROST_PROJECT_API_KEY_PREPROD!
-            : process.env.BLOCKFROST_PROJECT_API_KEY_MAINNET!,
+        enviroment.BLOCKFROST_PROJECT_API_KEY as string,
         network as CardanoNetwork,
     );
 

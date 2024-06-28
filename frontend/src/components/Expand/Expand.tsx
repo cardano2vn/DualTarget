@@ -60,25 +60,17 @@ const Expand = function ({ className, data }: Props) {
                     </div>
 
                     <div className={cx("right-content")}>
-                        <div className={cx("received-or-payed")}>
-                            <div className={cx("title-wrapper")}>
-                                <span>Fee</span>
+                        <div className={cx("status")}>
+                            <div className={"title-wrapper"}>
+                                <span>Amount DJED</span>
                             </div>
-                            <div className={cx("value")}>{data.fee} ₳</div>
+                            <div className={cx("value")}>{data.amountDJED}</div>
                         </div>
                         <div className={cx("status")}>
                             <div className={"title-wrapper"}>
                                 <span>Status</span>
                             </div>
                             <div className={cx("value")}>{data.status}</div>
-                        </div>
-                    </div>
-                    <div className={cx("right-content")}>
-                        <div className={cx("status")}>
-                            <div className={"title-wrapper"}>
-                                <span>Amount DJED</span>
-                            </div>
-                            <div className={cx("value")}>{data.amountDJED}</div>
                         </div>
                     </div>
                 </div>

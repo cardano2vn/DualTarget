@@ -12,17 +12,17 @@ type Props = {
 };
 
 const AccountProvider = function ({ children }: Props) {
-    const { wallet } = useContext<WalletContextType>(WalletContext);
+    // const { wallet } = useContext<WalletContextType>(WalletContext);
     const [account, setAccount] = useState<AccountType>(null!);
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["account"],
-        queryFn: async function () {
-            return await post("/account", {
-                wallet_address: wallet.address,
-            });
-        },
-        enabled: !Boolean(wallet?.address),
-    });
+    // const { data, isLoading, error } = useQuery({
+    //     queryKey: ["account"],
+    //     queryFn: async function () {
+    //         return await post("/account", {
+    //             wallet_address: wallet.address,
+    //         });
+    //     },
+    //     enabled: !Boolean(wallet?.address),
+    // });
 
     return (
         <AccountContext.Provider value={{ account, setAccount }}>

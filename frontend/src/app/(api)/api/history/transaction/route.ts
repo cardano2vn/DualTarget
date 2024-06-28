@@ -3,6 +3,7 @@ import { NextRequest } from "next/server";
 import { DECIMAL_PLACES } from "~/constants";
 import convertDatetime from "~/helpers/convert-datetime";
 import Blockfrost from "~/services/blockfrost";
+import readEnviroment from "~/utils/read-enviroment";
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -12,10 +13,10 @@ export async function GET(request: NextRequest) {
     const pageSize: string = searchParams.get("page_size") as string;
     const walletAddress: string = searchParams.get("wallet_address") as string;
 
+    const enviroment = readEnviroment({ network: network });
+
     const blockfrost = new Blockfrost(
-        network === "preprod"
-            ? process.env.BLOCKFROST_PROJECT_API_KEY_PREPROD!
-            : process.env.BLOCKFROST_PROJECT_API_KEY_MAINNET!,
+        enviroment.BLOCKFROST_PROJECT_API_KEY,
         network as CardanoNetwork,
     );
 
@@ -30,11 +31,7 @@ export async function GET(request: NextRequest) {
             }),
     );
 
-    const addressToFind =
-        network === "preprod"
-            ? (process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string)
-            : (process.env.DUALTARGET_CONTRACT_ADDRESS_PREPROD! as string);
-
+    const addressToFind = enviroment.DUALTARGET_CONTRACT_ADDRESS;
     const transactionsWithTargetAddress = await Promise.all(
         results
             .map((transaction) => {
@@ -45,8 +42,9 @@ export async function GET(request: NextRequest) {
                 const hasOutput = transaction.utxos.outputs.some(
                     (output) => output.address === addressToFind,
                 );
+
                 if (hasInput) {
-                    let amountADA: number = -39000000;
+                    let amountADA: number = 0;
                     let amountDJED: number = 0;
 
                     transaction.utxos.inputs.forEach(function (input) {
@@ -55,7 +53,7 @@ export async function GET(request: NextRequest) {
                                 total: number,
                                 { unit, quantity },
                             ) {
-                                if (unit === "lovelace") {
+                                if (unit === "lovelace" && !input.reference_script_hash) {
                                     return total + Number(quantity);
                                 }
                                 return total;
@@ -65,7 +63,7 @@ export async function GET(request: NextRequest) {
                                 total: number,
                                 { quantity, unit },
                             ) {
-                                if (unit === process.env.MIN_TOKEN_ASSET_PREPROD) {
+                                if (unit === enviroment.DJED_TOKEN_ASSET) {
                                     return total + Number(quantity);
                                 }
                                 return total;
@@ -80,9 +78,8 @@ export async function GET(request: NextRequest) {
                         type: "Withdraw",
                         txHash: transaction.utxos.hash,
                         amountADA: +(amountADA / DECIMAL_PLACES).toFixed(5),
-                        amountDJED: +amountDJED,
+                        amountDJED: +(amountDJED / DECIMAL_PLACES).toFixed(6),
                         status: "Completed",
-                        fee: 1.5,
                         blockTime: transaction.block_time,
                     };
                 }
@@ -107,7 +104,7 @@ export async function GET(request: NextRequest) {
                                 total: number,
                                 { unit, quantity },
                             ) {
-                                if (unit === process.env.MIN_TOKEN_ASSET_PREPROD) {
+                                if (unit === enviroment.DJED_TOKEN_ASSET) {
                                     return total + Number(quantity);
                                 }
 
@@ -126,12 +123,12 @@ export async function GET(request: NextRequest) {
                         amountADA: +(amountADA / DECIMAL_PLACES).toFixed(6),
                         amountDJED: +(amountDJED / DECIMAL_PLACES).toFixed(6),
                         status: "Completed",
-                        fee: 1.5,
                     };
                 }
             })
             .filter((output) => output != null),
     );
+
     const totalPage = Math.ceil(transactionsWithTargetAddress.length / Number(pageSize));
     const histories = [...transactionsWithTargetAddress].slice(
         (Number(page) - 1) * Number(pageSize),

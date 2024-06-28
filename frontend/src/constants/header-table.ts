@@ -6,7 +6,6 @@ const historyTransactions: HeaderTableType[] = [
     { title: "Action" },
     { title: "Amount ADA" },
     { title: "Amount DJED" },
-    { title: "Fees" },
     { title: "Status" },
 ];
 

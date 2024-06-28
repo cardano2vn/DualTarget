@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
             return utxos;
         }),
     );
-   
+
     return Response.json({
         totalTransaction: totalTransaction,
         totalVolumeWithdrawsDJED: totalVolumeWithdrawsDJED,

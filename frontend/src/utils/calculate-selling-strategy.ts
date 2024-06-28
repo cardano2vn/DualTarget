@@ -6,7 +6,7 @@ type Props = {
     priceHight: number;
     step: number;
     income: number;
-    totalADA: number;
+    totalADA?: number;
     stake: number;
 };
 
@@ -19,9 +19,7 @@ function calculateSellingStrategy({
     totalADA,
 }: Props): Array<CalculateSellingStrategy> {
     let price: number = priceLow;
-
     let sumADA: number = 0; // Số lượng ada cần nhập vào => UI
-
     const result: Array<CalculateSellingStrategy> = [];
 
     while (price <= priceHight) {

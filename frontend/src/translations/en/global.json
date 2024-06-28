@@ -1,5 +1,26 @@
 {
     "layout": {
+        "toast": {
+            "success": {
+                "deposit": "Deposit sucessfully completed.",
+                "connect_wallet": "Wallet connected!",
+                "disconnect_wallet": "Wallet connected error!"
+            },
+            "warn": {
+                "connect_wallet": "You cannot connect your wallet.",
+                "divide_transactions": {
+                    "1": "You need to divide it into",
+                    "2": "transactions or you can choose to withdraw each part to withdraw your assets"
+                }
+            },
+            "error": {
+                "counter_utxo": {
+                    "1": "You need to divide the steps into smaller than ",
+                    "2": " steps to deposit."
+                },
+                "insufficient_assets": "Insufficient assets in your wallet"
+            }
+        },
         "form": {
             "errors": {
                 "messages": {

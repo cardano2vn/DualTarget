@@ -36,7 +36,7 @@ import images from "~/assets/images";
 import TranslateContext from "~/contexts/components/TranslateContext";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import NetworkContext from "~/contexts/components/NetworkContext";
-import { COUNTER_UTXO, DECIMAL_PLACES } from "~/constants";
+import { BATCHER_FEE, COUNTER_UTXO, DECIMAL_PLACES } from "~/constants";
 const cx = classNames.bind(styles);
 
 type DepositeType = {
@@ -74,13 +74,13 @@ const Deposit = function () {
     });
 
     const { toast } = useContext<ToastContextType>(ToastContext);
-
     const {
         handleSubmit,
         watch,
         control,
         reset,
         trigger,
+        setValue,
         getValues,
         formState: { errors, isDirty, isValid },
     } = useForm<DepositeType>({
@@ -117,6 +117,8 @@ const Deposit = function () {
         }
     }, [t]);
 
+    useEffect(() => {}, []);
+
     const historyPrices: ChartDataType = useMemo(() => {
         if (isGetChartRecordsSuccess && chartDataRecords.data) {
             const prices = chartDataRecords.data.map((history) => [
@@ -147,7 +149,7 @@ const Deposit = function () {
             })
                 .then(() => {
                     toast.success({
-                        message: "Deposit sucessfully completed.",
+                        message: t("layout.toast.success.deposit"),
                     });
                     reset();
                     setSellingStrategies([]);
@@ -157,11 +159,26 @@ const Deposit = function () {
                     console.log(error);
                 });
         } else {
-            toast.warn({ message: "You can connect wallets." });
+            toast.warn({ message: t("layout.toast.warn.connect_wallet") });
         }
     });
 
     const { income, priceHight, priceLow, stake, step, totalADA } = watch();
+
+    useEffect(() => {
+        if (income && priceHight && priceLow && stake && step) {
+            const result: CalculateSellingStrategy[] = calculateSellingStrategy({
+                income: Number(income),
+                priceHight: Number(priceHight) * DECIMAL_PLACES,
+                priceLow: Number(priceLow) * DECIMAL_PLACES,
+                stake: Number(stake),
+                step: Number(step),
+            });
+            const _totalADA = result[result.length - 1]?.USDTPool || 0 / +priceLow;
+
+            setValue("totalADA", String(_totalADA));
+        }
+    }, [income, priceHight, priceLow, stake, step]);
 
     const handleCalculateSellingStrategy = function () {
         if (
@@ -179,7 +196,7 @@ const Deposit = function () {
                 priceLow: Number(priceLow) * DECIMAL_PLACES,
                 stake: Number(stake),
                 step: Number(step),
-                totalADA: Number(totalADA) * DECIMAL_PLACES,
+                // totalADA: Number(totalADA) * DECIMAL_PLACES,
             });
             const _fees = previewDeposit({ sellingStrategies: result, currentPrice });
             setFees(_fees);
@@ -189,14 +206,16 @@ const Deposit = function () {
                 _fees.amountDJED > Number(wallet?.djed)
             ) {
                 toast.error({
-                    message: "Insufficient assets in your wallet",
+                    message: t("layout.toast.error.insufficient_assets"),
                 });
                 return;
             }
 
             if (result.length > COUNTER_UTXO) {
                 toast.error({
-                    message: `You need to divide the steps into smaller than ${COUNTER_UTXO} steps to deposit.`,
+                    message: `${t("layout.toast.error.counter_utxo.1")}${COUNTER_UTXO}${t(
+                        "layout.toast.error.counter_utxo.2",
+                    )}`,
                 });
                 return;
             }
@@ -427,6 +446,7 @@ const Deposit = function () {
                                                 <Controller
                                                     control={control}
                                                     name="totalADA"
+                                                    disabled
                                                     rules={{
                                                         required: {
                                                             value: true,
@@ -472,7 +492,10 @@ const Deposit = function () {
                                                                     <span>
                                                                         {sellingStrategies.length >
                                                                         0
-                                                                            ? "1.5 ₳"
+                                                                            ? `${
+                                                                                  BATCHER_FEE /
+                                                                                  DECIMAL_PLACES
+                                                                              } ₳`
                                                                             : "-"}
                                                                     </span>
                                                                 </div>
@@ -491,7 +514,7 @@ const Deposit = function () {
                                                 {waitingDeposit ? (
                                                     <Loading />
                                                 ) : sellingStrategies.length > 0 ? (
-                                                    "1.5 ₳"
+                                                    `${BATCHER_FEE / DECIMAL_PLACES} ₳`
                                                 ) : (
                                                     "-"
                                                 )}
@@ -511,7 +534,10 @@ const Deposit = function () {
                                                                     <span>
                                                                         {sellingStrategies.length >
                                                                         0
-                                                                            ? "1.5 ₳"
+                                                                            ? `${
+                                                                                  BATCHER_FEE /
+                                                                                  DECIMAL_PLACES
+                                                                              } ₳`
                                                                             : "-"}
                                                                     </span>
                                                                 </div>

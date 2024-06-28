@@ -19,6 +19,7 @@ type Props = {
 };
 
 const Table = function ({ className, data, titles, center = false }: Props) {
+    console.log(data);
     const renderTableBody = function () {
         if (!data) return null;
         if (isTransactionHistoryType(data)) {
@@ -26,14 +27,13 @@ const Table = function ({ className, data, titles, center = false }: Props) {
                 <tr className={cx("row")} key={index}>
                     <td className={cx("row-item", "date")}>{item.blockTime}</td>
                     <td className={cx("row-item", "txhash")}>
-                        <Link href={""} target="_blanke">
+                        <Link href={item.txHash} target="_blanke">
                             {item.txHash}
                         </Link>
                     </td>
                     <td className={cx("row-item", "action")}>{item.type}</td>
                     <td className={cx("row-item", "amount")}>{item.amountADA}</td>
                     <td className={cx("row-item", "amount")}>{item.amountDJED}</td>
-                    <td className={cx("row-item", "fee")}>{item.fee}</td>
                     <td className={cx("row-item", "status")}>{item.status}</td>
                 </tr>
             ));

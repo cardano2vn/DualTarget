@@ -15,7 +15,7 @@ export const isTransactionHistoryType = (
     data: TransactionHistoryType[] | DelegationRewardType[],
 ): data is TransactionHistoryType[] => {
     const item = data[0];
-    return Array.isArray(data) && "blockTime" in item && "txHash" in item && "fee" in item;
+    return Array.isArray(data) && "blockTime" in item && "txHash" in item;
 };
 
 export function isValidCardanoWalletAddress(walletAddress: string) {

@@ -40,7 +40,7 @@ const PublicLayout = function ({ children }: Props) {
                 <Footer />
             </div>
             <Notification />
-            <Form />
+            {/* <Form /> */}
 
             {pageLoading && <Loading />}
         </main>

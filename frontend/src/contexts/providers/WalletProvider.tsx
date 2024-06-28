@@ -17,12 +17,14 @@ import { ToastContextType } from "~/types/contexts/ToastContextType";
 import ToastContext from "../components/ToastContext";
 import { DECIMAL_PLACES } from "~/constants";
 import axios from "axios";
+import TranslateContext from "../components/TranslateContext";
 
 type Props = {
     children: ReactNode;
 };
 
 const WalletProvider = function ({ children }: Props) {
+    const { enviroment } = useContext<NetworkContextType>(NetworkContext);
     const { lucid, setLucid } = useContext<LucidContextType>(LucidContext);
     const {
         toogleErrorNetwork,
@@ -36,7 +38,7 @@ const WalletProvider = function ({ children }: Props) {
     const [wallet, setWallet] = useState<WalletType>(null!);
     const [loading, setLoading] = useState<boolean>(false);
     const { network } = useContext<NetworkContextType>(NetworkContext);
-
+    const { t } = useContext(TranslateContext);
     useEffect(() => {
         const walletConnecttion = localStorage.getItem("wallet");
         if (walletConnecttion) {
@@ -106,11 +108,9 @@ const WalletProvider = function ({ children }: Props) {
             }, 0);
 
             const djed: number = utxos.reduce(function (balance: number, utxo, UTxO) {
-                const amount: number = isNaN(
-                    Number(utxo?.assets[process.env.MIN_TOKEN_ASSET_PREPROD!]),
-                )
+                const amount: number = isNaN(Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]))
                     ? 0
-                    : Number(Number(utxo?.assets[process.env.MIN_TOKEN_ASSET_PREPROD!]));
+                    : Number(Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]));
                 return balance + amount / DECIMAL_PLACES;
             }, 0);
             setWallet(function (previous: WalletType) {
@@ -135,11 +135,11 @@ const WalletProvider = function ({ children }: Props) {
             );
             setLucid(lucid);
             toast.success({
-                message: "Wallet connected!",
+                message: t("layout.toast.success.connect_wallet"),
             });
         } catch (error) {
             toast.success({
-                message: "Wallet connected error!",
+                message: t("layout.toast.success.disconnect_wallet"),
             });
         } finally {
             setLoading(false);
@@ -155,7 +155,7 @@ const WalletProvider = function ({ children }: Props) {
             }
             localStorage.removeItem("wallet");
             await axios.post("/api/auth/clear-wallet-address", {});
-            toast.success({ message: "Wallet disconnected!" });
+            toast.success({ message: t("layout.toast.success.disconnect_wallet") });
         } catch (error) {
             console.log(error);
         }
