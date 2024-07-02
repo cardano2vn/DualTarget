@@ -40,7 +40,7 @@ export type StatisticsType = {
     totalVolumeDepositsADA?: number;
     totalVolumnProfits?: number;
 
-    ROS?: number;
+    profitMargin?: number;
 };
 
 export type TransactionHistoryType = {

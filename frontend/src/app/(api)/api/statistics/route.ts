@@ -48,22 +48,7 @@ export async function GET(request: NextRequest) {
 
     const totalTransaction: number = addressesTotal.tx_count;
 
-    const totalTxHash = await Promise.all(
-        [...new Array(1)].map(async (element, index: number) => {
-            const txHashes = await blockfrost.addressesTransactions(
-                enviroment.DUALTARGET_CONTRACT_ADDRESS,
-                {
-                    page: index,
-                },
-            );
-            const utxos = await Promise.all(
-                txHashes.map(async function ({ tx_hash }) {
-                    const utxo = await blockfrost.txsUtxos(tx_hash);
-                }),
-            );
-            return utxos;
-        }),
-    );
+    
    
     return Response.json({
         totalTransaction: totalTransaction,

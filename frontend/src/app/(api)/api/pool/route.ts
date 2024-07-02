@@ -16,60 +16,41 @@ export async function GET(request: NextRequest) {
         enviroment.BLOCKFROST_PROJECT_API_KEY,
         network as CardanoNetwork,
     );
-
-    const addressesTotal = await blockfrost.addressesTotal(enviroment.DUALTARGET_CONTRACT_ADDRESS);
-
-    const totalVolumeDepositsADA = addressesTotal.received_sum.reduce(
-        (accumulator, currentValue) => {
-            if (currentValue.unit === "lovelace") {
-                return accumulator + parseInt(currentValue.quantity) / DECIMAL_PLACES;
-            }
-            return accumulator;
-        },
-        0,
-    );
-
-    const totalVolumeWithdrawsADA = addressesTotal.sent_sum.reduce((accumulator, currentValue) => {
-        if (currentValue.unit === "lovelace") {
-            return accumulator + parseInt(currentValue.quantity) / DECIMAL_PLACES;
-        }
-        return accumulator;
-    }, 0);
-
-    const totalVolumeWithdrawsDJED = addressesTotal.received_sum.reduce(
-        (accumulator, currentValue) => {
-            if (currentValue.unit === enviroment.DJED_TOKEN_ASSET) {
-                return accumulator + parseInt(currentValue.quantity) / DECIMAL_PLACES;
-            }
-            return accumulator;
-        },
-        0,
-    );
-
-    const totalTransaction: number = addressesTotal.tx_count;
-
-    const totalTxHash = await Promise.all(
-        [...new Array(1)].map(async (element, index: number) => {
-            const txHashes = await blockfrost.addressesTransactions(
-                enviroment.DUALTARGET_CONTRACT_ADDRESS,
-                {
-                    page: index,
-                },
-            );
-            const utxos = await Promise.all(
-                txHashes.map(async function ({ tx_hash }) {
-                    const utxo = await blockfrost.txsUtxos(tx_hash);
-                }),
-            );
-            return utxos;
+    const now = Date.now();
+    const sevenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
+    const txHashes = await Promise.all(
+        await blockfrost.addressesTransactions(enviroment.DUALTARGET_CONTRACT_ADDRESS, {
+            order: "desc",
         }),
     );
 
-    return Response.json({
-        totalTransaction: totalTransaction,
-        totalVolumeWithdrawsDJED: totalVolumeWithdrawsDJED,
-        totalVolumeWithdrawsADA: totalVolumeWithdrawsADA,
-        totalVolumeDepositsADA: totalVolumeDepositsADA,
-        totalVolumnProfits: 0,
+    const txHashesFilter = txHashes.filter(function (txHashFilter) {
+        return (
+            txHashFilter.block_time * 1000 >= sevenDaysAgo && txHashFilter.block_time * 1000 < now
+        );
     });
+
+    const inputs = await Promise.all(
+        txHashesFilter.map(async function ({ tx_hash }) {
+            const utxo = await blockfrost.txsUtxos(tx_hash);
+
+            return utxo.inputs;
+        }),
+    );
+
+    let inlineDatums: any[] = [];
+
+    inputs.forEach((input) => {
+        input.forEach((item) => {
+            if (
+                item.address === enviroment.DUALTARGET_CONTRACT_ADDRESS &&
+                !item.reference_script_hash &&
+                item.inline_datum
+            ) {
+                inlineDatums.push(item.inline_datum);
+            }
+        });
+    });
+
+    return Response.json(inlineDatums);
 }
