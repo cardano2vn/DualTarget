@@ -72,11 +72,12 @@
             "total transactions": "Tổng số giao dịch",
             "total volume lock": "Tổng số lượng giao dịch khóa",
             "total volume unlock": "Tổng số lượng giao dịch mở khóa",
-            "total DJED": "Tổng DJED",
+            "total DJED lock": "Tổng DJED khóa",
+            "total DJED unlock": "Tổng DJED mở khóa",
             "button": "Rút tiền"
         },
         "card profit": {
-            "title": "Tỷ suất lợi nhuận",
+            "title": "Tỷ suất lợi nhuận trong 7 ngày trước",
             "base reserve": "Pool Dualtarget",
             "update": "Cập nhật mới nhất: "
         },

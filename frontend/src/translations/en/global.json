@@ -72,11 +72,12 @@
             "total transactions": "Total transactions",
             "total volume lock": "Total Volume Lock",
             "total volume unlock": "Total Volume Unlock",
-            "total DJED": "Total DJED",
+            "total DJED lock": "Total DJED Lock",
+            "total DJED unlock": "Total DJED Un Lock",
             "button": "Withdraw"
         },
         "card profit": {
-            "title": "Profit margin",
+            "title": "Profit margin seven days ago",
             "base reserve": "Pool Dualtarget",
             "update": "Last updated: "
         },

@@ -107,7 +107,7 @@ const WalletProvider = function ({ children }: Props) {
                 return balance + Number(utxo.assets.lovelace) / DECIMAL_PLACES;
             }, 0);
 
-            const djed: number = utxos.reduce(function (balance: number, utxo, UTxO) {
+            const djed: number = utxos.reduce(function (balance: number, utxo: UTxO) {
                 const amount: number = isNaN(Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]))
                     ? 0
                     : Number(Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]));

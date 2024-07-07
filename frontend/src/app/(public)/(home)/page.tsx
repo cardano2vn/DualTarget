@@ -95,9 +95,9 @@ export default function Home() {
                     </div>
                     <div className={cx("introduction-description")}>
                         <div className={cx("description-child")}>
-                            <span>{t("home.title")}</span>
-                            {/* <span>{text}</span> */}
-                            {/* <Cursor cursorColor="#FFFFFF" /> */}
+                            {/* <span>{t("home.title")}</span> */}
+                            <span>{text}</span>
+                            <Cursor cursorColor="#FFFFFF" />
                         </div>
                     </div>
                 </div>
@@ -169,14 +169,14 @@ export default function Home() {
                                 loading={loading || isLoading}
                             />
                             <Coin
-                                title={t("home.card statistics.total DJED")}
+                                title={t("home.card statistics.total DJED lock")}
                                 amount={data?.data.totalVolumeWithdrawsDJED}
                                 denominations="DJED"
                                 loading={loading || isLoading}
                             />
                             <Coin
-                                title={"Profit"}
-                                amount={pool?.totalVolumnProfits}
+                                title={t("home.card statistics.total DJED unlock")}
+                                amount={data?.data.totalVolumeDepositsDJED}
                                 denominations="DJED"
                                 loading={loading || isLoading}
                             />
@@ -197,7 +197,7 @@ export default function Home() {
                             <div className={cx("reserves")}>
                                 <div className={cx("reserve-ratio")}>
                                     <div className={cx("title-wrapper")}>
-                                        <h2>Profit 7 Day</h2>
+                                        <h2>Profit</h2>
                                     </div>
                                     <div className={cx("reserves-value-ratio")}>
                                         <CountUp
@@ -216,9 +216,8 @@ export default function Home() {
                                         <div className={cx("base-reserves-value")}>
                                             <CountUp
                                                 decimals={6}
-                                                enableScrollSpy
                                                 start={0}
-                                                end={Number(data?.data.totalVolumeDepositsADA)}
+                                                end={Number(pool?.adaMargin)}
                                             />{" "}
                                             ₳
                                         </div>
@@ -226,9 +225,8 @@ export default function Home() {
                                             ≈{" "}
                                             <CountUp
                                                 decimals={6}
-                                                enableScrollSpy
                                                 start={0}
-                                                end={Number(data?.data.totalVolumeWithdrawsDJED)}
+                                                end={Number(pool?.djedMargin)}
                                             />{" "}
                                             DJED
                                         </span>

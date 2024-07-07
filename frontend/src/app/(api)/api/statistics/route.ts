@@ -36,6 +36,13 @@ export async function GET(request: NextRequest) {
         return accumulator;
     }, 0);
 
+    const totalVolumeDepositsDJED = addressesTotal.sent_sum.reduce((accumulator, currentValue) => {
+        if (currentValue.unit === enviroment.DJED_TOKEN_ASSET) {
+            return accumulator + parseInt(currentValue.quantity) / DECIMAL_PLACES;
+        }
+        return accumulator;
+    }, 0);
+
     const totalVolumeWithdrawsDJED = addressesTotal.received_sum.reduce(
         (accumulator, currentValue) => {
             if (currentValue.unit === enviroment.DJED_TOKEN_ASSET) {
@@ -48,13 +55,11 @@ export async function GET(request: NextRequest) {
 
     const totalTransaction: number = addressesTotal.tx_count;
 
-    
-   
     return Response.json({
         totalTransaction: totalTransaction,
         totalVolumeWithdrawsDJED: totalVolumeWithdrawsDJED,
         totalVolumeWithdrawsADA: totalVolumeWithdrawsADA,
         totalVolumeDepositsADA: totalVolumeDepositsADA,
-        totalVolumnProfits: 0,
+        totalVolumeDepositsDJED: totalVolumeDepositsDJED,
     });
 }

@@ -38,9 +38,11 @@ export type StatisticsType = {
     totalVolumeWithdrawsDJED?: number;
     totalVolumeWithdrawsADA?: number;
     totalVolumeDepositsADA?: number;
-    totalVolumnProfits?: number;
+    totalVolumeDepositsDJED?: number;
 
     profitMargin?: number;
+    adaMargin?: number;
+    djedMargin?: number;
 };
 
 export type TransactionHistoryType = {
