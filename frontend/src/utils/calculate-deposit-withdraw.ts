@@ -1,16 +1,20 @@
+import { BATCHER_FEE } from "~/constants";
+
 type Props = {
     utxos: any[];
     address: string;
     endTime: number;
+    startTimeStake: number;
 };
 
 const caculateDepositWithdraw = async function ({
     utxos,
     address,
     endTime,
+    startTimeStake,
 }: Props): Promise<number> {
     const results = utxos.filter(function ({ block_time, utxos }) {
-        return block_time >= endTime;
+        return block_time >= endTime && block_time >= startTimeStake;
     });
     const transactions: any[] = await Promise.all(
         results
@@ -22,7 +26,7 @@ const caculateDepositWithdraw = async function ({
                     (output: any) => output.address === address,
                 );
                 if (hasInput) {
-                    let amount: number = -39000000;
+                    let amount: number = 0;
 
                     transaction.utxos.inputs.forEach(function (input: any) {
                         if (input.address === address) {
@@ -30,7 +34,7 @@ const caculateDepositWithdraw = async function ({
                                 total: number,
                                 { unit, quantity }: any,
                             ) {
-                                if (unit === "lovelace") {
+                                if (unit === "lovelace" && !input.reference_script_hash) {
                                     return total + Number(quantity);
                                 }
                                 return total;
@@ -46,7 +50,7 @@ const caculateDepositWithdraw = async function ({
                 }
 
                 if (hasOutput) {
-                    let amount: number = 0;
+                    let amount: number = -BATCHER_FEE;
                     transaction.utxos.outputs.forEach(function (output: any) {
                         if (output.address === address) {
                             const quantity = output.amount.reduce(function (

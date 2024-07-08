@@ -77,8 +77,8 @@
             "button": "Rút tiền"
         },
         "card profit": {
-            "title": "Tỷ suất lợi nhuận trong 7 ngày trước",
-            "base reserve": "Pool Dualtarget",
+            "title": "Lượng giao dịch trong 7 ngày qua",
+            "base reserve": "Giao dịch",
             "update": "Cập nhật mới nhất: "
         },
         "card sub": "*Gửi tiền\\Rút tiền bao gồm phí cơ bản và phí điều hành",

@@ -45,7 +45,7 @@ const DelegationRewards = function () {
         enabled: !!debouncedValue,
     });
 
-
+    console.log(rewards);
 
     const handleChangeWalletAddress = function (e: React.ChangeEvent<HTMLInputElement>) {
         setWalletAddress(e.target.value);

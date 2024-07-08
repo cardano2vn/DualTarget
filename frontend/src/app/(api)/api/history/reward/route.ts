@@ -40,11 +40,16 @@ export async function GET(request: NextRequest) {
             }),
     );
 
+    const accountsDelegation = await blockfrost.accountsDelegations(stakeAddress);
+    const specificTransaction = await blockfrost.txs(
+        accountsDelegation[accountsDelegation.length - 1].tx_hash,
+    );
+
     const currentEpoch = await blockfrost.epochsLatest();
 
     let results: any = [];
 
-    for (let index = currentEpoch.epoch; index >= currentEpoch.epoch - 5; index--) {
+    for (let index = currentEpoch.epoch; index >= currentEpoch.epoch - 10; index--) {
         const epochInfomation = await koios.epochInfomation({ epochNo: index });
         const amountStake: number = await koios.poolDelegatorsHistory({
             poolId: poolId,
@@ -52,22 +57,46 @@ export async function GET(request: NextRequest) {
             epochNo: index,
         });
 
-        const accountRewards: number = await koios.accountRewards({ stakeAddress, epochNo: index });
+        const accountRewards: number = await koios.accountRewards({
+            stakeAddress,
+            epochNo: index,
+        });
+
+        if (index === currentEpoch.epoch) {
+            const amountDepositWithdraw: number = await caculateDepositWithdraw({
+                utxos: utxos,
+                address: smartcontractAddress,
+                endTime: epochInfomation.start_time,
+                startTimeStake: specificTransaction.block_time,
+            });
+            console.log(epochInfomation.start_time, amountDepositWithdraw);
+
+            const ROS: number = amountDepositWithdraw / amountStake;
+
+            results.push({
+                epoch: index,
+                amount: +amountDepositWithdraw.toFixed(5),
+                rewards: +(!isNaN(accountRewards * ROS) ? accountRewards * ROS : 0).toFixed(5),
+                status: "Distributed",
+            });
+        }
 
         const amountDepositWithdraw: number = await caculateDepositWithdraw({
             utxos: utxos,
             address: smartcontractAddress,
             endTime: epochInfomation.end_time,
+            startTimeStake: specificTransaction.block_time,
         });
-
         const ROS: number = amountDepositWithdraw / amountStake;
 
-        results.push({
-            epoch: index,
-            amount: amountDepositWithdraw.toFixed(5),
-            rewards: (!isNaN(accountRewards * ROS) ? accountRewards * ROS : 0).toFixed(5),
-            status: "Distributed",
-        });
+        if (amountDepositWithdraw !== 0) {
+            results.push({
+                epoch: index + 3,
+                amount: +amountDepositWithdraw.toFixed(5),
+                rewards: +(!isNaN(accountRewards * ROS) ? accountRewards * ROS : 0).toFixed(5),
+                status: "Distributed",
+            });
+        }
     }
 
     const totalPage = Math.ceil(results.length / Number(pageSize));
@@ -75,6 +104,8 @@ export async function GET(request: NextRequest) {
         (Number(page) - 1) * Number(pageSize),
         Number(page) * Number(pageSize),
     );
+
+    console.log(histories);
 
     return Response.json({
         totalPage,

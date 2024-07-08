@@ -1,6 +1,6 @@
 import { CardanoNetwork } from "@blockfrost/blockfrost-js/lib/types";
 import { NextRequest } from "next/server";
-import { DECIMAL_PLACES } from "~/constants";
+import { DECIMAL_PLACES, HISTORY_DAYS } from "~/constants";
 import Blockfrost from "~/services/blockfrost";
 import { EnviromentType } from "~/types/GenericsType";
 import readEnviroment from "~/utils/read-enviroment";
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
         network as CardanoNetwork,
     );
     const now = Date.now();
-    const sevenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
+    const sevenDaysAgo = now - HISTORY_DAYS * 24 * 60 * 60 * 1000;
     const txHashes = await Promise.all(
         await blockfrost.addressesTransactions(enviroment.DUALTARGET_CONTRACT_ADDRESS, {
             order: "desc",

@@ -222,7 +222,7 @@ export default function Home() {
                                             ₳
                                         </div>
                                         <span className={cx("approximate")}>
-                                            ≈{" "}
+                                            {" "}
                                             <CountUp
                                                 decimals={6}
                                                 start={0}

@@ -77,8 +77,8 @@
             "button": "Withdraw"
         },
         "card profit": {
-            "title": "Profit margin seven days ago",
-            "base reserve": "Pool Dualtarget",
+            "title": "Volume (7 days)",
+            "base reserve": "Trade",
             "update": "Last updated: "
         },
         "card sub": "*Deposit\\Withdraw includes base fee and operator fee",
