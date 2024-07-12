@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import classNames from "classnames/bind";
 import styles from "./Home.module.scss";
@@ -36,7 +36,7 @@ export default function Home() {
     const { pool } = useContext<StatisticContextType>(StatisticsContext);
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ["Transactions"],
+        queryKey: ["Statistics"],
         queryFn: () =>
             axios.get<StatisticsType>(
                 `${window.location.origin}/api/statistics?network=${network.toLowerCase()}`,
@@ -46,6 +46,16 @@ export default function Home() {
             ),
         enabled: true,
     });
+
+    const { data: poolHistory } = useQuery({
+        queryKey: ["Pools"],
+        queryFn: () =>
+            axios.get<any>(`${window.location.origin}/api/pool?network=${network.toLowerCase()}`, {
+                timeout: 10000,
+            }),
+        enabled: true,
+    });
+
 
     const words = [t("home.title")];
     const [text, count] = useTypewriter({
@@ -202,8 +212,8 @@ export default function Home() {
                                     <div className={cx("reserves-value-ratio")}>
                                         <CountUp
                                             start={0}
-                                            decimals={3}
-                                            end={Number(pool?.profitMargin)}
+                                            decimals={6}
+                                            end={Number(poolHistory?.data?.profitMargin)}
                                         />
                                         <span className="suffix">DJED</span>
                                     </div>
@@ -217,7 +227,7 @@ export default function Home() {
                                             <CountUp
                                                 decimals={6}
                                                 start={0}
-                                                end={Number(pool?.adaMargin)}
+                                                end={Number(poolHistory?.data?.adaMargin)}
                                             />{" "}
                                             ₳
                                         </div>
@@ -226,7 +236,7 @@ export default function Home() {
                                             <CountUp
                                                 decimals={6}
                                                 start={0}
-                                                end={Number(pool?.djedMargin)}
+                                                end={Number(poolHistory?.data?.djedMargin)}
                                             />{" "}
                                             DJED
                                         </span>

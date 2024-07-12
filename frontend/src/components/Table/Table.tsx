@@ -19,7 +19,6 @@ type Props = {
 };
 
 const Table = function ({ className, data, titles, center = false }: Props) {
-    console.log(data);
     const renderTableBody = function () {
         if (!data) return null;
         if (isTransactionHistoryType(data)) {

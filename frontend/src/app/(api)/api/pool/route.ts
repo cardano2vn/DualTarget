@@ -1,6 +1,7 @@
 import { CardanoNetwork } from "@blockfrost/blockfrost-js/lib/types";
 import { NextRequest } from "next/server";
 import { DECIMAL_PLACES, HISTORY_DAYS } from "~/constants";
+import convertInlineDatum from "~/helpers/convert-inline-datum";
 import Blockfrost from "~/services/blockfrost";
 import { EnviromentType } from "~/types/GenericsType";
 import readEnviroment from "~/utils/read-enviroment";
@@ -8,83 +9,121 @@ import readEnviroment from "~/utils/read-enviroment";
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const network: CardanoNetwork = searchParams.get("network") as CardanoNetwork;
-    const enviroment: EnviromentType = readEnviroment({
-        network: network,
-    });
+    const enviroment: EnviromentType = readEnviroment({ network: network });
 
     const blockfrost = new Blockfrost(
         enviroment.BLOCKFROST_PROJECT_API_KEY,
         network as CardanoNetwork,
     );
-    const now = Date.now();
-    const sevenDaysAgo = now - HISTORY_DAYS * 24 * 60 * 60 * 1000;
-    const txHashes = await Promise.all(
-        await blockfrost.addressesTransactions(enviroment.DUALTARGET_CONTRACT_ADDRESS, {
-            order: "desc",
-        }),
-    );
+
     const contractAddress = enviroment.DUALTARGET_CONTRACT_ADDRESS;
 
-    const txHashesFilter = txHashes.filter(function (txHashFilter) {
-        return (
-            txHashFilter.block_time * 1000 >= sevenDaysAgo && txHashFilter.block_time * 1000 < now
-        );
-    });
+    const addrTsx = (
+        await Promise.all(
+            Array.from({ length: 5 }, async function (_, index: number) {
+                return await blockfrost.addressesTransactions(contractAddress, {
+                    order: "desc",
+                    count: 100,
+                    page: index + 1,
+                });
+            }),
+        )
+    ).flat();
 
-    const inputs = await Promise.all(
-        txHashesFilter.map(async function ({ tx_hash }) {
-            const utxo = await blockfrost.txsUtxos(tx_hash);
-
-            return utxo.inputs;
+    const addrTsxFilter = await Promise.all(
+        addrTsx.filter(function ({ block_time }) {
+            return (
+                block_time * 1000 >= Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000 &&
+                block_time * 1000 <= Date.now()
+            );
         }),
     );
 
-    let inlineDatums: any[] = [];
-
-    inputs.map((input) => {
-        input.map((item) => {
-            if (
-                item.address === enviroment.DUALTARGET_CONTRACT_ADDRESS &&
-                !item.reference_script_hash &&
-                item.inline_datum
-            ) {
-                inlineDatums.push(item.inline_datum);
-            }
-        });
-    });
-
-    const results = await Promise.all(
-        (
-            await blockfrost.addressesTransactions(contractAddress, {
-                order: "desc",
-            })
-        )
-            .reverse()
-            .map(async function ({ tx_hash }) {
-                return {
-                    utxos: await blockfrost.txsUtxos(tx_hash),
-                };
-            }),
+    const utxos = await Promise.all(
+        addrTsxFilter.map(async function ({ tx_hash }) {
+            const { inputs, outputs } = await blockfrost.txsUtxos(tx_hash);
+            return { inputs, outputs };
+        }),
     );
-
-    let adaMargin = 0;
-    let djedMargin = 0;
+    let profitMargin: number = 0;
+    let adaMargin: number = 0;
+    let djedMargin: number = 0;
 
     await Promise.all(
-        results.map((transaction) => {
-            const hasInput = transaction.utxos.inputs.some(
-                (input) => input.address === contractAddress,
-            );
+        addrTsxFilter.map(async ({ tx_hash }) => {
+            const { inputs, outputs } = await blockfrost.txsUtxos(tx_hash);
 
-            const hasOutput = transaction.utxos.outputs.some(
+            inputs.forEach(async (input) => {
+                if (
+                    input.address === contractAddress &&
+                    !input.reference_script_hash &&
+                    input.inline_datum
+                ) {
+                    try {
+                        const datum = await convertInlineDatum({
+                            inlineDatum: input.inline_datum,
+                        });
+
+                        if (datum?.fields[15].int === 0) {
+                            const profit: number = input.amount.reduce(
+                                (total, { quantity, unit }) => {
+                                    if (unit === enviroment.DJED_TOKEN_ASSET) {
+                                        return total + Number(quantity);
+                                    }
+                                    return total;
+                                },
+                                0,
+                            );
+                            console.log(profit);
+                            profitMargin += profit;
+                        }
+                    } catch (error) {
+                        console.error("Error fetching script datum for input:", error);
+                    }
+                }
+            });
+
+            outputs.forEach(async (output) => {
+                if (
+                    output.address === contractAddress &&
+                    !output.reference_script_hash &&
+                    output.inline_datum
+                ) {
+                    try {
+                        const datum = await convertInlineDatum({
+                            inlineDatum: output.inline_datum,
+                        });
+
+                        if (datum?.fields[15].int === 0) {
+                            const profit: number = output.amount.reduce(
+                                (total, { quantity, unit }) => {
+                                    if (unit === enviroment.DJED_TOKEN_ASSET) {
+                                        return total + Number(quantity);
+                                    }
+                                    return total;
+                                },
+                                0,
+                            );
+                            profitMargin += profit;
+                        }
+                    } catch (error) {
+                        console.error("Error fetching script datum for output:", error);
+                    }
+                }
+            });
+        }),
+    );
+
+    await Promise.all(
+        utxos.map((transaction) => {
+            const hasInput = transaction.inputs.some((input) => input.address === contractAddress);
+
+            const hasOutput = transaction.outputs.some(
                 (output) => output.address === contractAddress,
             );
 
             if (hasInput) {
-                let amountADA: number = 0;
-                let amountDJED: number = 0;
-
-                transaction.utxos.inputs.forEach(function (input) {
+                transaction.inputs.forEach(function (input) {
                     if (input.address === contractAddress) {
                         const quantityADA = input.amount.reduce(function (
                             total: number,
@@ -116,7 +155,7 @@ export async function GET(request: NextRequest) {
             if (hasOutput) {
                 let amountADA: number = 0;
                 let amountDJED: number = 0;
-                transaction.utxos.outputs.forEach(function (output) {
+                transaction.outputs.forEach(function (output) {
                     if (output.address === contractAddress) {
                         const quantityADA: number = output.amount.reduce(function (
                             total: number,
@@ -150,7 +189,7 @@ export async function GET(request: NextRequest) {
     );
 
     return Response.json({
-        inlineDatums: inlineDatums,
+        profitMargin: +(profitMargin / DECIMAL_PLACES).toFixed(6),
         adaMargin: +(adaMargin / DECIMAL_PLACES).toFixed(6),
         djedMargin: +(djedMargin / DECIMAL_PLACES).toFixed(6),
     });

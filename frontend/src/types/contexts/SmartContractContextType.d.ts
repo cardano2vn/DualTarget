@@ -35,11 +35,9 @@ export type SmartContractContextType = {
     deposit: ({
         lucid,
         sellingStrategies,
-        currentPrice,
     }: {
         lucid: Lucid;
         sellingStrategies: CalculateSellingStrategy[];
-        currentPrice: number;
     }) => Promise<void>;
     withdraw: ({
         lucid,

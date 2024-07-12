@@ -12,23 +12,28 @@ import Pagination from "~/components/Pagination";
 import { historyRewards } from "~/constants/header-table";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { DelegationRewardResponseType, DelegationRewardType } from "~/types/GenericsType";
+import { DelegationRewardResponseType } from "~/types/GenericsType";
 import Loading from "~/components/Loading";
 import { useDebounce } from "~/hooks";
 import Reward from "~/components/Reward";
 import TranslateContext from "~/contexts/components/TranslateContext";
-import Button from "~/components/Button";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import NetworkContext from "~/contexts/components/NetworkContext";
+import { DelegationRewardContextType } from "~/types/contexts/DelegationRewardContextType";
+import DelegationRewardContext from "~/contexts/components/DelegationRewardContext";
+import { LucidContextType } from "~/types/contexts/LucidContextType";
+import LucidContext from "~/contexts/components/LucidContext";
 const cx = classNames.bind(styles);
 
 const DelegationRewards = function () {
     const [page, setPage] = useState<number>(1);
     const { t } = useContext(TranslateContext);
+    const { lucidPlatform } = useContext<LucidContextType>(LucidContext);
     const [walletAddress, setWalletAddress] = useState<string>("");
-    const { network } = useContext<NetworkContextType>(NetworkContext);
+    const { network, enviroment } = useContext<NetworkContextType>(NetworkContext);
+    const { caculateADAPool } = useContext<DelegationRewardContextType>(DelegationRewardContext);
     const debouncedValue = useDebounce(walletAddress);
-
+    
     const {
         data: rewards,
         isSuccess,
@@ -36,12 +41,20 @@ const DelegationRewards = function () {
         isError,
     } = useQuery({
         queryKey: ["Rewards", debouncedValue, page],
-        queryFn: () =>
-            axios.get<DelegationRewardResponseType>(
+        queryFn: async function () {
+            const paymentAddress = lucidPlatform.utils.getAddressDetails(debouncedValue as string)
+                .paymentCredential?.hash;
+            const ADAPool = await caculateADAPool({
+                walletAddress: debouncedValue as string,
+                enviroment: enviroment,
+                lucidPlatform: lucidPlatform,
+            });
+            return axios.get<DelegationRewardResponseType>(
                 `${
                     window.location.origin
-                }/api/history/reward?wallet_address=${debouncedValue}&page=${page}&page_size=5&network=${network.toLowerCase()}`,
-            ),
+                }/api/history/reward?wallet_address=${debouncedValue}&payment_address=${paymentAddress}&ada_pool=${ADAPool}&page=${page}&page_size=5&network=${network.toLowerCase()}`,
+            );
+        },
         enabled: !!debouncedValue,
     });
 

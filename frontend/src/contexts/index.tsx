@@ -12,7 +12,9 @@ const AccountProvider = lazy(() => import("~/contexts/providers/AccountProvider"
 const NetworkProvider = lazy(() => import("~/contexts/providers/NetworkProvider"));
 const TranslateProvider = lazy(() => import("~/contexts/providers/TranslateProvider"));
 const StatisticsProvider = lazy(() => import("~/contexts/providers/StatisticsProvider"));
-
+const DelegationRewardProvider = lazy(
+    () => import("~/contexts/providers/DelegationRewardProvider"),
+);
 type Props = {
     children: ReactNode;
 };
@@ -31,7 +33,11 @@ const ContextProvider = function ({ children }: Props) {
                                 <WalletProvider>
                                     <AccountProvider>
                                         <SmartContractProvider>
-                                            <StatisticsProvider>{children}</StatisticsProvider>
+                                            <StatisticsProvider>
+                                                <DelegationRewardProvider>
+                                                    {children}
+                                                </DelegationRewardProvider>
+                                            </StatisticsProvider>
                                         </SmartContractProvider>
                                     </AccountProvider>
                                 </WalletProvider>

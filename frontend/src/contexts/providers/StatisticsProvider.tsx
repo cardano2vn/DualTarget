@@ -10,15 +10,13 @@ import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import NetworkContext from "../components/NetworkContext";
 import { DualtargetDatum } from "~/constants/datum";
 import { DECIMAL_PLACES } from "~/constants";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 type Props = {
     children: ReactNode;
 };
 
 const StatisticsProvider = function ({ children }: Props) {
-    const { network, enviroment } = useContext<NetworkContextType>(NetworkContext);
+    const { enviroment } = useContext<NetworkContextType>(NetworkContext);
     const { lucidPlatform } = useContext<LucidContextType>(LucidContext);
 
     const [pool, setPool] = useState<StatisticsType>({
@@ -28,10 +26,6 @@ const StatisticsProvider = function ({ children }: Props) {
         totalDJED: 0,
         totalProfit: 0,
         totalVolumeDepositsDJED: 0,
-
-        profitMargin: 0,
-        adaMargin: 0,
-        djedMargin: 0,
     });
 
     useEffect(() => {
@@ -70,10 +64,20 @@ const StatisticsProvider = function ({ children }: Props) {
                     balance: number,
                     utxo: UTxO,
                 ) {
-                    const dattum = Data.from<DualtargetDatum>(utxo?.datum!, DualtargetDatum);
-                    return balance + Number(dattum.minimumAmountOutProfit) / DECIMAL_PLACES;
+                    const datum = Data.from<DualtargetDatum>(utxo?.datum!, DualtargetDatum);
+                    if (Number(datum.isLimitOrder) === 0) {
+                        const amount: number = isNaN(
+                            Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]),
+                        )
+                            ? 0
+                            : Number(Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]));
+                        return balance + amount / DECIMAL_PLACES;
+                    }
+
+                    return balance;
                 },
                 0);
+
                 setPool(function (prev) {
                     return {
                         ...prev,
@@ -87,37 +91,6 @@ const StatisticsProvider = function ({ children }: Props) {
             })();
         }
     }, [lucidPlatform]);
-
-    const { data: poolHistory } = useQuery({
-        queryKey: ["Pools"],
-        queryFn: () =>
-            axios.get<any>(`${window.location.origin}/api/pool?network=${network.toLowerCase()}`, {
-                timeout: 5000,
-            }),
-        enabled: true,
-    });
-
-    useEffect(() => {
-        const datums = poolHistory?.data?.inlineDatums?.map(function (data: string) {
-            return Data.from<DualtargetDatum>(data!, DualtargetDatum);
-        });
-        const profitMargin = datums?.reduce(function (balance: number, amount: DualtargetDatum) {
-            if (Number(amount.isLimitOrder) === 0) {
-                return balance + Number(amount.minimumAmountOutProfit) / DECIMAL_PLACES;
-            }
-
-            return balance;
-        }, 0);
-
-        setPool(function (previous) {
-            return {
-                ...previous,
-                profitMargin: profitMargin,
-                adaMargin: poolHistory?.data?.adaMargin,
-                djedMargin: poolHistory?.data?.djedMargin,
-            };
-        });
-    }, [poolHistory]);
 
     return <StatisticsContext.Provider value={{ pool }}>{children}</StatisticsContext.Provider>;
 };

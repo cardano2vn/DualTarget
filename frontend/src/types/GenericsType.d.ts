@@ -56,7 +56,6 @@ export type TransactionHistoryType = {
 };
 
 export type TransactionResponseType = {
-    p;
     totalPage: number;
     histories: TransactionHistoryType[];
     totalItems: number;
