@@ -20,16 +20,41 @@ export async function GET(request: NextRequest) {
         network as CardanoNetwork,
     );
 
+    // const results = await Promise.all(
+    //     (await blockfrost.addressesTransactions(walletAddress))
+    //         .reverse()
+    //         .map(async function ({ tx_hash, block_time }) {
+    //             return {
+    //                 block_time: convertDatetime(block_time),
+    //                 utxos: await blockfrost.txsUtxos(tx_hash),
+    //             };
+    //         }),
+    // );
+    // // Remove duplicate transactions based on tx_hash
+    // const uniqueTxs = Array.from(
+    //     new Map(addrTsx.map(tx => [tx.tx_hash, tx])).values()
+    // );
+
+      // Fetch transactions from Blockfrost
+    const transactions = await blockfrost.addressesTransactions(walletAddress);
+
+    // Remove duplicates based on tx_hash
+    const uniqueTransactions = Array.from(
+        new Map(transactions.map(tx => [tx.tx_hash, tx])).values()
+    ).reverse();
+
+    // Fetch UTXOs and block_time for unique transactions
     const results = await Promise.all(
-        (await blockfrost.addressesTransactions(walletAddress))
-            .reverse()
-            .map(async function ({ tx_hash, block_time }) {
-                return {
-                    block_time: convertDatetime(block_time),
-                    utxos: await blockfrost.txsUtxos(tx_hash),
-                };
-            }),
+        uniqueTransactions.map(async function ({ tx_hash, block_time }) {
+        return {
+            block_time: convertDatetime(block_time),
+            utxos: await blockfrost.txsUtxos(tx_hash),
+        };
+        })
     );
+
+    
+    console.log(results)
 
     const addressToFind = enviroment.DUALTARGET_CONTRACT_ADDRESS;
     const transactionsWithTargetAddress = await Promise.all(

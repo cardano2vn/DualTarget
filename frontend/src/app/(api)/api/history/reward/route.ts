@@ -1,4 +1,5 @@
 import { CardanoNetwork } from "@blockfrost/blockfrost-js/lib/types";
+import { C } from "lucid-cardano";
 import { NextRequest } from "next/server";
 import { BATCHER_FEE, DECIMAL_PLACES } from "~/constants";
 import convertDatetime from "~/helpers/convert-datetime";
@@ -48,12 +49,18 @@ export async function GET(request: NextRequest) {
         )
     ).flat();
 
+      // Remove duplicate transactions based on tx_hash
+    const uniqueTxs = Array.from(
+        new Map(addrTsx.map(tx => [tx.tx_hash, tx])).values()
+    );
+
+    // console.log(uniqueTxs)
     let results: any = [];
 
-    for (let epoch = currentEpoch.epoch; epoch >= currentEpoch.epoch - 7; epoch--) {
+    for (let epoch = currentEpoch.epoch; epoch >= currentEpoch.epoch - 4; epoch--) {
         const { start_time, end_time } = await koios.epochInfomation({ epochNo: epoch });
 
-        const addrTsxFilter = addrTsx.filter(function ({ block_time }, index: number) {
+        const addrTsxFilter = uniqueTxs.filter(function ({ block_time }, index: number) {
             return block_time >= start_time && block_time <= end_time;
         });
 
@@ -63,7 +70,7 @@ export async function GET(request: NextRequest) {
                 return await blockfrost.txsUtxos(tx_hash);
             }),
         );
-
+        // console.log(txsUtxos)
         // Deposit(+): Output là địa chỉ smc
         const depositUtxos = await Promise.all(
             txsUtxos.map(async function (txsUtxo) {
@@ -168,49 +175,52 @@ export async function GET(request: NextRequest) {
         });
 
         results.push({
-            amount: -amountDeposit + amountWithdraw,
+            amount: amountDeposit- amountWithdraw,
             epoch: epoch,
             adaPool: adaPool,
             amountReward: accountRewards,
             amountStake: amountStake,
+            // amountDeposit: amountDeposit,
+            // amountWithdraw: amountWithdraw,
         });
     }
-
+    
     let caculateAdaRewards = [];
     let caculateAdaRewardTemp = 0;
-    for (let index = 1; index < results.length; index++) {
+    for (let index = 0; index < results.length; index++) {
         if (index === 1) {
             caculateAdaRewardTemp +=
-                Number(results[index - 1].adaPool) +
-                Number(results[index - 1].amount / DECIMAL_PLACES) +
+                Number(results[index].adaPool) -
+                Number(results[index - 1].amount / DECIMAL_PLACES) -
                 Number(results[index].amount / DECIMAL_PLACES);
         }
-        caculateAdaRewardTemp += Number(results[index].amount / DECIMAL_PLACES);
+        if (index > 1) caculateAdaRewardTemp -= Number(results[index].amount / DECIMAL_PLACES);
 
         const reward =
-            (caculateAdaRewardTemp * Number(results[index - 1].amountReward)) /
-            Number(results[index - 1].amountStake);
+            (caculateAdaRewardTemp * Number(results[index ].amountReward)) /
+            Number(results[index].amountStake);
 
-        if (
-            results[index - 1].epoch === currentEpoch.epoch &&
-            results[index - 1].epoch === currentEpoch.epoch - 1
-        ) {
+        // if (
+        //     results[index - 1].epoch === currentEpoch.epoch &&
+        //     results[index - 1].epoch === currentEpoch.epoch - 1
+        // ) {
+        //     caculateAdaRewards.push({
+        //         epoch: results[index - 1].epoch,
+        //         amount: caculateAdaRewardTemp.toFixed(5),
+        //         rewards: "-",
+        //         status: "Distributed",
+        //     });
+        // } else 
+        if (index > 1){
             caculateAdaRewards.push({
-                epoch: results[index - 1].epoch,
-                amount: caculateAdaRewardTemp.toFixed(5),
-                rewards: "-",
-                status: "Distributed",
-            });
-        } else {
-            caculateAdaRewards.push({
-                epoch: results[index - 1].epoch,
+                epoch: results[index-1].epoch,
                 amount: caculateAdaRewardTemp.toFixed(5),
                 rewards: reward.toFixed(5),
                 status: "Distributed",
             });
         }
     }
-
+    
     const totalPage = Math.ceil(caculateAdaRewards.length / Number(pageSize));
     const histories = [...caculateAdaRewards].slice(
         (Number(page) - 1) * Number(pageSize),
