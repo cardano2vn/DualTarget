@@ -77,7 +77,7 @@
             "button": "Withdraw"
         },
         "card profit": {
-            "title": "Volume (7 days)",
+            "title": "Volume (30 days)",
             "base reserve": "Trade",
             "update": "Last updated: "
         },
