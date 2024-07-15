@@ -77,7 +77,7 @@
             "button": "Rút tiền"
         },
         "card profit": {
-            "title": "Lượng giao dịch trong 7 ngày qua",
+            "title": "Lượng giao dịch trong 30 ngày qua",
             "base reserve": "Giao dịch",
             "update": "Cập nhật mới nhất: "
         },

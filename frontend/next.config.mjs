@@ -19,7 +19,7 @@ const nextConfig = {
         // PREPROD NETWORK
         BLOCKFROST_NETWORK_NAME_PREPROD: "Preprod",
         BLOCKFROST_RPC_URL_PREPROD: "https://cardano-preprod.blockfrost.io/api/v0",
-        BLOCKFROST_PROJECT_API_KEY_PREPROD: "preprod",
+        BLOCKFROST_PROJECT_API_KEY_PREPROD: "preprodJe64HY09uHObRB0XC6BXkSFydmKC3wW3",
         KOIOS_RPC_URL_PREPROD: "https://preprod.koios.rest/api/v1",
         NEXT_APP_BASE_URL_PREPROD: "https://preprod.dualtarget.vn/api/v1",
         DUALTARGET_CONTRACT_ADDRESS_PREPROD:

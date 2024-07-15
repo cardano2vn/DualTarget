@@ -16,7 +16,7 @@ const historyRewards: HeaderTableType[] = [
         description: "Amount of SHEN address held at the moment of the snapshot",
     },
     {
-        title: "Amount (ADA)",
+        title: "Reward (ADA)",
         description:
             "Rewards are calculated with 2-3 epoch delay according to Cardano network rules",
     },

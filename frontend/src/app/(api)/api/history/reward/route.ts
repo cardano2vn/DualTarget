@@ -49,10 +49,8 @@ export async function GET(request: NextRequest) {
         )
     ).flat();
 
-      // Remove duplicate transactions based on tx_hash
-    const uniqueTxs = Array.from(
-        new Map(addrTsx.map(tx => [tx.tx_hash, tx])).values()
-    );
+    // Remove duplicate transactions based on tx_hash
+    const uniqueTxs = Array.from(new Map(addrTsx.map((tx) => [tx.tx_hash, tx])).values());
 
     // console.log(uniqueTxs)
     let results: any = [];
@@ -70,104 +68,6 @@ export async function GET(request: NextRequest) {
                 return await blockfrost.txsUtxos(tx_hash);
             }),
         );
-        // console.log(txsUtxos)
-        // Deposit(+): Output là địa chỉ smc
-        const depositUtxos = await Promise.all(
-            txsUtxos.map(async function (txsUtxo) {
-                const outputs = await Promise.all(
-                    txsUtxo.outputs.map(async function (output) {
-                        if (output.inline_datum){
-                        const datum = await convertInlineDatum({
-                            inlineDatum: output.inline_datum!,
-                        });
-                        if (
-                            output.address === smartcontractAddress &&
-                            output.inline_datum !== null &&
-                            datum?.fields[0].bytes === paymentAddress
-                        ) {
-                            return output;
-                        }
-                    }
-                        return null;
-                    }),
-                );
-                return outputs.filter((output) => output !== null);
-            }),
-        );
-
-        // Withdraw(-): Input là địa chỉ của smc
-        const withdrawUtxos = await Promise.all(
-            txsUtxos.map(async function (txsUtxo) {
-                const inputs = await Promise.all(
-                    txsUtxo.inputs.map(async function (input) {
-                        if (input.inline_datum){
-                        const datum = await convertInlineDatum({
-                            inlineDatum: input.inline_datum!,
-                        });
-                        console.log(datum)
-                        if (
-                            input.address === smartcontractAddress &&
-                            !input.reference_script_hash &&
-                            input.inline_datum !== null &&
-                            datum?.fields[0].bytes === paymentAddress
-                        ) {
-                            return input;
-                        }
-                    }
-                        return null;
-                    }),
-                );
-                return inputs.filter((input) => input !== null);
-            }),
-        );
-        // Read datum inputs
-
-        const amountDeposit = depositUtxos
-            .map(function (depositUtxo) {
-                return depositUtxo.reduce(function (amount, outputs) {
-                    if (outputs && outputs.amount) {
-                        return (
-                            amount +
-                            Number(
-                                outputs.amount.reduce(function (total, { unit, quantity }) {
-                                    if (unit === "lovelace") {
-                                        return total + Number(quantity);
-                                    }
-                                    return total;
-                                }, 0),
-                            )
-                        );
-                    }
-
-                    return amount;
-                }, 0);
-            })
-            .reduce(function (balance, current) {
-                return balance + current;
-            });
-
-        const amountWithdraw = withdrawUtxos
-            .map(function (depositUtxo) {
-                return depositUtxo.reduce(function (amount, inputs) {
-                    if (inputs && inputs.amount) {
-                        return (
-                            amount +
-                            Number(
-                                inputs.amount.reduce(function (total, { unit, quantity }) {
-                                    if (unit === "lovelace") {
-                                        return total + Number(quantity);
-                                    }
-                                    return total;
-                                }, 0),
-                            )
-                        );
-                    }
-                    return amount;
-                }, 0);
-            })
-            .reduce(function (balance, current) {
-                return balance + current;
-            });
 
         const amountStake: number = await koios.poolDelegatorsHistory({
             poolId: poolId,
@@ -179,18 +79,129 @@ export async function GET(request: NextRequest) {
             epochNo: epoch,
         });
 
-        results.push({
-            amount: amountDeposit- amountWithdraw,
-            epoch: epoch,
-            adaPool: adaPool,
-            amountReward: accountRewards,
-            amountStake: amountStake,
-            // amountDeposit: amountDeposit,
-            // amountWithdraw: amountWithdraw,
-        });
+        console.log("epoch " + epoch + " :" + amountStake, accountRewards);
+        if (txsUtxos.length !== 0) {
+            // console.log(txsUtxos)
+            // Deposit(+): Output là địa chỉ smc
+            const depositUtxos = await Promise.all(
+                txsUtxos.map(async function (txsUtxo) {
+                    const outputs = await Promise.all(
+                        txsUtxo.outputs.map(async function (output) {
+                            if (output.inline_datum) {
+                                const datum = await convertInlineDatum({
+                                    inlineDatum: output.inline_datum!,
+                                });
+                                if (
+                                    output.address === smartcontractAddress &&
+                                    output.inline_datum !== null &&
+                                    datum?.fields[0].bytes === paymentAddress
+                                ) {
+                                    return output;
+                                }
+                            }
+                            return null;
+                        }),
+                    );
+                    return outputs.filter((output) => output !== null);
+                }),
+            );
+
+            // Withdraw(-): Input là địa chỉ của smc
+            const withdrawUtxos = await Promise.all(
+                txsUtxos.map(async function (txsUtxo) {
+                    const inputs = await Promise.all(
+                        txsUtxo.inputs.map(async function (input) {
+                            if (input.inline_datum) {
+                                const datum = await convertInlineDatum({
+                                    inlineDatum: input.inline_datum!,
+                                });
+                                if (
+                                    input.address === smartcontractAddress &&
+                                    !input.reference_script_hash &&
+                                    input.inline_datum !== null &&
+                                    datum?.fields[0].bytes === paymentAddress
+                                ) {
+                                    return input;
+                                }
+                            }
+                            return null;
+                        }),
+                    );
+                    return inputs.filter((input) => input !== null);
+                }),
+            );
+            // Read datum inputs
+
+            const amountDeposit = depositUtxos
+                .map(function (depositUtxo) {
+                    return depositUtxo.reduce(function (amount, outputs) {
+                        if (outputs && outputs.amount) {
+                            return (
+                                amount +
+                                Number(
+                                    outputs.amount.reduce(function (total, { unit, quantity }) {
+                                        if (unit === "lovelace") {
+                                            return total + Number(quantity);
+                                        }
+                                        return total;
+                                    }, 0),
+                                )
+                            );
+                        }
+
+                        return amount;
+                    }, 0);
+                })
+                .reduce(function (balance, current) {
+                    return balance + current;
+                });
+
+            const amountWithdraw = withdrawUtxos
+                .map(function (depositUtxo) {
+                    return depositUtxo.reduce(function (amount, inputs) {
+                        if (inputs && inputs.amount) {
+                            return (
+                                amount +
+                                Number(
+                                    inputs.amount.reduce(function (total, { unit, quantity }) {
+                                        if (unit === "lovelace") {
+                                            return total + Number(quantity);
+                                        }
+                                        return total;
+                                    }, 0),
+                                )
+                            );
+                        }
+                        return amount;
+                    }, 0);
+                })
+                .reduce(function (balance, current) {
+                    return balance + current;
+                });
+
+            results.push({
+                amount: amountDeposit - amountWithdraw,
+                epoch: epoch,
+                adaPool: adaPool,
+                amountReward: accountRewards,
+                amountStake: amountStake,
+                // amountDeposit: amountDeposit,
+                // amountWithdraw: amountWithdraw,
+            });
+        } else {
+            results.push({
+                amount: 0,
+                epoch: epoch,
+                adaPool: adaPool,
+                amountReward: accountRewards,
+                amountStake: amountStake,
+                // amountDeposit: amountDeposit,
+                // amountWithdraw: amountWithdraw,
+            });
+        }
     }
-    
-    let caculateAdaRewards = [];
+
+    let caculateAdaRewardsShift1 = [];
     let caculateAdaRewardTemp = 0;
     for (let index = 0; index < results.length; index++) {
         if (index === 1) {
@@ -201,33 +212,47 @@ export async function GET(request: NextRequest) {
         }
         if (index > 1) caculateAdaRewardTemp -= Number(results[index].amount / DECIMAL_PLACES);
 
-        const reward =
-            (caculateAdaRewardTemp * Number(results[index ].amountReward)) /
-            Number(results[index].amountStake);
+        caculateAdaRewardsShift1.push({
+            amountRewardInline: caculateAdaRewardTemp,
+            epoch: results[index].epoch,
+            adaPool: results[index].adaPool,
+            amountReward: results[index].amountReward,
+            amountStake: results[index].amountStake,
+        });
+    }
 
-        // if (
-        //     results[index - 1].epoch === currentEpoch.epoch &&
-        //     results[index - 1].epoch === currentEpoch.epoch - 1
-        // ) {
-        //     caculateAdaRewards.push({
-        //         epoch: results[index - 1].epoch,
-        //         amount: caculateAdaRewardTemp.toFixed(5),
-        //         rewards: "-",
-        //         status: "Distributed",
-        //     });
-        // } else 
-        if (index > 1){
-            caculateAdaRewards.push({
-                epoch: results[index-1].epoch,
-                amount: caculateAdaRewardTemp.toFixed(5),
+    let caculateAdaRewardsShift2 = [];
+
+    for (let index = 0; index < caculateAdaRewardsShift1.length - 1; index++) {
+        const reward =
+            (caculateAdaRewardsShift1[index + 1].amountRewardInline *
+                Number(caculateAdaRewardsShift1[index].amountReward)) /
+            Number(caculateAdaRewardsShift1[index].amountStake);
+        if (index > 1) {
+            caculateAdaRewardsShift2.push({
                 rewards: reward.toFixed(5),
+                amount: caculateAdaRewardsShift1[index + 1].amountRewardInline.toFixed(5),
+                epoch: caculateAdaRewardsShift1[index].epoch,
+                adaPool: caculateAdaRewardsShift1[index].adaPool,
+                amountReward: caculateAdaRewardsShift1[index].amountReward,
+                amountStake: caculateAdaRewardsShift1[index].amountStake,
+                status: "Distributed",
+            });
+        } else {
+            caculateAdaRewardsShift2.push({
+                rewards: "-",
+                amount: caculateAdaRewardsShift1[index + 1].amountRewardInline.toFixed(5),
+                epoch: caculateAdaRewardsShift1[index].epoch,
+                adaPool: caculateAdaRewardsShift1[index].adaPool,
+                amountReward: caculateAdaRewardsShift1[index].amountReward,
+                amountStake: caculateAdaRewardsShift1[index].amountStake,
                 status: "Distributed",
             });
         }
     }
-    
-    const totalPage = Math.ceil(caculateAdaRewards.length / Number(pageSize));
-    const histories = [...caculateAdaRewards].slice(
+
+    const totalPage = Math.ceil(caculateAdaRewardsShift2.length / Number(pageSize));
+    const histories = [...caculateAdaRewardsShift2].slice(
         (Number(page) - 1) * Number(pageSize),
         Number(page) * Number(pageSize),
     );
@@ -235,6 +260,26 @@ export async function GET(request: NextRequest) {
     return Response.json({
         totalPage,
         histories,
-        totalItems: caculateAdaRewards.length,
+        totalItems: caculateAdaRewardsShift2.length,
     });
 }
+
+// if (
+//     results[index - 1].epoch === currentEpoch.epoch &&
+//     results[index - 1].epoch === currentEpoch.epoch - 1
+// ) {
+//     caculateAdaRewards.push({
+//         epoch: results[index - 1].epoch,
+//         amount: caculateAdaRewardTemp.toFixed(5),
+//         rewards: "-",
+//         status: "Distributed",
+//     });
+// } else
+// if (index > 1) {
+//     caculateAdaRewards.push({
+//         epoch: results[index - 1].epoch,
+//         amount: caculateAdaRewardTemp.toFixed(5),
+//         rewards: reward.toFixed(5),
+//         status: "Distributed",
+//     });
+// }

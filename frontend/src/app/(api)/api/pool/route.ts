@@ -30,8 +30,12 @@ export async function GET(request: NextRequest) {
         )
     ).flat();
 
+    const uniqueTransactions = Array.from(
+        new Map(addrTsx.map((tx) => [tx.tx_hash, tx])).values(),
+    ).reverse();
+
     const addrTsxFilter = await Promise.all(
-        addrTsx.filter(function ({ block_time }) {
+        uniqueTransactions.filter(function ({ block_time }) {
             return (
                 block_time * 1000 >= Date.now() - HISTORY_DAYS * 24 * 60 * 60 * 1000 &&
                 block_time * 1000 <= Date.now()
