@@ -36,7 +36,18 @@ export async function GET(request: NextRequest) {
     // );
 
       // Fetch transactions from Blockfrost
-    const transactions = await blockfrost.addressesTransactions(walletAddress);
+       // TODO: 5 QUERY
+    const transactions = (
+        await Promise.all(
+            Array.from({ length: 5 }, async function (_, index: number) {
+                return await blockfrost.addressesTransactions(walletAddress, {
+                    order: "desc",
+                    count: 100,
+                    page: index + 1,
+                });
+            }),
+        )
+    ).flat();
 
     // Remove duplicates based on tx_hash
     const uniqueTransactions = Array.from(
@@ -54,7 +65,7 @@ export async function GET(request: NextRequest) {
     );
 
     
-    console.log(results)
+    // console.log(results)
 
     const addressToFind = enviroment.DUALTARGET_CONTRACT_ADDRESS;
     const transactionsWithTargetAddress = await Promise.all(
