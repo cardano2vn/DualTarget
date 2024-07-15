@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
             txsUtxos.map(async function (txsUtxo) {
                 const outputs = await Promise.all(
                     txsUtxo.outputs.map(async function (output) {
+                        if (output.inline_datum){
                         const datum = await convertInlineDatum({
                             inlineDatum: output.inline_datum!,
                         });
@@ -86,6 +87,7 @@ export async function GET(request: NextRequest) {
                         ) {
                             return output;
                         }
+                    }
                         return null;
                     }),
                 );
@@ -98,9 +100,11 @@ export async function GET(request: NextRequest) {
             txsUtxos.map(async function (txsUtxo) {
                 const inputs = await Promise.all(
                     txsUtxo.inputs.map(async function (input) {
+                        if (input.inline_datum){
                         const datum = await convertInlineDatum({
                             inlineDatum: input.inline_datum!,
                         });
+                        console.log(datum)
                         if (
                             input.address === smartcontractAddress &&
                             !input.reference_script_hash &&
@@ -109,6 +113,7 @@ export async function GET(request: NextRequest) {
                         ) {
                             return input;
                         }
+                    }
                         return null;
                     }),
                 );
