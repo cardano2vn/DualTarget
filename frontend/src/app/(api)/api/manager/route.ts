@@ -47,8 +47,6 @@ export async function GET(request: NextRequest) {
             .reverse()
             .map(async function ({ tx_hash, block_time }) {
                 const addressTx = await blockfrost.txsWithdrawals(tx_hash);
-                // console.log(tx_hash);
-                // console.log(addressTx);
                 return {
                     block_time: block_time,
                     utxos: await blockfrost.txsUtxos(tx_hash),

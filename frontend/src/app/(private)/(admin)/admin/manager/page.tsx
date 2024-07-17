@@ -45,7 +45,6 @@ const DelegationRewards = function () {
             ),
         enabled: !!debouncedValue,
     });
-    console.log(rewards);
 
     const handleChangeEpoch = function (e: React.ChangeEvent<HTMLInputElement>) {
         setEpoch(e.target.value);

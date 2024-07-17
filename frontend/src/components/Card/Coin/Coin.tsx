@@ -15,7 +15,7 @@ type Props = {
     decimals?: number;
 };
 
-const Coin = function ({ className, title, amount, denominations, loading, decimals = 3 }: Props) {
+const Coin = function ({ className, title, amount, denominations, loading, decimals = 6 }: Props) {
     return (
         <div className={cx("body", className)}>
             <div className={cx("buy-price")}>

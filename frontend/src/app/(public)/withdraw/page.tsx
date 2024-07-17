@@ -65,7 +65,7 @@ const Withdraw = function () {
         txHashWithdraw,
     } = useContext<SmartContractContextType>(SmartContractContext);
     const { wallet } = useContext<WalletContextType>(WalletContext);
-    const { network } = useContext<NetworkContextType>(NetworkContext);
+    const { network, enviroment } = useContext<NetworkContextType>(NetworkContext);
     const [page, setPage] = useState<number>(1);
     const [claimableUtxos, setClaimableUtxos] = useState<Array<ClaimableUTxO>>([]);
     const [sellingStrategies, setSellingStrategies] = useState<CalculateSellingStrategy[]>([]);
@@ -147,32 +147,31 @@ const Withdraw = function () {
                 );
 
                 const amountDJED: number = (res as ClaimableUTxO[]).reduce(function (acc, claim) {
-                    const amount: number = isNaN(
-                        Number(claim.utxo.assets[process.env.MIN_TOKEN_ASSET_PREPROD!]),
-                    )
-                        ? 0
-                        : Number(Number(claim.utxo.assets[process.env.MIN_TOKEN_ASSET_PREPROD!]));
-                    return acc + amount;
-                }, 0);
+                    if (claim.isLimitOrder == 2) {
+                        const amount: number = isNaN(
+                            Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]),
+                        )
+                            ? 0
+                            : Number(Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]));
+                        return acc + amount;
+                    }
 
-                setFees(function (previous) {
-                    return {
-                        ...previous,
-                        amountDJED: amountDJED,
-                    };
-                });
+                    return acc;
+                }, 0);
 
                 const amountProfit: number = (res as Array<ClaimableUTxO>).reduce(function (
                     acc,
                     claim,
                 ) {
-                    let balance: number = 0;
                     if (claim.isLimitOrder == 0) {
-                        balance = isNaN(Number(claim.minimumAmountOutProfit))
+                        const amount: number = isNaN(
+                            Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]),
+                        )
                             ? 0
-                            : Number(claim.minimumAmountOutProfit);
+                            : Number(Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]));
+                        return acc + amount;
                     }
-                    return acc + balance;
+                    return acc;
                 },
                 0);
                 setFees(function (previous) {

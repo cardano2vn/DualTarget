@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     // Remove duplicate transactions based on tx_hash
     const uniqueTxs = Array.from(new Map(addrTsx.map((tx) => [tx.tx_hash, tx])).values());
 
-    // console.log(uniqueTxs)
+
     let results: any = [];
 
     for (let epoch = currentEpoch.epoch; epoch >= currentEpoch.epoch - 4; epoch--) {

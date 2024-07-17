@@ -78,7 +78,6 @@ export async function GET(request: NextRequest) {
                                 },
                                 0,
                             );
-                            console.log(profit);
                             profitMargin += profit;
                         }
                     } catch (error) {

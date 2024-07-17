@@ -25,9 +25,7 @@ const HelpCenter = function ({ open, setOpen }: Props) {
     const [isSent, setIsSent] = useState<boolean>(false);
     const buttonSubmitRef = useRef<HTMLButtonElement>(null);
 
-    const onSubmit = handleSubmit((data) => {
-        console.log(data);
-    });
+    const onSubmit = handleSubmit((data) => {});
 
     const triggerSubmit = function () {
         buttonSubmitRef.current?.click();
@@ -45,9 +43,26 @@ const HelpCenter = function ({ open, setOpen }: Props) {
         >
             <header className={cx("header")}>
                 <div className={cx("widget-title")}>Leave us a message</div>
-                <button type="button" aria-label="Minimize widget" className={cx("close-widget-button")} onClick={handleCloseWidget}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} focusable="false" viewBox="0 0 16 16" className={cx("close-icon")}>
-                        <path stroke="currentColor" strokeLinecap="round" strokeWidth={2} d="M3 8h10" />
+                <button
+                    type="button"
+                    aria-label="Minimize widget"
+                    className={cx("close-widget-button")}
+                    onClick={handleCloseWidget}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width={16}
+                        height={16}
+                        focusable="false"
+                        viewBox="0 0 16 16"
+                        className={cx("close-icon")}
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeWidth={2}
+                            d="M3 8h10"
+                        />
                     </svg>
                 </button>
             </header>
