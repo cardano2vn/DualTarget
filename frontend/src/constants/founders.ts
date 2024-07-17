@@ -48,10 +48,10 @@ const developers: {
 }[] = [
     {
         id: 1,
-        firstName: "Tien",
-        lastName: "Nguyen Anh",
-        role: "Computer Science Experts",
-        avatar: images.nguyenanhtien,
+        firstName: "Son",
+        lastName: "Nguyen Hong",
+        role: "Full-stack Developer/Blockchain Developer",
+        avatar: images.nguyenhongson,
         twitter: "https://t.me/tiennguyenanh",
         linkedin: "https://www.linkedin.com/in/tienna/",
         description:
@@ -61,8 +61,8 @@ const developers: {
         id: 2,
         firstName: "Hieu",
         lastName: "Nguyen Van",
-        role: "MSc. Electronics and Telecommunication",
-        avatar: images.nguyenvanhieu,
+        role: "Full-stack Developer/Blockchain Developer",
+        avatar: images.nguyenduykhanh,
         twitter: "https://t.me/nvhieu1978",
         linkedin: "https://www.linkedin.com/in/nguyen-van-hieu-b4410121b/",
         description:

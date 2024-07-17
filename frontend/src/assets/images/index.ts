@@ -27,6 +27,8 @@ const images = {
     nguyenvanhieu: require("./founders/hieu.jpg"),
     nguyenanhtien: require("./founders/tien.jpg"),
     phanvankhanh: require("./founders/khanh.jpg"),
+    nguyenduykhanh: require("./founders/developers/khanh.jpg"),
+    nguyenhongson: require("./founders/developers/son.jpg"),
     /* founder-image-end */
 };
 
