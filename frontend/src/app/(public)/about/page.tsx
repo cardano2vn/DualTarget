@@ -3,7 +3,7 @@
 import React, { useContext } from "react";
 import classNames from "classnames/bind";
 import Founder from "~/components/Founder";
-import { founders } from "~/constants/founders";
+import { advisors, developers, founders } from "~/constants/founders";
 import styles from "./About.module.scss";
 import Banner from "~/components/Banner";
 import { TranslateContextType } from "~/types/contexts/TranslateContextType";
@@ -51,19 +51,19 @@ const About = function () {
 
                 <section className={cx("founder-wrapper")}>
                     <div id="founder-contact" className={cx("founder-container")}>
-                        {founders?.map(function (founder, index: number) {
+                        {developers?.map(function (developer, index: number) {
                             return (
                                 <Founder
-                                    id={founder.id}
+                                    id={developer.id}
                                     role={"developers"}
-                                    twitter={founder.twitter}
-                                    linkedin={founder.linkedin}
-                                    lastName={founder.lastName}
-                                    firstName={founder.firstName}
-                                    company={founder?.company}
-                                    avatar={founder.avatar}
+                                    twitter={developer.twitter}
+                                    linkedin={developer.linkedin}
+                                    lastName={developer.lastName}
+                                    firstName={developer.firstName}
+                                    company={developer?.company}
+                                    avatar={developer.avatar}
                                     key={index}
-                                    description={founder.description}
+                                    description={developer.description}
                                 />
                             );
                         })}
@@ -78,19 +78,19 @@ const About = function () {
 
                 <section className={cx("founder-wrapper")}>
                     <div id="founder-contact" className={cx("founder-container")}>
-                        {founders?.map(function (founder, index: number) {
+                        {advisors?.map(function (advisor, index: number) {
                             return (
                                 <Founder
-                                    id={founder.id}
+                                    id={advisor.id}
                                     role={"advisors"}
-                                    twitter={founder.twitter}
-                                    linkedin={founder.linkedin}
-                                    lastName={founder.lastName}
-                                    firstName={founder.firstName}
-                                    company={founder?.company}
-                                    avatar={founder.avatar}
+                                    twitter={advisor.twitter}
+                                    linkedin={advisor.linkedin}
+                                    lastName={advisor.lastName}
+                                    firstName={advisor.firstName}
+                                    company={advisor?.company}
+                                    avatar={advisor.avatar}
                                     key={index}
-                                    description={founder.description}
+                                    description={advisor.description}
                                 />
                             );
                         })}

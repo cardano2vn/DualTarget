@@ -213,30 +213,20 @@
                 "name": "Hieu Nguyen Van",
                 "major": "MSc. Electronics and Telecommunication",
                 "description": "Founder of HADA stake pool, member of Plutus Pioneer Program, Researcher at VAST."
-            },
-            "3": {
-                "name": "Khanh Pham Van",
-                "major": "Doctor of Mathematics",
-                "description": "Researcher at the Institute of Information Technology - VAST; Lecturer at Hanoi National University on Artificial Intelligence, Deep Learning, Reinforcement Learning"
             }
         },
         "developers title": "Our Developers",
         "developers sub title": "We are impartial and independent, and every day we create distinctive, world-class programmes and develop",
         "developers": {
             "1": {
-                "name": "Tien Nguyen Anh",
-                "major": "Computer Science Experts",
+                "name": "Son Nguyen Hong",
+                "major": "Full-stack Developer/Blockchain Developer",
                 "description": "Founder of the VILAI stake pool, former Experts at HPE; Blockchain Support Engineer"
             },
             "2": {
-                "name": "Hieu Nguyen Van",
-                "major": "MSc. Electronics and Telecommunication",
+                "name": "Khanh Nguyen Duy",
+                "major": "Full-stack Developer/Blockchain Developer",
                 "description": "Founder of HADA stake pool, member of Plutus Pioneer Program, Researcher at VAST."
-            },
-            "3": {
-                "name": "Khanh Pham Van",
-                "major": "Doctor of Mathematics",
-                "description": "Researcher at the Institute of Information Technology - VAST; Lecturer at Hanoi National University on Artificial Intelligence, Deep Learning, Reinforcement Learning"
             }
         },
         "advisors title": "Our Advisors",
@@ -251,11 +241,6 @@
                 "name": "Hieu Nguyen Van",
                 "major": "MSc. Electronics and Telecommunication",
                 "description": "Founder of HADA stake pool, member of Plutus Pioneer Program, Researcher at VAST."
-            },
-            "3": {
-                "name": "Khanh Pham Van",
-                "major": "Doctor of Mathematics",
-                "description": "Researcher at the Institute of Information Technology - VAST; Lecturer at Hanoi National University on Artificial Intelligence, Deep Learning, Reinforcement Learning"
             }
         }
     }

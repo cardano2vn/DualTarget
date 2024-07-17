@@ -222,13 +222,13 @@
         },
         "developers": {
             "1": {
-                "name": "Tiến Nguyễn Anh",
-                "major": "Chuyên gia Khoa học Máy tính",
+                "name": "Nguyễn Hồng Sơn",
+                "major": "Full-stack Developer/Blockchain Developer",
                 "description": "Người sáng lập hồ bơi stake VILAI, cựu chuyên gia tại HPE; Kỹ sư Hỗ trợ Blockchain"
             },
             "2": {
-                "name": "Hiếu Nguyễn Văn",
-                "major": "Thạc sĩ Điện tử và Viễn thông",
+                "name": "Nguyễn Duy Khánh",
+                "major": "Full-stack Developer/Blockchain Developer",
                 "description": "Người sáng lập hồ bơi stake HADA, thành viên của Chương trình Plutus Pioneer, Nhà nghiên cứu tại VAST."
             },
             "3": {
