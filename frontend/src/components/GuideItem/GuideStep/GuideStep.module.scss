@@ -1,0 +1,57 @@
+.wrapper {
+    margin: 32px 0;
+    color: var(--text-color);
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.title {
+    font-size: 1.6rem;
+}
+
+.button {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    letter-spacing: none;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-right: 16px;
+    background: linear-gradient(
+        90deg,
+        #8f04a6 0%,
+        #c0f 0%,
+        #7000ff 39.36%,
+        rgba(44, 0, 219, 0.91) 63.12%,
+        rgba(4, 0, 203, 0.89) 79.64%,
+        #1400ff 99.32%
+    );
+    font-size: 1.5rem;
+    color: var(--white-color);
+}
+
+.description {
+    margin-top: 16px;
+    font-size: 1.4rem;
+}
+
+.guide-video-iframe {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    margin-top: 12px;
+}
+
+.guide-step-heading {
+    margin-top: 24px;
+    color: var(--text-color);
+}

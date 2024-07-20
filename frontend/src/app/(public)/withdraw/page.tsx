@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames/bind";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Card from "~/components/Card";
 import icons from "~/assets/icons";
 import Orders from "~/components/Orders/Orders";
@@ -33,7 +33,6 @@ import {
 import axios from "axios";
 import CustomChart from "~/components/CustomChart";
 import CountUp from "react-countup";
-import { useDebounce } from "~/hooks";
 import TranslateContext from "~/contexts/components/TranslateContext";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import NetworkContext from "~/contexts/components/NetworkContext";
@@ -71,12 +70,13 @@ const Withdraw = function () {
     const [sellingStrategies, setSellingStrategies] = useState<CalculateSellingStrategy[]>([]);
     const [currentWithdrawMode, setCurrentWithdrawMode] = useState<Item>(WITHDRAW_MODES[0]);
     const [withdrawableProfit, setWithdrawableProfit] = useState<number[]>([0, 0]);
-    const debouncedValue = useDebounce<number[]>(withdrawableProfit);
+    const [maxRangeValue, setMaxRangeValue] = useState<number>(0);
     const [fees, setFees] = useState<{
         amountADA: number;
         amountDJED: number;
         amountProfit: number;
     }>({ amountADA: 0, amountDJED: 0, amountProfit: 0 });
+
     const { data, isLoading, isError } = useQuery({
         queryKey: ["Transactions", page, txHashWithdraw],
         queryFn: () =>
@@ -88,7 +88,7 @@ const Withdraw = function () {
             ),
         enabled: !!Boolean(wallet?.address) || (!!Boolean(wallet?.address) && !!txHashWithdraw),
     });
-
+    const maxRef = useRef<number>(0);
     const { t } = useContext(TranslateContext);
 
     const {
@@ -106,34 +106,62 @@ const Withdraw = function () {
     });
 
     const {
-        watch,
         register,
         setValue,
         handleSubmit,
         formState: { errors },
     } = useForm<WithdrawType>();
 
-    const maxOfSellingStrategies = useMemo(() => {
+    useEffect(() => {
+        setWithdrawableProfit([0, maxRangeValue]);
+    }, [currentWithdrawMode, maxRangeValue]);
+
+    useEffect(() => {
         if (sellingStrategies.length > 0) {
-            return (
+            const _maxRangeValue =
                 Math.max(
                     ...sellingStrategies.map(({ buyPrice }) => {
                         return (Number(buyPrice) as number) / 1000000;
                     }),
-                ) + 0.1
-            );
+                ) + 0.1;
+
+            if (maxRef.current < _maxRangeValue) {
+                maxRef.current = _maxRangeValue;
+                setMaxRangeValue(_maxRangeValue);
+            }
         }
+    }, [sellingStrategies, currentWithdrawMode]);
 
-        return 0;
-    }, [sellingStrategies]);
+    const historyPrices: ChartDataType = useMemo(() => {
+        if (isGetChartRecordsSuccess && chartDataRecords.data) {
+            const prices = chartDataRecords.data.map((history) => [
+                +history.closeTime,
+                +history.close,
+            ]);
+            return prices as ChartDataType;
+        }
+        return [];
+    }, [chartDataRecords, isGetChartRecordsSuccess]);
 
-    useEffect(() => {
-        setWithdrawableProfit([0, maxOfSellingStrategies]);
-    }, [maxOfSellingStrategies]);
+    const previewSellingStrategies = function () {
+        if (lucid) {
+            if (claimableUtxos.length > COUNTER_UTXO) {
+                toast.warn({
+                    message: `${t("layout.toast.warn.divide_transactions.1")} ${
+                        Math.ceil(calculateClaimEUTxO.length / COUNTER_UTXO) + 1
+                    } ${t("layout.toast.warn.divide_transactions.2")}`,
+                });
+            }
 
-    useEffect(() => {
-        const [min, max] = debouncedValue;
-        lucid &&
+            previewWithdraw({
+                lucid,
+                range: withdrawableProfit as [number, number],
+            }).then((response) => {
+                setSellingStrategies(response);
+            });
+
+            const [min, max] = withdrawableProfit;
+
             calculateClaimEUTxO({
                 lucid,
                 mode: currentWithdrawMode.id,
@@ -174,6 +202,7 @@ const Withdraw = function () {
                     return acc;
                 },
                 0);
+
                 setFees(function (previous) {
                     return {
                         ...previous,
@@ -184,59 +213,6 @@ const Withdraw = function () {
                 });
 
                 setValue("amount", amountADA / 1000000);
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentWithdrawMode, lucid, debouncedValue]);
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            if (Boolean(txHashWithdraw) && lucid) {
-                previewWithdraw({
-                    lucid,
-                    range:
-                        withdrawableProfit.length === 0
-                            ? [0, maxOfSellingStrategies]
-                            : (withdrawableProfit as [number, number]),
-                }).then((response) => {
-                    setWithdrawableProfit([0, maxOfSellingStrategies]);
-                    setSellingStrategies(response);
-                });
-            }
-        }, 5000);
-
-        return () => clearTimeout(timeout);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lucid, txHashWithdraw, maxOfSellingStrategies]);
-
-    const historyPrices: ChartDataType = useMemo(() => {
-        if (isGetChartRecordsSuccess && chartDataRecords.data) {
-            const prices = chartDataRecords.data.map((history) => [
-                +history.closeTime,
-                +history.close,
-            ]);
-            return prices as ChartDataType;
-        }
-        return [];
-    }, [chartDataRecords, isGetChartRecordsSuccess]);
-
-    const previewSellingStrategies = function () {
-        if (lucid) {
-            if (claimableUtxos.length > COUNTER_UTXO) {
-                toast.warn({
-                    message: `${t("layout.toast.warn.divide_transactions.1")} ${
-                        Math.ceil(calculateClaimEUTxO.length / COUNTER_UTXO) + 1
-                    } ${t("layout.toast.warn.divide_transactions.2")}`,
-                });
-            }
-            previewWithdraw({
-                lucid,
-                range:
-                    withdrawableProfit.length === 0
-                        ? [0, maxOfSellingStrategies]
-                        : (withdrawableProfit as [number, number]),
-            }).then((response) => {
-                setWithdrawableProfit([0, maxOfSellingStrategies]);
-                setSellingStrategies(response);
             });
         }
     };
@@ -253,8 +229,8 @@ const Withdraw = function () {
         }
     });
 
-    const onRangeChange = function (value: number[]) {
-        setWithdrawableProfit(value);
+    const onRangeChange = function (withdrawableProfit: number[]) {
+        setWithdrawableProfit(withdrawableProfit);
     };
 
     return (
@@ -324,13 +300,13 @@ const Withdraw = function () {
                                             />
 
                                             <InputRange
+                                                currentValue={withdrawableProfit}
                                                 onChange={onRangeChange}
                                                 min={0}
-                                                max={Number(maxOfSellingStrategies.toFixed(4))}
+                                                max={Number(maxRangeValue.toFixed(4))}
                                                 disabled={
                                                     currentWithdrawMode.id === 0 ||
-                                                    currentWithdrawMode.id === 1 ||
-                                                    maxOfSellingStrategies === 0
+                                                    currentWithdrawMode.id === 1
                                                 }
                                             />
                                         </div>

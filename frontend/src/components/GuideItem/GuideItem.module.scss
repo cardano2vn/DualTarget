@@ -1,0 +1,111 @@
+.wrapper {
+    width: 100%;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 40px rgba(178, 117, 220, 0.2);
+
+    &.isOpen {
+        background: #f8fafd;
+        box-shadow: 0 0 40px rgba(178, 117, 220, 0.5);
+    }
+}
+
+.inner {
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    background: #f8fafd;
+    border-radius: 2.60417vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 20px;
+    padding: 20px 36px 20px 20px;
+    width: 100%;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: left;
+}
+
+.icon {
+    background-image: url("../../assets/icons/arrow-bottom.svg");
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    height: 15px;
+    position: absolute;
+    right: 16px;
+    top: 24.5px;
+    transition: all 0.1s ease-out;
+    width: 16px;
+    z-index: 100;
+    pointer-events: none;
+
+    &.isOpen {
+        transform: rotate(180deg);
+        transition: all 0.1s ease-out;
+    }
+}
+
+.title-wrapper {
+    cursor: pointer;
+    transition: all 0.1s ease-out;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: left;
+    position: relative;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        width: 60px;
+        height: 100%;
+        right: -36px;
+        background-color: transparent;
+        z-index: 1;
+    }
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+}
+
+.faq-paragraph {
+    color: var(--text-color);
+    font-weight: 300;
+    margin: 0;
+    text-align: left;
+    white-space-collapse: break-spaces;
+    text-wrap: wrap;
+    font-size: 1.4rem;
+}
+
+.faq-image {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.faq-bold {
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .title {
+        font-size: 1.6rem;
+    }
+}

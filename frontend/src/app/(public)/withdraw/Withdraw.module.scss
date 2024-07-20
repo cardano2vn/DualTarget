@@ -96,6 +96,7 @@
     font-size: 16px;
     font-weight: 600;
 }
+
 .icon-help-circle {
     margin-top: 5px;
     margin-left: 4px;
@@ -119,12 +120,14 @@
 .form-wrapper {
     margin-bottom: 2.4rem;
 }
+
 .withdraw-mode-dropdown {
     padding: 1.8rem 2.4rem !important;
     &::before {
         padding: 2px;
     }
 }
+
 .preview-button,
 .withdraw-button {
     align-items: center;
@@ -191,6 +194,7 @@
         display: flex;
         justify-content: end;
         align-items: center;
+        min-height: 18px;
     }
 }
 
