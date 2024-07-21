@@ -3,6 +3,7 @@
         "toast": {
             "success": {
                 "deposit": "Deposit sucessfully completed.",
+                "withdraw": "Withdraw sucessfully completed.",
                 "connect_wallet": "Wallet connected!",
                 "disconnect_wallet": "Wallet connected error!"
             },

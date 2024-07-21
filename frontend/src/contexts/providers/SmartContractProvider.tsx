@@ -331,17 +331,17 @@ const SmartContractProvider = function ({ children }: Props) {
             .paymentCredential?.hash as string;
         const contractAddress: string = enviroment.DUALTARGET_CONTRACT_ADDRESS! as string;
         const scriptUtxos: UTxO[] = await lucid.utxosAt(contractAddress);
-
         const sellingStrategies: CalculateSellingStrategy[] = [];
+
         for (const scriptUtxo of scriptUtxos) {
             if (scriptUtxo.datum) {
-                const outputDatum: any = await Data.from(scriptUtxo.datum!);
+                const outputDatum = Data.from<DualtargetDatum>(scriptUtxo.datum!, DualtargetDatum);
                 const params = {
-                    odOwner: outputDatum.fields[0],
-                    minimumAmountOut: outputDatum.fields[5],
-                    minimumAmountOutProfit: outputDatum.fields[6],
-                    buyPrice: outputDatum.fields[7],
-                    sellPrice: outputDatum.fields[8],
+                    odOwner: outputDatum.odOwner,
+                    minimumAmountOut: outputDatum.minimumAmountOut,
+                    minimumAmountOutProfit: outputDatum.minimumAmountOutProfit,
+                    buyPrice: outputDatum.buyPrice,
+                    sellPrice: outputDatum.sellPrice,
                 };
 
                 if (String(params.odOwner) === String(paymentAddress)) {
@@ -366,6 +366,7 @@ const SmartContractProvider = function ({ children }: Props) {
                 }
             }
         }
+
         return sellingStrategies;
     };
 

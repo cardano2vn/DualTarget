@@ -143,7 +143,7 @@ const Withdraw = function () {
         return [];
     }, [chartDataRecords, isGetChartRecordsSuccess]);
 
-    const previewSellingStrategies = function () {
+    const previewSellingStrategies = async function () {
         if (lucid) {
             if (claimableUtxos.length > COUNTER_UTXO) {
                 toast.warn({
@@ -153,77 +153,92 @@ const Withdraw = function () {
                 });
             }
 
-            previewWithdraw({
+            const _withdrawableProfit =
+                currentWithdrawMode.id === 0 || currentWithdrawMode.id === 1
+                    ? ([0, 0] as [number, number])
+                    : (withdrawableProfit as [number, number]);
+
+            const _caculateSellingStrategy: CalculateSellingStrategy[] = await previewWithdraw({
                 lucid,
-                range: withdrawableProfit as [number, number],
-            }).then((response) => {
-                setSellingStrategies(response);
+                range: _withdrawableProfit,
             });
+
+            const uniqueCaculateSellingStrategy = Array.from(
+                new Map(_caculateSellingStrategy.map((res) => [res, res])).values(),
+            ).reverse();
+
+            setSellingStrategies(uniqueCaculateSellingStrategy);
 
             const [min, max] = withdrawableProfit;
 
-            calculateClaimEUTxO({
+            const claimEUTxO = await calculateClaimEUTxO({
                 lucid,
                 mode: currentWithdrawMode.id,
                 min,
                 max,
-            }).then((res: ClaimableUTxO[]) => {
-                setClaimableUtxos(res);
-                const amountADA = (res as ClaimableUTxO[]).reduce(
-                    (acc, claim) => acc + Number(claim.utxo.assets.lovelace),
-                    0,
-                );
-
-                const amountDJED: number = (res as ClaimableUTxO[]).reduce(function (acc, claim) {
-                    if (claim.isLimitOrder == 2) {
-                        const amount: number = isNaN(
-                            Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]),
-                        )
-                            ? 0
-                            : Number(Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]));
-                        return acc + amount;
-                    }
-
-                    return acc;
-                }, 0);
-
-                const amountProfit: number = (res as Array<ClaimableUTxO>).reduce(function (
-                    acc,
-                    claim,
-                ) {
-                    if (claim.isLimitOrder == 0) {
-                        const amount: number = isNaN(
-                            Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]),
-                        )
-                            ? 0
-                            : Number(Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]));
-                        return acc + amount;
-                    }
-                    return acc;
-                },
-                0);
-
-                setFees(function (previous) {
-                    return {
-                        ...previous,
-                        amountADA: amountADA / DECIMAL_PLACES,
-                        amountDJED: amountDJED / DECIMAL_PLACES,
-                        amountProfit: amountProfit / DECIMAL_PLACES,
-                    };
-                });
-
-                setValue("amount", amountADA / 1000000);
             });
+
+            setClaimableUtxos(claimEUTxO);
+            const amountADA = (claimEUTxO as ClaimableUTxO[]).reduce(
+                (acc, claim) => acc + Number(claim.utxo.assets.lovelace),
+                0,
+            );
+
+            const amountDJED: number = (claimEUTxO as ClaimableUTxO[]).reduce(function (
+                acc,
+                claim,
+            ) {
+                if (claim.isLimitOrder == 2) {
+                    const amount: number = isNaN(
+                        Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]),
+                    )
+                        ? 0
+                        : Number(Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]));
+                    return acc + amount;
+                }
+
+                return acc;
+            },
+            0);
+
+            const amountProfit: number = (claimEUTxO as Array<ClaimableUTxO>).reduce(function (
+                acc,
+                claim,
+            ) {
+                if (claim.isLimitOrder == 0) {
+                    const amount: number = isNaN(
+                        Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]),
+                    )
+                        ? 0
+                        : Number(Number(claim.utxo.assets[enviroment.DJED_TOKEN_ASSET]));
+                    return acc + amount;
+                }
+                return acc;
+            },
+            0);
+
+            setFees(function (previous) {
+                return {
+                    ...previous,
+                    amountADA: amountADA / DECIMAL_PLACES,
+                    amountDJED: amountDJED / DECIMAL_PLACES,
+                    amountProfit: amountProfit / DECIMAL_PLACES,
+                };
+            });
+
+            setValue("amount", amountADA / 1000000);
         }
     };
 
     const onWithdraw = handleSubmit(async (data) => {
         try {
-            lucid &&
-                withdraw({
-                    lucid,
-                    claimableUtxos,
-                }).then(() => {});
+            if (lucid) {
+                await withdraw({ lucid, claimableUtxos });
+                toast.success({
+                    message: t("layout.toast.success.withdraw"),
+                });
+                await previewSellingStrategies();
+            }
         } catch (error) {
             console.warn("Error: ", error);
         }
@@ -381,7 +396,7 @@ const Withdraw = function () {
                                                     <span className={cx("fee-wrapper")}>
                                                         {waitingCalculateEUTxO ? (
                                                             <Loading />
-                                                        ) : sellingStrategies.length > 0 ? (
+                                                        ) : fees.amountADA > 0 ? (
                                                             <span className={cx("fee-currency")}>
                                                                 {fees.amountADA.toFixed(5)}&nbsp;₳
                                                             </span>
@@ -393,7 +408,7 @@ const Withdraw = function () {
                                                     <span className={cx("fee-wrapper")}>
                                                         {waitingCalculateEUTxO ? (
                                                             <Loading />
-                                                        ) : sellingStrategies.length > 0 ? (
+                                                        ) : fees.amountDJED > 0 ? (
                                                             <span className={cx("fee-currency")}>
                                                                 &nbsp;{fees.amountDJED}
                                                                 &nbsp;DJED
@@ -434,7 +449,7 @@ const Withdraw = function () {
                                                     <span className={cx("fee-wrapper")}>
                                                         {waitingCalculateEUTxO ? (
                                                             <Loading />
-                                                        ) : sellingStrategies.length > 0 ? (
+                                                        ) : fees.amountProfit > 0 ? (
                                                             <span className={cx("fee-currency")}>
                                                                 {fees.amountProfit.toFixed(5)}
                                                                 &nbsp;DJED
@@ -452,7 +467,11 @@ const Withdraw = function () {
                                                 disabled={
                                                     !lucid ||
                                                     waitingWithdraw ||
-                                                    waitingCalculateEUTxO
+                                                    waitingCalculateEUTxO ||
+                                                    sellingStrategies.length > 16 ||
+                                                    (fees.amountProfit === 0 &&
+                                                        fees.amountDJED === 0 &&
+                                                        fees.amountADA === 0)
                                                 }
                                                 loading={waitingWithdraw || waitingCalculateEUTxO}
                                                 onClick={onWithdraw}

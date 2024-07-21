@@ -3,6 +3,7 @@
         "toast": {
             "success": {
                 "deposit": "Nạp tiền thành công.",
+                "withdraw": "Rút tiền thành công.",
                 "connect_wallet": "Ví đã được kết nối!",
                 "disconnect_wallet": "Lỗi kết nối ví!"
             },
