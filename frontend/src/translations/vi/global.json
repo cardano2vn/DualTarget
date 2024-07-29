@@ -202,8 +202,8 @@
         }
     },
     "about": {
-        "title": "Về Quỹ của Chúng Tôi",
-        "sub title": "Chúng tôi là một tổ chức trung lập và độc lập, mỗi ngày chúng tôi tạo ra các chương trình độc đáo, đẳng cấp thế giới và phát triển",
+        "founders title": "Về Quỹ của Chúng Tôi",
+        "founders sub title": "Chúng tôi là một tổ chức trung lập và độc lập, mỗi ngày chúng tôi tạo ra các chương trình độc đáo, đẳng cấp thế giới và phát triển",
         "founders": {
             "1": {
                 "name": "Tiến Nguyễn Anh",
@@ -221,6 +221,8 @@
                 "description": "Nhà nghiên cứu tại Viện Công nghệ Thông tin - VAST; Giảng viên tại Đại học Quốc gia Hà Nội về Trí tuệ Nhân tạo, Học sâu, Học tăng cường"
             }
         },
+        "developers title": "Về nhà phát triển của Chúng Tôi",
+        "developers sub title": "Chúng tôi là một tổ chức trung lập và độc lập, mỗi ngày chúng tôi tạo ra các chương trình độc đáo, đẳng cấp thế giới và phát triển",
         "developers": {
             "1": {
                 "name": "Nguyễn Hồng Sơn",
@@ -238,6 +240,8 @@
                 "description": "Nhà nghiên cứu tại Viện Công nghệ Thông tin - VAST; Giảng viên tại Đại học Quốc gia Hà Nội về Trí tuệ Nhân tạo, Học sâu, Học tăng cường"
             }
         },
+        "advisors title": "Về người hướng dẫn của Chúng Tôi",
+        "advisors sub title": "Chúng tôi là một tổ chức trung lập và độc lập, mỗi ngày chúng tôi tạo ra các chương trình độc đáo, đẳng cấp thế giới và phát triển",
         "advisors": {
             "1": {
                 "name": "Tiến Nguyễn Anh",

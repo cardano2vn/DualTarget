@@ -1,0 +1,48 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.6rem 3.2rem;
+    background: var(--admin-primary-color);
+    border: 1px solid var(--admin-border-color);
+}
+.connect-wallet-button {
+    background: var(--admin-secondary-color) !important;
+    color: var(--white-color);
+    transition: all 0.3s;
+    &:hover,
+    &:focus {
+        background: var(--admin-hovered-background-color) !important;
+    }
+}
+
+.modal-wallet {
+    background: var(--admin-secondary-color) !important;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    margin-right: 12px;
+    background: transparent;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.image {
+    width: 2rem;
+    height: 2rem;
+}
+
+.title {
+    color: var(--white-color);
+    font-size: 2rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}

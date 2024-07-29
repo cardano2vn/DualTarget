@@ -52,7 +52,6 @@ export async function GET(request: NextRequest) {
     // Remove duplicate transactions based on tx_hash
     const uniqueTxs = Array.from(new Map(addrTsx.map((tx) => [tx.tx_hash, tx])).values());
 
-
     let results: any = [];
 
     for (let epoch = currentEpoch.epoch; epoch >= currentEpoch.epoch - 4; epoch--) {
@@ -263,23 +262,3 @@ export async function GET(request: NextRequest) {
         totalItems: caculateAdaRewardsShift2.length,
     });
 }
-
-// if (
-//     results[index - 1].epoch === currentEpoch.epoch &&
-//     results[index - 1].epoch === currentEpoch.epoch - 1
-// ) {
-//     caculateAdaRewards.push({
-//         epoch: results[index - 1].epoch,
-//         amount: caculateAdaRewardTemp.toFixed(5),
-//         rewards: "-",
-//         status: "Distributed",
-//     });
-// } else
-// if (index > 1) {
-//     caculateAdaRewards.push({
-//         epoch: results[index - 1].epoch,
-//         amount: caculateAdaRewardTemp.toFixed(5),
-//         rewards: reward.toFixed(5),
-//         status: "Distributed",
-//     });
-// }

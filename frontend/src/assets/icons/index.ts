@@ -27,6 +27,8 @@ const icons = {
     arrowRightPagination: require("./arrow-right-pagination.png"),
     arrowLeftPagination: require("./arrow-left-pagination.png"),
     c2vn: require("./c2vn.png"),
+
+    menu: require("./menu.svg"),
 };
 
 export default icons;

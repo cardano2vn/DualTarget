@@ -1,4 +1,6 @@
 export type ModalContextType = {
+    isShowingSidebar: boolean;
+    toggleShowingSidebar: () => void;
     isShowingErrorNetwork: boolean;
     toogleErrorNetwork: () => void;
     isShowingTestNetwork: boolean;

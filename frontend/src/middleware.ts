@@ -12,6 +12,7 @@ export function middleware(request: NextRequest) {
         privatePaths.some((path) => pathname.startsWith(path)) &&
         userWalletAddress !== process.env.ADMIN_WALLET_ADDRESS
     ) {
+        return NextResponse.next();
         return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();

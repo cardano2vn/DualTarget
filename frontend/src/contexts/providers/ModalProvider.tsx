@@ -12,10 +12,12 @@ const ModalProvider = function ({ children }: Props) {
     const { isShowing: isShowingWallet, toggle: toggleShowingWallet } = useModal();
     const { isShowing: isShowingTestNetwork, toggle: toggleTestNetwork } = useModal();
     const { isShowing: isShowingErrorNetwork, toggle: toogleErrorNetwork } = useModal();
-
+    const { isShowing: isShowingSidebar, toggle: toggleShowingSidebar } = useModal();
     return (
         <ModalContext.Provider
             value={{
+                isShowingSidebar,
+                toggleShowingSidebar,
                 isShowingErrorNetwork,
                 toogleErrorNetwork,
                 isShowingWallet,

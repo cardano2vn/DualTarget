@@ -1,0 +1,12 @@
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.main {
+    background-color: var(--admin-secondary-color);
+    flex: 1;
+}

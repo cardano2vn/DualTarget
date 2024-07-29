@@ -1,9 +1,6 @@
-import "./globals.scss";
 import React, { ReactNode } from "react";
 import type { Metadata } from "next";
-import ContextProvider from "~/contexts";
-import NetworkConnectionStatus from "~/components/NetworkConnectionStatus";
-import Aos from "~/components/Aos";
+import { PublicLayout } from "~/layouts";
 
 export const metadata: Metadata = {
     title: "Dualtarget",
@@ -15,18 +12,14 @@ type Props = {
     children: ReactNode;
 };
 
-const RootLayout = function ({ children }: Readonly<Props>) {
+const RootPublic = function ({ children }: Readonly<Props>) {
     return (
         <html lang="en" suppressHydrationWarning>
             <body>
-                <ContextProvider>
-                    {children}
-                    <NetworkConnectionStatus />
-                    <Aos />
-                </ContextProvider>
+                <PublicLayout>{children}</PublicLayout>
             </body>
         </html>
     );
 };
 
-export default RootLayout;
+export default RootPublic;

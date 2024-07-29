@@ -7,11 +7,13 @@ import styles from "./Logo.module.scss";
 
 const cx = classNames.bind(styles);
 
-type Props = {};
+type Props = {
+    className?: string;
+};
 
-const Logo = function ({}: Props) {
+const Logo = function ({ className }: Props) {
     return (
-        <Link href={"/"} className={cx("wrapper")}>
+        <Link href={"/"} className={cx("wrapper", className)}>
             <Image src={images.logo} alt="" className={cx("image")} />
         </Link>
     );

@@ -11,9 +11,25 @@
     --text-primary-color: #e086f7;
     --text-secondary-color: #e086f7;
     --background-primary: linear-gradient(180deg, #1d2345 0, #3a426f);
-    --background-button-linear: linear-gradient(91.14deg, #7054d1 0.64%, #ab56c9 51.6%, #b275dc 99.47%);
+    --background-button-linear: linear-gradient(
+        91.14deg,
+        #7054d1 0.64%,
+        #ab56c9 51.6%,
+        #b275dc 99.47%
+    );
     --shadow-button: 0 8px 12px 0 rgba(177, 109, 215, 0.28);
     --text-linear: linear-gradient(107deg, #7054d1 16%, #ab56c9 60%, #b275dc 102%);
+
+    // Admin themes
+    --admin-primary-color: #202b40;
+    --admin-secondary-color: #192132;
+    --admin-active-nav-item-color: #313e59;
+    --admin-border-color: #26334d;
+    --admin-card-color: #26334d;
+    --admin-text-color: #c2c9d6;
+    --admin-hovered-background-color: rgba(105, 122, 155, 0.2);
+    --admin-separate-color: #384766;
+    --admin-success-color: #00c000;
 }
 
 * {
