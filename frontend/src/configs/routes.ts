@@ -9,7 +9,7 @@ const routes = {
 
     private: {
         home: "/admin",
-        trasaction: "/admin/transaction",
+        manager: "/admin/manager",
     },
 } as const;
 

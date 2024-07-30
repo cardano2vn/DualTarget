@@ -1,4 +1,8 @@
-import { DelegationRewardType, TransactionHistoryType } from "~/types/GenericsType";
+import {
+    CalculateRewardType,
+    DelegationRewardType,
+    TransactionHistoryType,
+} from "~/types/GenericsType";
 
 export const convertNumberToSocialType = (number: number) => new Intl.NumberFormat().format(number);
 
@@ -12,10 +16,17 @@ export const convertTimestampToDateObject = (timestamp: number) => {
 };
 
 export const isTransactionHistoryType = (
-    data: TransactionHistoryType[] | DelegationRewardType[],
+    data: TransactionHistoryType[] | DelegationRewardType[] | CalculateRewardType[],
 ): data is TransactionHistoryType[] => {
     const item = data[0];
     return Array.isArray(data) && "blockTime" in item && "txHash" in item;
+};
+
+export const isRewardCalculateType = function (
+    data: TransactionHistoryType[] | DelegationRewardType[] | CalculateRewardType[],
+): data is CalculateRewardType[] {
+    const item = data[0];
+    return Array.isArray(data) && "address" in item;
 };
 
 export function isValidCardanoWalletAddress(walletAddress: string) {

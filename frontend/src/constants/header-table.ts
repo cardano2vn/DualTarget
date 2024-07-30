@@ -9,6 +9,15 @@ const historyTransactions: HeaderTableType[] = [
     { title: "Status" },
 ];
 
+const calculateTableType: HeaderTableType[] = [
+    { title: "STT" },
+    { title: "Epoch" },
+    { title: "Address" },
+    { title: "Amount ADA" },
+    { title: "Reward ADA" },
+    { title: "Status" },
+];
+
 const historyRewards: HeaderTableType[] = [
     { title: "Epoch" },
     {
@@ -27,4 +36,4 @@ const historyRewards: HeaderTableType[] = [
     },
 ];
 
-export { historyRewards, historyTransactions };
+export { historyRewards, historyTransactions, calculateTableType };

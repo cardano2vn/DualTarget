@@ -45,6 +45,15 @@ export type StatisticsType = {
     djedMargin?: number;
 };
 
+export type CalculateRewardType = {
+    index: number;
+    epoch: number;
+    address: string;
+    amount: number;
+    reward: number;
+    status: string;
+};
+
 export type TransactionHistoryType = {
     type: string;
     txHash: string;

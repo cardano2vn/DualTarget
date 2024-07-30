@@ -12,6 +12,6 @@ const publicRoutes = [
 
 const privateRoutes = [
     { name: "Home", redirect: configs.routes.private.home, Icon: HomeIcon },
-    { name: "Transaction", redirect: configs.routes.private.trasaction, Icon: TransactionIcon },
+    { name: "Manager", redirect: configs.routes.private.manager, Icon: TransactionIcon },
 ];
 export { publicRoutes, privateRoutes };

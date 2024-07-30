@@ -57,7 +57,6 @@ class Koios extends Axios {
         const { data } = await this.get(
             `/epoch_info?_epoch_no=${epochNo}&_include_next_epoch=true`,
         );
-
         const parse = JSON.parse(data)[0];
         return parse;
     }

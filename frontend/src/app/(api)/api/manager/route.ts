@@ -40,7 +40,6 @@ export async function GET(request: NextRequest) {
     const wallets = new Set<string>();
     const { start_time, end_time } = await blockfrost.epochs(Number(epochNo));
 
-    console.log(start_time, end_time);
     const txsUtxos = await Promise.all(
         uniqueTxs.map(async function ({ tx_hash }) {
             return await blockfrost.txsUtxos(tx_hash);
@@ -59,9 +58,10 @@ export async function GET(request: NextRequest) {
                             if (
                                 output.address === smartcontractAddress &&
                                 output.inline_datum !== null &&
-                                datum?.fields[0].bytes
+                                datum?.fields[0].bytes.length === 56
                             ) {
                                 wallets.add(datum?.fields[0].bytes);
+                                console.log(datum?.fields[0].bytes);
                                 return output;
                             }
                         }
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
                                 input.address === smartcontractAddress &&
                                 !input.reference_script_hash &&
                                 input.inline_datum !== null &&
-                                datum?.fields[0].bytes
+                                datum?.fields[0].bytes.length === 56
                             ) {
                                 wallets.add(datum?.fields[0].bytes);
                                 return input;
