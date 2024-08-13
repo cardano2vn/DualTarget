@@ -1,8 +1,10 @@
 "use client";
 
-import React, { ReactNode, lazy } from "react";
+import React, { ReactNode, Suspense, lazy } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Loading from "~/app/(loading)/loading";
+
 const SmartContractProvider = lazy(() => import("~/contexts/providers/SmartContractProvider"));
 const WalletProvider = lazy(() => import("~/contexts/providers/WalletProvider"));
 const LucidProvider = lazy(() => import("~/contexts/providers/LucidProvider"));
@@ -23,30 +25,32 @@ const queryClient = new QueryClient();
 
 const ContextProvider = function ({ children }: Props) {
     return (
-        <ToastProvider>
-            <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools initialIsOpen={false} />
-                <TranslateProvider>
-                    <ModalProvider>
-                        <NetworkProvider>
-                            <LucidProvider>
-                                <WalletProvider>
-                                    <AccountProvider>
-                                        <SmartContractProvider>
-                                            <StatisticsProvider>
-                                                <DelegationRewardProvider>
-                                                    {children}
-                                                </DelegationRewardProvider>
-                                            </StatisticsProvider>
-                                        </SmartContractProvider>
-                                    </AccountProvider>
-                                </WalletProvider>
-                            </LucidProvider>
-                        </NetworkProvider>
-                    </ModalProvider>
-                </TranslateProvider>
-            </QueryClientProvider>
-        </ToastProvider>
+        <Suspense fallback={<Loading />}>
+            <ToastProvider>
+                <QueryClientProvider client={queryClient}>
+                    <ReactQueryDevtools initialIsOpen={false} />
+                    <TranslateProvider>
+                        <ModalProvider>
+                            <NetworkProvider>
+                                <LucidProvider>
+                                    <WalletProvider>
+                                        <AccountProvider>
+                                            <SmartContractProvider>
+                                                <StatisticsProvider>
+                                                    <DelegationRewardProvider>
+                                                        {children}
+                                                    </DelegationRewardProvider>
+                                                </StatisticsProvider>
+                                            </SmartContractProvider>
+                                        </AccountProvider>
+                                    </WalletProvider>
+                                </LucidProvider>
+                            </NetworkProvider>
+                        </ModalProvider>
+                    </TranslateProvider>
+                </QueryClientProvider>
+            </ToastProvider>
+        </Suspense>
     );
 };
 

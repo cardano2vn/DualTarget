@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
     const stakeAddress: string = enviroment.DUALTARGET_STAKE_ADDRESS;
     const smartcontractAddress: string = enviroment.DUALTARGET_CONTRACT_ADDRESS;
     const koios = new Koios(enviroment.KOIOS_RPC_URL);
-    console.log(enviroment.KOIOS_RPC_URL);
     const poolId: string = enviroment.HADA_POOL_ID;
     const blockfrost = new Blockfrost(
         enviroment.BLOCKFROST_PROJECT_API_KEY as string,
@@ -38,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     const uniqueTxs = Array.from(new Map(addrTsx.map((tx) => [tx.tx_hash, tx])).values());
     const wallets = new Set<string>();
-    const { start_time, end_time } = await blockfrost.epochs(Number(epochNo));
+    const { start_time, end_time } = await koios.epochInfomation({ epochNo: Number(epochNo) });
 
     const txsUtxos = await Promise.all(
         uniqueTxs.map(async function ({ tx_hash }) {
@@ -61,7 +60,6 @@ export async function GET(request: NextRequest) {
                                 datum?.fields[0].bytes.length === 56
                             ) {
                                 wallets.add(datum?.fields[0].bytes);
-                                console.log(datum?.fields[0].bytes);
                                 return output;
                             }
                         }
@@ -122,12 +120,11 @@ export async function GET(request: NextRequest) {
             let caculateAdaRewardsShift: any = [];
 
             for (let epoch = currentEpoch.epoch; epoch >= currentEpoch.epoch - 4; epoch--) {
-                const { start_time, end_time } = await blockfrost.epochs(Number(epoch));
+                const { start_time, end_time } = await koios.epochInfomation({ epochNo: epoch });
                 const addrTsxFilter = uniqueTxs.filter(function ({ block_time }, index: number) {
                     return block_time >= start_time && block_time <= end_time;
                 });
 
-                // Đọc các UTXO của smartcontract trong khoảng 1 epoch
                 const txsUtxos = await Promise.all(
                     addrTsxFilter.map(async function ({ tx_hash }) {
                         return await blockfrost.txsUtxos(tx_hash);
@@ -143,11 +140,8 @@ export async function GET(request: NextRequest) {
                     stakeAddress,
                     epochNo: epoch,
                 });
-                console.log(accountRewards, amountStake);
 
                 if (txsUtxos.length !== 0) {
-                    // console.log(txsUtxos)
-                    // Deposit(+): Output là địa chỉ smc
                     const depositUtxos = await Promise.all(
                         txsUtxos.map(async function (txsUtxo) {
                             const outputs = await Promise.all(
@@ -171,7 +165,6 @@ export async function GET(request: NextRequest) {
                         }),
                     );
 
-                    // Withdraw(-): Input là địa chỉ của smc
                     const withdrawUtxos = await Promise.all(
                         txsUtxos.map(async function (txsUtxo) {
                             const inputs = await Promise.all(
@@ -325,7 +318,6 @@ export async function GET(request: NextRequest) {
             const epochFilter = caculateAdaRewardsShift2.find(function (caculateAdaRewards) {
                 return Number(caculateAdaRewards.epoch) === Number(epochNo);
             });
-            console.log(epochFilter);
 
             return {
                 paymentAddress: paymentAddress,

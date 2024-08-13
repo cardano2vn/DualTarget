@@ -3,7 +3,7 @@ const nextConfig = {
         // MAINNET NETWORK
         BLOCKFROST_NETWORK_NAME_MAINNET: "Mainnet",
         BLOCKFROST_RPC_URL_MAINNET: "https://cardano-mainnet.blockfrost.io/api/v0",
-        BLOCKFROST_PROJECT_API_KEY_MAINNET: "preprodpVntD7UGTviDa7Y7gqs7bcIZAdU5gcwr",
+        BLOCKFROST_PROJECT_API_KEY_MAINNET: "preprodHXZNMTECARQ3jlUE0RvCBT2qOK6JRtQf",
         KOIOS_RPC_URL_MAINNET: "https://api.koios.rest/api/v1",
         NEXT_APP_BASE_URL_MAINNET: "https://api.dualtarget.vn/api/v1",
         DUALTARGET_CONTRACT_ADDRESS_MAINNET:
@@ -19,7 +19,7 @@ const nextConfig = {
         // PREPROD NETWORK
         BLOCKFROST_NETWORK_NAME_PREPROD: "Preprod",
         BLOCKFROST_RPC_URL_PREPROD: "https://cardano-preprod.blockfrost.io/api/v0",
-        BLOCKFROST_PROJECT_API_KEY_PREPROD: "preprodxq4qzMjJbieRF8P24inEuVTZmwZDqHQ8",
+        BLOCKFROST_PROJECT_API_KEY_PREPROD: "preprodHXZNMTECARQ3jlUE0RvCBT2qOK6JRtQf",
         KOIOS_RPC_URL_PREPROD: "https://preprod.koios.rest/api/v1",
         NEXT_APP_BASE_URL_PREPROD: "https://preprod.dualtarget.vn/api/v1",
         DUALTARGET_CONTRACT_ADDRESS_PREPROD:

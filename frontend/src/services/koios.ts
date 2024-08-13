@@ -54,11 +54,20 @@ class Koios extends Axios {
     }
 
     async epochInfomation({ epochNo }: { epochNo: number }) {
-        const { data } = await this.get(
-            `/epoch_info?_epoch_no=${epochNo}&_include_next_epoch=true`,
-        );
-        const parse = JSON.parse(data)[0];
-        return parse;
+        try {
+            const response = await this.get(
+                `/epoch_info?_epoch_no=${epochNo}&_include_next_epoch=false`,
+            );
+            if (response.status !== 200) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
+
+            const parse = JSON.parse(response.data)[0];
+            return parse;
+        } catch (error) {
+            console.error("Failed to fetch epoch information:", error);
+            throw error;
+        }
     }
 }
 
