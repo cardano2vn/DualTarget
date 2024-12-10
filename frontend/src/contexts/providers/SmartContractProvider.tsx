@@ -22,7 +22,8 @@ import { DECIMAL_PLACES, OUTPUT_ADA } from "~/constants";
 import NetworkContext from "../components/NetworkContext";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import { getCurrentPrice } from "~/utils/current-price";
-
+import convertInlineDatum from "~/helpers/convert-inline-datum";
+import cbor from "cbor";
 type Props = {
     children: ReactNode;
 };
@@ -56,38 +57,111 @@ const SmartContractProvider = function ({ children }: Props) {
             ).paymentCredential?.hash as string;
             const vkeyBeneficiaryHash: string = lucid.utils.getAddressDetails(contractAddress)
                 .paymentCredential?.hash as string;
-            const datums: any[] = sellingStrategies.map(function (
-                sellingStrategy: CalculateSellingStrategy,
-                index: number,
-            ) {
-                return Data.to<DualtargetDatum>(
-                    {
-                        odOwner: vkeyOwnerHash,
-                        odBeneficiary: vkeyBeneficiaryHash,
-                        assetADA: {
-                            policyId: datumParams.assetAda.policyId,
-                            assetName: datumParams.assetAda.assetName,
+            const datums: any[] = await Promise.all(
+                sellingStrategies?.map(async function (
+                    sellingStrategy: CalculateSellingStrategy,
+                    index: number,
+                ) {
+                    const json: any = {
+                        fields: [
+                            {
+                                bytes: Buffer.from(
+                                    "6c61c6c1164c58ef55d007e71d4da6b6d55b175c18591225692d3ae3",
+                                    "hex",
+                                ),
+                            },
+                            {
+                                bytes: Buffer.from(
+                                    "ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7",
+                                    "hex",
+                                ),
+                            },
+                            {
+                                fields: [
+                                    { bytes: Buffer.from("", "hex") },
+                                    { bytes: Buffer.from("", "hex") },
+                                ],
+                                constructor: 0,
+                            },
+                            { int: 270734767 },
+                            {
+                                fields: [
+                                    {
+                                        bytes: Buffer.from(
+                                            "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72",
+                                            "hex",
+                                        ),
+                                    },
+                                    {
+                                        bytes: Buffer.from(
+                                            "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72",
+                                            "hex",
+                                        ),
+                                    },
+                                ],
+                                constructor: 0,
+                            },
+                            { int: 118811790 },
+                            { int: 1199997 },
+                            { int: 446267 },
+                            { int: 450729 },
+                            { bytes: Buffer.from("414441444a4544", "hex") },
+                            { int: 1500000 },
+                            { int: 6000000 },
+                            {
+                                bytes: Buffer.from(
+                                    "849bb882b0999fe8eee3190d53a1dc46fd707c41859f4973aec84cc0",
+                                    "hex",
+                                ),
+                            },
+                            {
+                                bytes: Buffer.from(
+                                    "ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7",
+                                    "hex",
+                                ),
+                            },
+                            { int: 1718276636007 },
+                            { int: 0 },
+                        ],
+                        constructor: 0,
+                    };
+
+                    const cborEncoded = cbor.encode(json);
+
+                    console.log("CBOR Encoded:", cborEncoded.toString("hex"));
+                    const datum = Data.to<DualtargetDatum>(
+                        {
+                            odOwner: vkeyOwnerHash,
+                            odBeneficiary: vkeyBeneficiaryHash,
+                            assetADA: {
+                                policyId: datumParams.assetAda.policyId,
+                                assetName: datumParams.assetAda.assetName,
+                            },
+                            amountADA: BigInt(sellingStrategy.amountSend!),
+                            assetOut: {
+                                policyId: datumParams.assetOut.policyId,
+                                assetName: datumParams.assetOut.assetName,
+                            },
+                            minimumAmountOut: BigInt(sellingStrategy.minimumAmountOut!),
+                            minimumAmountOutProfit: BigInt(sellingStrategy.minimumAmountOutProfit!),
+                            buyPrice: BigInt(sellingStrategy.buyPrice!),
+                            sellPrice: BigInt(sellingStrategy.sellPrice!),
+                            odStrategy: datumParams.odStrategy,
+                            batcherFee: datumParams.batcherFee,
+                            outputADA: datumParams.outputADA,
+                            feeAddress: datumParams.feeAddress,
+                            validatorAddress: datumParams.validatorAddress,
+                            deadline: BigInt(new Date().getTime() + 10 * 1000),
+                            isLimitOrder: BigInt(2),
                         },
-                        amountADA: BigInt(sellingStrategy.amountSend!),
-                        assetOut: {
-                            policyId: datumParams.assetOut.policyId,
-                            assetName: datumParams.assetOut.assetName,
-                        },
-                        minimumAmountOut: BigInt(sellingStrategy.minimumAmountOut!),
-                        minimumAmountOutProfit: BigInt(sellingStrategy.minimumAmountOutProfit!),
-                        buyPrice: BigInt(sellingStrategy.buyPrice!),
-                        sellPrice: BigInt(sellingStrategy.sellPrice!),
-                        odStrategy: datumParams.odStrategy,
-                        batcherFee: datumParams.batcherFee,
-                        outputADA: datumParams.outputADA,
-                        feeAddress: datumParams.feeAddress,
-                        validatorAddress: datumParams.validatorAddress,
-                        deadline: BigInt(new Date().getTime() + 10 * 1000),
-                        isLimitOrder: BigInt(2),
-                    },
-                    DualtargetDatum,
-                );
-            });
+                        DualtargetDatum,
+                    );
+
+                    console.log(datum);
+
+                    return datum;
+                }),
+            );
 
             let winter_addr: Credential = {
                 type: "Key",
@@ -218,11 +292,13 @@ const SmartContractProvider = function ({ children }: Props) {
             const claimableUtxos: ClaimableUTxO[] = [];
             for (const scriptUtxo of scriptUtxos) {
                 if (scriptUtxo.datum) {
-                    const outputDatum: any = Data.from(scriptUtxo.datum!);
+                    const outputDatum: any = await convertInlineDatum({
+                        inlineDatum: scriptUtxo.datum!,
+                    });
 
                     const params = {
-                        odOwner: outputDatum.fields[0],
-                        odBeneficiary: outputDatum.fields[1],
+                        odOwner: outputDatum.fields[0]?.bytes,
+                        odBeneficiary: outputDatum.fields[1]?.bytes,
                         assetADA: {
                             policyId: datumParams.assetAda.policyId,
                             assetName: datumParams.assetAda.assetName,
@@ -335,13 +411,14 @@ const SmartContractProvider = function ({ children }: Props) {
 
         for (const scriptUtxo of scriptUtxos) {
             if (scriptUtxo.datum) {
-                const outputDatum = Data.from<DualtargetDatum>(scriptUtxo.datum!, DualtargetDatum);
+                const outputDatum = await convertInlineDatum({ inlineDatum: scriptUtxo?.datum! });
+
                 const params = {
-                    odOwner: outputDatum.odOwner,
-                    minimumAmountOut: outputDatum.minimumAmountOut,
-                    minimumAmountOutProfit: outputDatum.minimumAmountOutProfit,
-                    buyPrice: outputDatum.buyPrice,
-                    sellPrice: outputDatum.sellPrice,
+                    odOwner: outputDatum?.fields[0]?.bytes,
+                    minimumAmountOut: outputDatum?.fields[5]?.int,
+                    minimumAmountOutProfit: outputDatum?.fields[6]?.int,
+                    buyPrice: outputDatum?.fields[7]?.int,
+                    sellPrice: outputDatum?.fields[8]?.int,
                 };
 
                 if (String(params.odOwner) === String(paymentAddress)) {

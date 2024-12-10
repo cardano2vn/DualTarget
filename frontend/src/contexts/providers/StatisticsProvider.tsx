@@ -96,7 +96,6 @@ const StatisticsProvider = function ({ children }: Props) {
             })();
         }
     }, [lucidPlatform]);
-    console.log(pool);
 
     return <StatisticsContext.Provider value={{ pool }}>{children}</StatisticsContext.Provider>;
 };
