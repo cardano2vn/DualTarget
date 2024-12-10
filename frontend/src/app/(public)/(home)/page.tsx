@@ -56,7 +56,6 @@ export default function Home() {
         enabled: true,
     });
 
-
     const words = [t("home.title")];
     const [text, count] = useTypewriter({
         words,
@@ -100,7 +99,6 @@ export default function Home() {
                     <div className={cx("introduction-header")}>
                         <span className={cx("prefix")}>
                             <span>Dualtarget</span>
-                            {/* <Cursor cursorColor="#FFFFFF" /> */}
                         </span>
                     </div>
                     <div className={cx("introduction-description")}>
@@ -123,31 +121,31 @@ export default function Home() {
                             <Coin
                                 title={t("home.card pool.total wallet")}
                                 decimals={0}
-                                amount={pool.totalWallet}
+                                amount={pool?.totalWallet}
                                 loading={loading || isLoading}
                             />
                             <Coin
                                 title={t("home.card pool.total UTxO")}
                                 decimals={0}
-                                amount={pool.totalUTxO}
+                                amount={pool?.totalUTxO}
                                 denominations="UTxO"
                                 loading={loading || isLoading}
                             />
                             <Coin
                                 title={t("home.card pool.total volume lock")}
-                                amount={pool.totalADA}
+                                amount={pool?.totalADA}
                                 denominations="₳"
                                 loading={loading || isLoading}
                             />
                             <Coin
                                 title={t("home.card pool.total DJED")}
-                                amount={pool.totalDJED}
+                                amount={pool?.totalDJED}
                                 denominations="DJED"
                                 loading={loading || isLoading}
                             />
                             <Coin
                                 title={"Profit"}
-                                amount={pool.totalProfit}
+                                amount={pool?.totalProfit}
                                 denominations="DJED"
                                 loading={loading || isLoading}
                             />
