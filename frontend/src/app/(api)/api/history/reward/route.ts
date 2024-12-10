@@ -78,9 +78,7 @@ export async function GET(request: NextRequest) {
             epochNo: epoch,
         });
 
-        console.log("epoch " + epoch + " :" + amountStake, accountRewards);
         if (txsUtxos.length !== 0) {
-            // console.log(txsUtxos)
             // Deposit(+): Output là địa chỉ smc
             const depositUtxos = await Promise.all(
                 txsUtxos.map(async function (txsUtxo) {

@@ -37,7 +37,6 @@ const FileUploader = function () {
         setFiles((prev) => [...prev.filter((file) => file.id !== id)]);
     };
 
-    console.log(files);
     return (
         <div className={cx("wrapper")}>
             <label htmlFor="dropzone-input" className={cx("label")}>

@@ -14,7 +14,6 @@ import {
 import React, { ReactNode, useContext, useState } from "react";
 import SmartContractContext from "~/contexts/components/SmartContractContext";
 import { ClaimableUTxO, CalculateSellingStrategy } from "~/types/GenericsType";
-import { DualtargetDatum } from "~/constants/datum";
 import readDatum from "~/utils/read-datum";
 import { WalletContextType } from "~/types/contexts/WalletContextType";
 import WalletContext from "~/contexts/components/WalletContext";
@@ -23,7 +22,8 @@ import NetworkContext from "../components/NetworkContext";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import { getCurrentPrice } from "~/utils/current-price";
 import convertInlineDatum from "~/helpers/convert-inline-datum";
-import cbor from "cbor";
+import { DualtargetDatum } from "~/constants/datum";
+
 type Props = {
     children: ReactNode;
 };
@@ -62,74 +62,7 @@ const SmartContractProvider = function ({ children }: Props) {
                     sellingStrategy: CalculateSellingStrategy,
                     index: number,
                 ) {
-                    const json: any = {
-                        fields: [
-                            {
-                                bytes: Buffer.from(
-                                    "6c61c6c1164c58ef55d007e71d4da6b6d55b175c18591225692d3ae3",
-                                    "hex",
-                                ),
-                            },
-                            {
-                                bytes: Buffer.from(
-                                    "ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7",
-                                    "hex",
-                                ),
-                            },
-                            {
-                                fields: [
-                                    { bytes: Buffer.from("", "hex") },
-                                    { bytes: Buffer.from("", "hex") },
-                                ],
-                                constructor: 0,
-                            },
-                            { int: 270734767 },
-                            {
-                                fields: [
-                                    {
-                                        bytes: Buffer.from(
-                                            "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72",
-                                            "hex",
-                                        ),
-                                    },
-                                    {
-                                        bytes: Buffer.from(
-                                            "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72",
-                                            "hex",
-                                        ),
-                                    },
-                                ],
-                                constructor: 0,
-                            },
-                            { int: 118811790 },
-                            { int: 1199997 },
-                            { int: 446267 },
-                            { int: 450729 },
-                            { bytes: Buffer.from("414441444a4544", "hex") },
-                            { int: 1500000 },
-                            { int: 6000000 },
-                            {
-                                bytes: Buffer.from(
-                                    "849bb882b0999fe8eee3190d53a1dc46fd707c41859f4973aec84cc0",
-                                    "hex",
-                                ),
-                            },
-                            {
-                                bytes: Buffer.from(
-                                    "ecc575c43fe93b158e02a176c9159afe681cd097910748fde50d33a7",
-                                    "hex",
-                                ),
-                            },
-                            { int: 1718276636007 },
-                            { int: 0 },
-                        ],
-                        constructor: 0,
-                    };
-
-                    const cborEncoded = cbor.encode(json);
-
-                    console.log("CBOR Encoded:", cborEncoded.toString("hex"));
-                    const datum = Data.to<DualtargetDatum>(
+                    return Data.to<DualtargetDatum>(
                         {
                             odOwner: vkeyOwnerHash,
                             odBeneficiary: vkeyBeneficiaryHash,
@@ -147,8 +80,8 @@ const SmartContractProvider = function ({ children }: Props) {
                             buyPrice: BigInt(sellingStrategy.buyPrice!),
                             sellPrice: BigInt(sellingStrategy.sellPrice!),
                             odStrategy: datumParams.odStrategy,
-                            batcherFee: datumParams.batcherFee,
-                            outputADA: datumParams.outputADA,
+                            batcherFee: BigInt(datumParams.batcherFee),
+                            outputADA: BigInt(datumParams.outputADA),
                             feeAddress: datumParams.feeAddress,
                             validatorAddress: datumParams.validatorAddress,
                             deadline: BigInt(new Date().getTime() + 10 * 1000),
@@ -156,10 +89,6 @@ const SmartContractProvider = function ({ children }: Props) {
                         },
                         DualtargetDatum,
                     );
-
-                    console.log(datum);
-
-                    return datum;
                 }),
             );
 

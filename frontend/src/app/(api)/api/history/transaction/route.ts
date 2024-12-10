@@ -49,8 +49,6 @@ export async function GET(request: NextRequest) {
         }),
     );
 
-    // console.log(results)
-
     const addressToFind = enviroment.DUALTARGET_CONTRACT_ADDRESS;
     const transactionsWithTargetAddress = await Promise.all(
         results

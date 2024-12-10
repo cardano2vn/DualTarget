@@ -50,7 +50,6 @@ const DelegationRewardsManager = function () {
                     );
                     setEndTime(data?.endTime);
                     setStartTime(data?.startTime);
-                    console.log(data);
                     const response = data?.results.map(function (result: any, index: number) {
                         let credential: Credential = {
                             type: "Key",
@@ -66,7 +65,6 @@ const DelegationRewardsManager = function () {
                             status: "Distributed",
                         };
                     });
-                    console.log(response);
                     setReward(response);
                 } catch (error) {
                     console.log(error);

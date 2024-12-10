@@ -8,7 +8,6 @@ import LucidContext from "~/contexts/components/LucidContext";
 import { Address, Data, UTxO } from "lucid-cardano";
 import { NetworkContextType } from "~/types/contexts/NetworkContextType";
 import NetworkContext from "../components/NetworkContext";
-import { DualtargetDatum } from "~/constants/datum";
 import { DECIMAL_PLACES } from "~/constants";
 import convertInlineDatum from "~/helpers/convert-inline-datum";
 
@@ -64,9 +63,7 @@ const StatisticsProvider = function ({ children }: Props) {
 
                 const profits = await Promise.all(
                     scriptUTxOs.map(async (utxo) => {
-                        console.log(utxo);
                         const datum = await convertInlineDatum({ inlineDatum: utxo.datum! });
-                        console.log(datum);
 
                         if (Number(datum?.fields[15]) === 0) {
                             const amount: number = isNaN(
