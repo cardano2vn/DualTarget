@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
                             inlineDatum: input.inline_datum,
                         });
 
-                        if (datum?.fields[15].int === 0) {
+                        if (datum?.fields[15]?.int === 0) {
                             const profit: number = input.amount.reduce(
                                 (total, { quantity, unit }) => {
                                     if (unit === enviroment.DJED_TOKEN_ASSET) {
@@ -107,6 +107,7 @@ export async function GET(request: NextRequest) {
                                 },
                                 0,
                             );
+
                             profitMargin += profit;
                         }
                     } catch (error) {

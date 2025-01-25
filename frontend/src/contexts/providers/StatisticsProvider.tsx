@@ -65,7 +65,7 @@ const StatisticsProvider = function ({ children }: Props) {
                     scriptUTxOs.map(async (utxo) => {
                         const datum = await convertInlineDatum({ inlineDatum: utxo.datum! });
 
-                        if (Number(datum?.fields[15]) === 0) {
+                        if (Number(datum?.fields[15].int) === 0) {
                             const amount: number = isNaN(
                                 Number(utxo?.assets[enviroment.DJED_TOKEN_ASSET!]),
                             )
